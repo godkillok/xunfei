@@ -30,7 +30,7 @@ def get_data_set(flie):
     data_y = []
     for li in lines:
         li=json.loads(li)
-        text=li.get("text")
+        text=li.get("jieba")
         label1=li.get("label","no")
 
         if label1 not in label_dic.keys():
