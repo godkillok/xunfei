@@ -36,6 +36,6 @@ for path in [train_path,test_path]:
                 res["label_2st"] = id_dic[lid]
             result.append(res)
 
-    with open(path.replace("dat","jieba_json"), "w", encoding="utf8") as f:
+    with open(path.replace(".dat",".jieba_json"), "w", encoding="utf8") as f:
        for  res in result:
            f.writelines(json.dumps(res)+'\n')
