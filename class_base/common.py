@@ -31,15 +31,15 @@ for path in [train_path,test_path]:
             res["jieba"]=' '.join(seg_list)
             if "train" in path:
                 lid=li[1]
-                if len(lid.split("|")) == 2:
-                    print(lid.split("|"))
-                lid=lid.split("|")[0]
-
-                res["label"] = lid
-                res["label_name"] = id_dic[lid[:4]]+'#'+id_dic[lid]
-                res["label_1st"] = id_dic[lid[:4]]
-                res["label_2st"] = id_dic[lid]
-            result.append(res)
+                for i  in  range(len(lid.split("|"))):
+                    lid=lid.split("|")[i]
+                    res["label"] = lid
+                    res["label_name"] = id_dic[lid[:4]]+'#'+id_dic[lid]
+                    res["label_1st"] = id_dic[lid[:4]]
+                    res["label_2st"] = id_dic[lid]
+                    result.append(res)
+            else:
+                result.append(res)
 
     with open(path.replace(".dat",".jieba_json"), "w", encoding="utf8") as f:
        for  res in result:
