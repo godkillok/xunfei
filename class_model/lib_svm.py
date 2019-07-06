@@ -124,11 +124,12 @@ def svm_train():
     test_y_name=[]
     test_preds_name=[]
     for  real, pred in zip( test_y, test_preds):
+        prd=pred[0]
         for pr in pred:
             if real==pr:
-                pr=real
+                prd=real
         test_y_name.append(dic_lab[real])
-        test_preds_name.append(dic_lab[pr])
+        test_preds_name.append(dic_lab[prd])
 
     logging.info('{} model on {} data top2 test\n {}'.format("train", test_path,
                                                                 classification_report(test_y_name, test_preds_name)))
