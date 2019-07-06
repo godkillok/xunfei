@@ -30,9 +30,9 @@ for path in [train_path,test_path]:
             seg_list=jieba.cut(text.lower(), cut_all=False)
             res["jieba"]=' '.join(seg_list)
             if "train" in path:
-                lid=li[1]
-                for i  in  range(len(lid.split("|"))):
-                    lid=lid.split("|")[i]
+                llid=li[1]
+                for i  in  range(len(llid.split("|"))):
+                    lid=llid.split("|")[i]
                     res["label"] = lid
                     res["label_name"] = id_dic[lid[:4]]+'#'+id_dic[lid]
                     res["label_1st"] = id_dic[lid[:4]]
