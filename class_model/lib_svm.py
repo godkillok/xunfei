@@ -21,6 +21,7 @@ t = time.time()
 
 import json
 
+from sklearn.calibration import CalibratedClassifierCV
 
 def get_data_set(flie):
     global label_num
@@ -72,6 +73,7 @@ def svm_train():
 
     logging.info('begin svm ')
     lin_clf = svm.LinearSVC()
+    lin_clf = CalibratedClassifierCV(lin_clf)
     lin_clf.fit(trn_term_doc, train_y)
     logging.info('end  svm ')
     with open(project_path + 'svm_model.pkl', 'wb') as f:
@@ -88,6 +90,7 @@ def svm_train():
 
     test_term_doc = vec.transform(test_x)
     test_preds = lin_clf.predict(test_term_doc)
+
     dic_lab={}
     for k,v in label_dic.items():
         dic_lab[v]=k
@@ -110,6 +113,24 @@ def svm_train():
         test_preds_name.append(dic_lab[pred])
 
     logging.info('{} model on {} data set test\n {}'.format("train", test_path,
+                                                                classification_report(test_y_name, test_preds_name)))
+    cnf=classification_report(test_y_name, test_preds_name)
+
+    test_preds_prob = lin_clf.predict(test_term_doc)
+    test_preds=[]
+    for prob in test_preds_prob:
+        test_preds.append(list(prob.argsort()[-2:][::-1]))
+
+    test_y_name=[]
+    test_preds_name=[]
+    for  real, pred in zip( test_y, test_preds):
+        for pr in pred:
+            if real==pr:
+                pr=real
+        test_y_name.append(dic_lab[real])
+        test_preds_name.append(dic_lab[pr])
+
+    logging.info('{} model on {} data top2 test\n {}'.format("train", test_path,
                                                                 classification_report(test_y_name, test_preds_name)))
     cnf=classification_report(test_y_name, test_preds_name)
 
