@@ -5,6 +5,7 @@ test_path=os.path.join(project_path,"app_desc.dat")
 id_path=os.path.join(project_path,"apptype_id_name.txt")
 import  jieba
 import json
+import re
 from collections import defaultdict
 id_dic={}
 with open(id_path,"r",encoding="utf8") as f:
@@ -28,8 +29,11 @@ for path in [train_path,test_path]:
                 text= li[2]
             else:
                 text= li[1]
+            punctuation = r"""1234567890!"#$%&()*+,-./:;<=>?@[\]^_`{|}~。，"""
+
             res["text"]=text
-            seg_list=jieba.cut(text.lower(), cut_all=False)
+            text2 = re.sub(r'[{}]+'.format(punctuation), ' ', str(text))
+            seg_list=jieba.cut(text2.lower(), cut_all=False)
             res["jieba"]=' '.join(seg_list)
             if "train" in path:
                 llid=li[1]
