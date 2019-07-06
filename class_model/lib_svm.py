@@ -111,7 +111,7 @@ def svm_train():
     for  real, pred in zip( test_y, test_preds):
         test_y_name.append(dic_lab[real])
         test_preds_name.append(dic_lab[pred])
-    logging.info("\n")
+    logging.info("\n"*3)
 
     logging.info('{} model on {} data accuracy_score {} set test\n {}'.format("test", test_path,accuracy_score(test_y_name, test_preds_name),
                                                                 classification_report(test_y_name, test_preds_name)))
