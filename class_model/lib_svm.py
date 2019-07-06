@@ -84,7 +84,7 @@ def svm_train():
 
     from sklearn.metrics import classification_report
 
-    logging.info('train {} model {},  \n {}'.format('train',accuracy_score(train_y, train_preds),classification_report(train_y, train_preds)))
+    logging.info('train {} accuracy_score {},  \n {}'.format('train',accuracy_score(train_y, train_preds),classification_report(train_y, train_preds)))
     t2 = time.time()
     logging.info('time spend {}'.format(t2 - t))
 
@@ -112,7 +112,7 @@ def svm_train():
         test_y_name.append(dic_lab[real])
         test_preds_name.append(dic_lab[pred])
 
-    logging.info('{} model on {} data{} set test\n {}'.format("train", test_path,accuracy_score(test_y_name, test_preds_name),
+    logging.info('{} model on {} data accuracy_score {} set test\n {}'.format("train", test_path,accuracy_score(test_y_name, test_preds_name),
                                                                 classification_report(test_y_name, test_preds_name)))
     cnf=classification_report(test_y_name, test_preds_name)
 
@@ -133,7 +133,7 @@ def svm_train():
         test_y_name.append(dic_lab[real])
         test_preds_name.append(dic_lab[prd])
 
-    logging.info('{} model on {} data {} top2 test\n {}'.format("train", test_path,accuracy_score(test_y_name, test_preds_name),
+    logging.info('{} model on {} data accuracy_score {} top2 test\n {}'.format("train", test_path,accuracy_score(test_y_name, test_preds_name),
                                                                 classification_report(test_y_name, test_preds_name)))
     cnf=classification_report(test_y_name, test_preds_name)
 
