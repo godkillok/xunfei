@@ -116,7 +116,7 @@ def svm_train():
                                                                 classification_report(test_y_name, test_preds_name)))
     cnf=classification_report(test_y_name, test_preds_name)
 
-    test_preds_prob = lin_clf.predict(test_term_doc)
+    test_preds_prob = lin_clf.predict_proba(test_term_doc)
     test_preds=[]
     for prob in test_preds_prob:
         test_preds.append(list(prob.argsort()[-2:][::-1]))
