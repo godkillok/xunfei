@@ -54,7 +54,7 @@ for path in [train_path,test_path]:
         import random
         random.shuffle(result)
         for k,v in lab_count.item():
-            lab_count[k]=int(v*0.8)
+            lab_count[k]=int(v*0.8)+1
         print(lab_count)
         with open(path.replace(".dat",".train_jieba_json"), "w", encoding="utf8") as f,  open(path.replace(".dat",".test_jieba_json"), "w", encoding="utf8") as f1:
            for  res in result:
