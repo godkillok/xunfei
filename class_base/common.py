@@ -41,11 +41,25 @@ for path in [train_path,test_path]:
                     res["label_name"] = id_dic[lid[:4]]+'#'+id_dic[lid]
                     res["label_1st"] = id_dic[lid[:4]]
                     res["label_2st"] = id_dic[lid]
-                    lab_count[res["label_1st"]]+=1
+                    lab_count[res["label_2st"]]+=1
                     result.append(res)
             else:
                 result.append(res)
     print(lab_count)
-    with open(path.replace(".dat",".jieba_json"), "w", encoding="utf8") as f:
-       for  res in result:
-           f.writelines(json.dumps(res,ensure_ascii=False)+'\n')
+    if "train" not in path:
+        with open(path.replace(".dat",".jieba_json"), "w", encoding="utf8") as f:
+           for  res in result:
+               f.writelines(json.dumps(res,ensure_ascii=False)+'\n')
+    else:
+        import random
+        random.result(result)
+        for k,v in lab_count.item():
+            lab_count[k]=int(v*0.8)
+        print(lab_count)
+        with open(path.replace(".dat",".train_jieba_json"), "w", encoding="utf8") as f,  open(path.replace(".dat",".test_jieba_json"), "w", encoding="utf8") as f1:
+           for  res in result:
+               if lab_count[res["label_2st"]]>0:
+                   lab_count[res["label_2st"]]-=1
+                   f.writelines(json.dumps(res,ensure_ascii=False)+'\n')
+               else:
+                    f.writelines(json.dumps(res,ensure_ascii=False)+'\n')
