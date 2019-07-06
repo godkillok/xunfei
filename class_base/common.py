@@ -64,4 +64,4 @@ for path in [train_path,test_path]:
                    lab_count[res["label_2st"]]-=1
                    f.writelines(json.dumps(res,ensure_ascii=False)+'\n')
                else:
-                    f.writelines(json.dumps(res,ensure_ascii=False)+'\n')
+                    f1.writelines(json.dumps(res,ensure_ascii=False)+'\n')
