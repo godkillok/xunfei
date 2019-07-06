@@ -31,6 +31,8 @@ for path in [train_path,test_path]:
             res["jieba"]=' '.join(seg_list)
             if "train" in path:
                 llid=li[1]
+                if len(llid.split("|"))>2:
+                    print(llid)
                 for i  in  range(len(llid.split("|"))):
                     lid=llid.split("|")[i]
                     res["label"] = lid
