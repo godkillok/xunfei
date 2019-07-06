@@ -45,4 +45,4 @@ for path in [train_path,test_path]:
 
     with open(path.replace(".dat",".jieba_json"), "w", encoding="utf8") as f:
        for  res in result:
-           f.writelines(json.dumps(res)+'\n')
+           f.writelines(json.dumps(res,ensure_ascii=False)+'\n')
