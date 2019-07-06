@@ -74,7 +74,7 @@ def svm_train():
     logging.info('time spend {}'.format(tfidf_time - t))
 
     logging.info('begin svm ')
-    lin_clf = svm.LinearSVC(C=0.05)
+    lin_clf = svm.LinearSVC(C=0.005)
     lin_clf = CalibratedClassifierCV(lin_clf)
     lin_clf.fit(trn_term_doc, train_y)
     logging.info('end  svm ')
