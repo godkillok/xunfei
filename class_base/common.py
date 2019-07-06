@@ -5,6 +5,7 @@ test_path=os.path.join(project_path,"app_desc.dat")
 id_path=os.path.join(project_path,"apptype_id_name.txt")
 import  jieba
 import json
+from collections import defaultdict
 id_dic={}
 with open(id_path,"r",encoding="utf8") as f:
     lines=f.readlines()
@@ -15,6 +16,7 @@ with open(id_path,"r",encoding="utf8") as f:
 
 for path in [train_path,test_path]:
     result=[]
+    lab_count=defaultdict(int)
     with open(path,"r",encoding="utf8") as f:
         lines=f.readlines()
         for li  in lines:
@@ -39,10 +41,11 @@ for path in [train_path,test_path]:
                     res["label_name"] = id_dic[lid[:4]]+'#'+id_dic[lid]
                     res["label_1st"] = id_dic[lid[:4]]
                     res["label_2st"] = id_dic[lid]
+                    lab_count[res["label_1st"]]+=1
                     result.append(res)
             else:
                 result.append(res)
-
+    print(lab_count)
     with open(path.replace(".dat",".jieba_json"), "w", encoding="utf8") as f:
        for  res in result:
            f.writelines(json.dumps(res,ensure_ascii=False)+'\n')
