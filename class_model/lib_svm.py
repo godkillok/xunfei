@@ -142,13 +142,14 @@ def svm_train():
 
     pred_term_doc = vec.transform(pred_x)
     pred_preds_prob = lin_clf.predict_proba(pred_term_doc)
-    test_preds=[]
+    pred_preds=[]
+
     for prob in pred_preds_prob:
-        test_preds.append(list(prob.argsort()[-2:][::-1]))
+        pred_preds.append(list(prob.argsort()[-2:][::-1]))
     with open(os.path.join(project_path,"ag.csv"),"w",encoding="utf8")  as f:
         f.writelines("id,label1,label2\n")
 
-        for ap,te in zip(apps,test_preds_prob):
+        for ap,te in zip(apps,pred_preds):
             res=[ap]
             for t in te:
                res.append(dic_lab[t])
