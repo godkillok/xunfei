@@ -14,6 +14,7 @@ with open(id_path,"r",encoding="utf8") as f:
         li=li.strip()
         lid,lname=li.split()
         id_dic[lid]=lname
+        jieba.add_word(lname)
 
 for path in [train_path,test_path]:
     result=[]
