@@ -52,6 +52,8 @@ for path in [train_path,test_path]:
                f.writelines(json.dumps(res,ensure_ascii=False)+'\n')
     else:
         import random
+
+        random.seed(10)
         random.shuffle(result)
         for k,v in lab_count.items():
             lab_count[k]=int(v*0.8)+1
