@@ -32,7 +32,7 @@ def get_data_set(flie):
     for li in lines:
         li=json.loads(li)
         text=li.get("jieba")
-        label1=li.get("label_1st","no")
+        label1=li.get("label","no") #label_1st
 
         if label1 not in label_dic.keys():
             label_dic[label1] = label_num
