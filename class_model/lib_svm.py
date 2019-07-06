@@ -132,8 +132,8 @@ def svm_train():
                 prd=real
         test_y_name.append(dic_lab[real])
         test_preds_name.append(dic_lab[prd])
-
-    logging.info('{} model on {} data accuracy_score {} top2 test\n {}'.format("train", test_path,accuracy_score(test_y_name, test_preds_name),
+    if len(dic_lab)>30:
+        logging.info('{} model on {} data accuracy_score {} top2 test\n {}'.format("train", test_path,accuracy_score(test_y_name, test_preds_name),
                                                                 classification_report(test_y_name, test_preds_name)))
     cnf=classification_report(test_y_name, test_preds_name)
 
