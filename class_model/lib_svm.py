@@ -29,11 +29,13 @@ def get_data_set(flie):
         lines = f.readlines()
     data_x = []
     data_y = []
+    apps=[]
     for li in lines:
         li=json.loads(li)
         text=li.get("jieba")
-        label1=li.get("label","no") #label_1st
-
+        label1=li.get("label_name","no") #label_1st
+        app=li.get("app")
+        apps.append(app)
         if label1 not in label_dic.keys():
             label_dic[label1] = label_num
             label_num += 1
@@ -43,13 +45,13 @@ def get_data_set(flie):
         data_x.append(text)
         data_y.append(label)
     assert len(data_x) == len(data_y)
-    return data_x, np.array(data_y).astype(int)
+    return data_x, np.array(data_y).astype(int),apps
 
 
 def svm_train():
-    train_x, train_y = get_data_set(train_path)
-    test_x, test_y = get_data_set(test_path)
-    pred_x,_=get_data_set(pred_path)
+    train_x, train_y,apps = get_data_set(train_path)
+    test_x, test_y,apps = get_data_set(test_path)
+    pred_x,_,apps=get_data_set(pred_path)
     # with open(CHANNEL_MODEL + 'svm_label.pkl', 'wb') as f:
     #     pickle.dump(label_dic, f)
 
@@ -138,6 +140,19 @@ def svm_train():
                                                                 classification_report(test_y_name, test_preds_name)))
     cnf=classification_report(test_y_name, test_preds_name)
 
+    pred_term_doc = vec.transform(pred_x)
+    pred_preds_prob = lin_clf.predict_proba(pred_term_doc)
+    test_preds=[]
+    for prob in pred_preds_prob:
+        test_preds.append(list(prob.argsort()[-2:][::-1]))
+    with open(os.path.join(project_path,"ag.csv"),"w",encoding="utf8")  as f:
+        f.writelines("id,label1,label2\n")
+
+        for ap,te in zip(apps,test_preds_prob):
+            res=[ap]
+            for t in te:
+               res.append(dic_lab[t])
+            f.writelines(','.join(res)+'\n')
 
 def svm_pred():
     logging.info('pred')
