@@ -28,8 +28,8 @@ for path in [train_path,test_path]:
             if "train" in path:
                 lid=li[1]
                 res["label"] = lid
-                res["label_name"] = id_dic[lid[:5]]+'#'+id_dic[lid]
-                res["label_1st"] = id_dic[lid[:5]]
+                res["label_name"] = id_dic[lid[:4]]+'#'+id_dic[lid]
+                res["label_1st"] = id_dic[lid[:4]]
                 res["label_2st"] = id_dic[lid]
             result.append(res)
 
