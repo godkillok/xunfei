@@ -22,8 +22,12 @@ for path in [train_path,test_path]:
             li=li.split()
             res={}
             res["app"]=li[0]
-            res["text"] = li[2]
-            seg_list=jieba.cut(li[2].lower(), cut_all=False)
+            if "train" in path:
+                text= li[2]
+            else:
+                text= li[1]
+            res["text"]=text
+            seg_list=jieba.cut(text.lower(), cut_all=False)
             res["jieba"]=' '.join(seg_list)
             if "train" in path:
                 lid=li[1]
