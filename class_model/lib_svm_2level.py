@@ -38,7 +38,7 @@ def get_data_set(flie):
     for li in lines:
         li=json.loads(li)
         text=li.get("jieba")
-        labels=li.get("label","no123456") #label_1st
+        labels=li.get("label_name","no123456") #label_1st
         if "#" in labels:
             label1=labels.split("#")[0]
         else:
