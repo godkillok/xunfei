@@ -79,10 +79,10 @@ def svm_train():
     #vec=HashingVectorizer(ngram_range=(1, 3))
     vec.fit_transform(data_set)
     #
-    with open(project_path + 'tfidf.pkl', 'wb') as f:
-        pickle.dump(vec, f)
-    # with open(CHANNEL_MODEL + 'tfidf.pkl', 'rb') as f:
-    #     vec = pickle.load(f)
+    # with open(project_path + 'tfidf.pkl', 'wb') as f:
+    #     pickle.dump(vec, f)
+    with open(project_path + 'tfidf.pkl', 'rb') as f:
+        vec = pickle.load(f)
 
 
     trn_term_doc = vec.transform(train_x)
