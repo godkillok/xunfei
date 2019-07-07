@@ -156,7 +156,7 @@ def svm_train():
     with open(os.path.join(project_path, "add_data.csv"), "w", encoding="utf8")  as f:
         for ap, prob in zip(apps, pred_preds_prob):
             res=[ap]
-            if max(prob) > 0.7:
+            if max(prob) > 0.75:
                 for t in list(prob.argsort()[-1:][::-1]):
                     res.append(dic_lab[t])
                 f.writelines(','.join(res) + '\n')
