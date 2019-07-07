@@ -136,7 +136,7 @@ flags.DEFINE_integer(
 class InputExample(object):
     """A single training/test example for simple sequence classification."""
 
-    def __init__(self, guid, text_a, text_b=None, label=None,image=None):
+    def __init__(self, guid, text_a, text_b=None, label=None):
         """Constructs a InputExample.
 
         Args:
@@ -263,9 +263,6 @@ def convert_single_example(ex_index, example, label_list, max_seq_length,
     tokens_b = None
     if example.text_b:
         tokens_b = tokenizer.tokenize(example.text_b)
-    image=None
-    if example.image:
-        image=example.image
     if tokens_b:
         # Modifies `tokens_a` and `tokens_b` in place so that the total
         # length is less than the specified length.
