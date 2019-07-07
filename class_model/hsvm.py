@@ -60,10 +60,10 @@ def get_data_set(flie):
         # label = label_dic.get(label1)
         # label2 = label_dic2.get(label2)
         data_x.append(text)
-        data_y.append(label1)
+        data_y.append(label2)
         if "test" not in flie:
             data_x.append(text)
-            data_y.append(label2)
+            data_y.append(label1)
         data_y2.append(label2)
     assert len(data_x) == len(data_y)
     return data_x, np.array(data_y).astype(str),apps,np.array(data_y2).astype(str)
@@ -144,10 +144,10 @@ def svm_train():
         test_y_name.append(real)
         test_preds_name.append(prd)
 
-    if len(dic_lab)>30:
-        logging.info('{} model on {} data accuracy_score {} top2 test\n {}'.format("train", test_path,accuracy_score(test_y_name, test_preds_name),
+
+    logging.info('{} model on {} data accuracy_score {} top2 test\n {}'.format("train", test_path,accuracy_score(test_y_name, test_preds_name),
                                                                 classification_report(test_y_name, test_preds_name)))
-    cnf=classification_report(test_y_name, test_preds_name)
+    #cnf=classification_report(test_y_name, test_preds_name)
 
     # pred_term_doc = vec.transform(pred_x)
     # pred_preds_prob = lin_clf.predict_proba(pred_term_doc)
