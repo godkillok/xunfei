@@ -103,7 +103,7 @@ def svm_train():
         base_estimator=lin_clf,
         class_hierarchy=label1_label2,
     )
-    print(HierarchicalClassifier.classes_)
+    print(clf.classes_)
     clf.fit(trn_term_doc, train_y)
 
 
@@ -142,7 +142,7 @@ def svm_train():
             if real==pr:
                 prd=real
         test_y_name.append(real)
-        test_preds_name.append(HierarchicalClassifier.classes_[prd])
+        test_preds_name.append(clf.classes_[prd])
 
 
     logging.info('{} model on {} data accuracy_score {} top2 test\n {}'.format("train", test_path,accuracy_score(test_y_name, test_preds_name),
