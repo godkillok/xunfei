@@ -132,7 +132,7 @@ def svm_train():
 
     test_y_name=[]
     test_preds_name=[]
-    for  real, pred in zip( test_y, test_preds):
+    for  real, pred in zip( test_y2, test_preds):
         prd=pred[0]
         #print(real, pred)
         for pr in pred:
