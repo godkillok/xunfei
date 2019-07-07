@@ -242,7 +242,7 @@ class CategoryProcessor(DataProcessor):
 
             if set_type == "test":
                 text_a = tokenization.convert_to_unicode(text)
-                label = "0"
+                label ="142701"
             else:
                 label = li["label"]
                 text_a = tokenization.convert_to_unicode(text)
