@@ -74,7 +74,7 @@ def svm_train():
     logging.info('time spend {}'.format(tfidf_time - t))
 
     logging.info('begin svm ')
-    lin_clf = svm.LinearSVC(C=0.1)
+    lin_clf = svm.LinearSVC(C=1)
     lin_clf = CalibratedClassifierCV(lin_clf)
     lin_clf.fit(trn_term_doc, train_y)
     logging.info('end  svm ')
@@ -117,43 +117,43 @@ def svm_train():
 
     logging.info('{} model on {} data accuracy_score {} set test\n {}'.format("test", test_path,accuracy_score(test_y_name, test_preds_name),
                                                                 classification_report(test_y_name, test_preds_name)))
-    cnf=classification_report(test_y_name, test_preds_name)
-
-    test_preds_prob = lin_clf.predict_proba(test_term_doc)
-    test_preds=[]
-    for prob in test_preds_prob:
-        test_preds.append(list(prob.argsort()[-2:][::-1]))
-
-    test_y_name=[]
-    test_preds_name=[]
-    for  real, pred in zip( test_y, test_preds):
-        prd=pred[0]
-        #print(real, pred)
-        for pr in pred:
-
-            if real==pr:
-                prd=real
-        test_y_name.append(dic_lab[real])
-        test_preds_name.append(dic_lab[prd])
-    if len(dic_lab)>30:
-        logging.info('{} model on {} data accuracy_score {} top2 test\n {}'.format("train", test_path,accuracy_score(test_y_name, test_preds_name),
-                                                                classification_report(test_y_name, test_preds_name)))
-    cnf=classification_report(test_y_name, test_preds_name)
-
-    pred_term_doc = vec.transform(pred_x)
-    pred_preds_prob = lin_clf.predict_proba(pred_term_doc)
-    pred_preds=[]
-
-    for prob in pred_preds_prob:
-        pred_preds.append(list(prob.argsort()[-2:][::-1]))
-    with open(os.path.join(project_path,"ag2.csv"),"w",encoding="utf8")  as f:
-        f.writelines("id,label1,label2\n")
-
-        for ap,te in zip(apps,pred_preds):
-            res=[ap]
-            for t in te:
-               res.append(dic_lab[t])
-            f.writelines(','.join(res)+'\n')
+    # cnf=classification_report(test_y_name, test_preds_name)
+    #
+    # test_preds_prob = lin_clf.predict_proba(test_term_doc)
+    # test_preds=[]
+    # for prob in test_preds_prob:
+    #     test_preds.append(list(prob.argsort()[-2:][::-1]))
+    #
+    # test_y_name=[]
+    # test_preds_name=[]
+    # for  real, pred in zip( test_y, test_preds):
+    #     prd=pred[0]
+    #     #print(real, pred)
+    #     for pr in pred:
+    #
+    #         if real==pr:
+    #             prd=real
+    #     test_y_name.append(dic_lab[real])
+    #     test_preds_name.append(dic_lab[prd])
+    # if len(dic_lab)>30:
+    #     logging.info('{} model on {} data accuracy_score {} top2 test\n {}'.format("train", test_path,accuracy_score(test_y_name, test_preds_name),
+    #                                                             classification_report(test_y_name, test_preds_name)))
+    # cnf=classification_report(test_y_name, test_preds_name)
+    #
+    # pred_term_doc = vec.transform(pred_x)
+    # pred_preds_prob = lin_clf.predict_proba(pred_term_doc)
+    # pred_preds=[]
+    #
+    # for prob in pred_preds_prob:
+    #     pred_preds.append(list(prob.argsort()[-2:][::-1]))
+    # with open(os.path.join(project_path,"ag2.csv"),"w",encoding="utf8")  as f:
+    #     f.writelines("id,label1,label2\n")
+    #
+    #     for ap,te in zip(apps,pred_preds):
+    #         res=[ap]
+    #         for t in te:
+    #            res.append(dic_lab[t])
+    #         f.writelines(','.join(res)+'\n')
 
 def svm_pred():
     logging.info('pred')
