@@ -92,11 +92,11 @@ def svm_train():
 
     logging.info('begin svm ')
     lin_clf = svm.LinearSVC(C=1)
-    lin_clf = CalibratedClassifierCV(lin_clf)
+    lin_clf = CalibratedClassifierCV(lin_clf,cv=10)
     lin_clf.fit(trn_term_doc, train_y)
 
     lin_clf2 = svm.LinearSVC(C=0.1)
-    lin_clf2 = CalibratedClassifierCV(lin_clf2)
+    lin_clf2 = CalibratedClassifierCV(lin_clf2,cv=10)
     lin_clf2.fit(trn_term_doc, train_y2)
 
     logging.info('end  svm ')
