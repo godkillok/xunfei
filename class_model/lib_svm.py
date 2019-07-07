@@ -145,7 +145,6 @@ def svm_train():
     pred_preds=[]
 
     for prob in pred_preds_prob:
-        print(max(prob))
         pred_preds.append(list(prob.argsort()[-2:][::-1]))
     with open(os.path.join(project_path,"ag2.csv"),"w",encoding="utf8")  as f:
         f.writelines("id,label1,label2\n")
@@ -155,6 +154,13 @@ def svm_train():
             for t in te:
                res.append(dic_lab[t])
             f.writelines(','.join(res)+'\n')
+    with open(os.path.join(project_path, "ag222.csv"), "w", encoding="utf8")  as f:
+        for ap, prob in zip(apps, pred_preds_prob):
+            res=[ap]
+            if max(prob) > 0.65:
+                for t in list(prob.argsort()[-1:][::-1]):
+                    res.append(dic_lab[t])
+                f.writelines(','.join(res) + '\n')
 
 def svm_pred():
     logging.info('pred')
