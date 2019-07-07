@@ -95,7 +95,7 @@ def svm_train():
     lin_clf = CalibratedClassifierCV(lin_clf)
     lin_clf.fit(trn_term_doc, train_y)
 
-    lin_clf2 = svm.LinearSVC(C=1)
+    lin_clf2 = svm.LinearSVC(C=0.1)
     lin_clf2 = CalibratedClassifierCV(lin_clf2)
     lin_clf2.fit(trn_term_doc, train_y2)
 
