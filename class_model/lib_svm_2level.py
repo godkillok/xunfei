@@ -75,7 +75,7 @@ def svm_train():
     logging.info('train {} test{}'.format(len(train_x), len(test_x)))
     t=time.time()
     data_set = train_x + test_x+pred_x
-    vec = TfidfVectorizer(ngram_range=(1,3), min_df=10, max_df=0.9, use_idf=1, smooth_idf=1, sublinear_tf=1)
+    vec = TfidfVectorizer(ngram_range=(1,4), min_df=10, max_df=0.95, use_idf=1, smooth_idf=1, sublinear_tf=1)
     #vec=HashingVectorizer(ngram_range=(1, 3))
     vec.fit_transform(data_set)
     #
