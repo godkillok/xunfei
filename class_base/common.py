@@ -51,6 +51,7 @@ def  segment(text):
             text= segm(text)
             retry = -1
         except Exception as e:
+            retry -= 1
             print(e)
             time.sleep(1)
     return text
