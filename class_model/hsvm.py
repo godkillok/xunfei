@@ -49,24 +49,23 @@ def get_data_set(flie):
         label2=labels
         app=li.get("app")
         apps.append(app)
-        if label1 not in label_dic.keys():
-            label_dic[label1] =label_num
-            label1_label2[ROOT].append('A_{}'.format(label_num))
-            label1_label2['A_{}'.format(label_dic[label1])]=[]
-            label_num += 1
 
-        if label2 not in label_dic2.keys():
-            label_dic2[label2] = label_num2
-            label1_label2['A_{}'.format(label_dic[label1])].append(label_num2)
-            label_num2 += 1
+        if label1 not in label_dic[ROOT]:
+            label1_label2[ROOT].append(label1)
+            label1_label2[label1]=[]
 
-        label = label_dic.get(label1)
-        label2 = label_dic2.get(label2)
+        if label2 not in label1_label2[label1]:
+            label1_label2[label1].append(label2)
+
+        # label = label_dic.get(label1)
+        # label2 = label_dic2.get(label2)
         data_x.append(text)
-        data_y.append(label)
+        data_y.append(label1)
+        data_x.append(text)
+        data_y.append(label2)
         data_y2.append(label2)
     assert len(data_x) == len(data_y)
-    return data_x, np.array(data_y).astype(int),apps,np.array(data_y2).astype(int)
+    return data_x, np.array(data_y).astype(str),apps,np.array(data_y2).astype(str)
 
 
 def svm_train():
