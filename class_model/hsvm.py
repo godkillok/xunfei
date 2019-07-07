@@ -61,7 +61,7 @@ def get_data_set(flie):
         # label2 = label_dic2.get(label2)
         data_x.append(text)
         data_y.append(label2)
-        if "test" not in flie:
+        if "test" not in flie or "train" not in flie:
             data_x.append(text)
             data_y.append(label1)
         data_y2.append(label2)
