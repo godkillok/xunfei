@@ -103,7 +103,7 @@ def svm_train():
         base_estimator=lin_clf,
         class_hierarchy=label1_label2,
     )
-
+    print(HierarchicalClassifier.classes_)
     clf.fit(trn_term_doc, train_y)
 
 
