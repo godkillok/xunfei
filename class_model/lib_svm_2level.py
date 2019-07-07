@@ -23,7 +23,7 @@ label_num2=0
 t = time.time()
 
 import json
-
+import math
 from sklearn.calibration import CalibratedClassifierCV
 
 def get_data_set(flie):
@@ -95,7 +95,7 @@ def svm_train():
     lin_clf = CalibratedClassifierCV(lin_clf)
     lin_clf.fit(trn_term_doc, train_y)
 
-    lin_clf2 = svm.LinearSVC(C=0.1)
+    lin_clf2 = svm.LinearSVC(C=1)
     lin_clf2 = CalibratedClassifierCV(lin_clf2)
     lin_clf2.fit(trn_term_doc, train_y2)
 
@@ -127,7 +127,7 @@ def svm_train():
             sc1=l1[i]
             for lv2 in label1_label2[i]:
 
-                l2[lv2]*=sc1
+                l2[lv2]=l2[lv2]*math.exp(sc1)
         #print(l2)
         dg2 = list(l2.argsort()[-2:][::-1])
         for d1,d2 in zip(dg,dg2):
