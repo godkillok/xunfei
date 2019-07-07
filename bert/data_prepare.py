@@ -152,18 +152,15 @@ class InputExample(object):
         self.text_a = text_a
         self.text_b = text_b
         self.label = label
-        self.image=image
-
 
 class InputFeatures(object):
     """A single set of features of data."""
 
-    def __init__(self, input_ids, input_mask, segment_ids, label_id,image):
+    def __init__(self, input_ids, input_mask, segment_ids, label_id):
         self.input_ids = input_ids
         self.input_mask = input_mask
         self.segment_ids = segment_ids
         self.label_id = label_id
-        self.image = image
 
 
 class DataProcessor(object):
@@ -202,58 +199,7 @@ class DataProcessor(object):
             print(input_file)
             # reader = csv.reader(f, delimiter="\t", quotechar=quotechar)
             read_lines = f.readlines()
-            lines = []
-            for line in read_lines:
-                it=json.loads(line)
-
-                title = it.get('title', '')
-
-                if title == '':
-                    continue
-
-                for ri in range(15):
-                    pic_tags = [pic.split('\x02')[0] for pic in it.get('pic_tags', '').split('\x03')]
-                    tags=it.get('tags', [])
-                    if ri>0 and 'pred' not in input_file:
-                        if ri==1:
-                            tags = sorted(tags)
-                            pic_tags = sorted(pic_tags)
-                        else:
-                            random.shuffle(tags)
-                            random.shuffle(pic_tags)
-                    if ri>0  and 'pred'  in input_file:
-                        continue
-
-                    source_user = it.get('source_user', '')
-                    senc = title + ' ' + ' ' + ' '.join(tags) + ' ' + ' '.join(pic_tags) + source_user
-                    senc = senc.replace('\n', '').replace('\r', '')
-                    if len(senc.split()) < 10:
-                        print('{}----{}'.format(it.get('id', ''), senc))
-                    lab = it['label']
-                    vid=it.get('id', '')
-                    com = ".jpeg_https~tfhub.dev~google~imagenet~inception_v3~feature_vector~1.txt"
-
-                    if 'pred' in input_file:
-                        pic_path = '/data/tanggp/nsfw_bottle_pred/{}/{}{}'.format(lab,vid,com)
-                        with open('NSFW_MANUL_dict','r',encoding='utf8') as f:
-                            pic=json.load(f)
-                        if vid not in pic:
-                            continue
-                        lab=pic[vid]
-                    else:
-                        pic_path = '/data/tanggp/nsfw_bottle/{}/{}{}'.format(lab,vid,com)
-                    #print(pic_path)
-                    # if os.path.exists(pic_path):
-                    #     with open(pic_path) as fg:
-                    #         pic_lines=fg.readlines()[0].strip()
-                    #         print(len(pic_lines.split(',')))
-                    # else:
-                    #     print('not pic embedding found')
-                    #     continue
-                    pic_lines='2,2'
-                    lines.append([senc,str(lab),pic_lines])
-
-            return lines
+            return read_lines
 
 
 class CategoryProcessor(DataProcessor):
@@ -262,80 +208,48 @@ class CategoryProcessor(DataProcessor):
     def get_train_examples(self, data_dir):
         """See base class."""
         return self._create_examples(
-            self._read_fasttxext_format(os.path.join(data_dir, "channel_train")), "train")
+            self._read_fasttxext_format(os.path.join(data_dir, "apptype_train.train_jieba_json")), "train")
 
     def get_dev_examples(self, data_dir):
         """See base class."""
         return self._create_examples(
-            self._read_fasttxext_format(os.path.join(data_dir, "channel_test")), "dev")
+            self._read_fasttxext_format(os.path.join(data_dir, "apptype_train.test_jieba_json")), "dev")
 
     def get_test_examples(self, data_dir):
         """See base class."""
         return self._create_examples(
-            self._read_fasttxext_format(os.path.join(data_dir, "channel_test")), "test")
+            self._read_fasttxext_format(os.path.join(data_dir, "app_desc.jieba_json")), "test")
 
-    def get_labels(self):
+    def get_labels(self,data_dir):
         """See base class."""
-        return ['Science_&_Technology', 'Sports', 'Howto_&_Style', 'Film_&_Animation', 'Entertainment', 'Education', 'News_&_Politics', 'Music', 'Shows', 'Autos_&_Vehicles', 'Comedy', 'Travel_&_Events', 'Gaming', 'Pets_&_Animals']
+        labels=[]
+        with open(os.path.join(data_dir, "apptype_id_name.txt"),"r",encoding="utf8") as f:
+            lines=f.readlines()
+            for li in lines:
+                li=li.strip()
+                lid,lname=li.split()
+                if len(lid)>4:
+                    labels.append(lid)
+        return labels
 
     def _create_examples(self, lines, set_type):
         """Creates examples for the training and dev sets."""
         examples = []
         for (i, line) in enumerate(lines):
-            guid = "%s-%s" % (set_type, i)
+            li=json.loads(line)
+            guid =li["app"]
+            text=li["jieba"]
+            label=li["label"]
             if set_type == "test":
-                text_a = tokenization.convert_to_unicode(line[1])
+                text_a = tokenization.convert_to_unicode(text)
                 label = "0"
             else:
-                text_a = tokenization.convert_to_unicode(line[0])
-                label = tokenization.convert_to_unicode(line[1])
+                text_a = tokenization.convert_to_unicode(text)
+                label = tokenization.convert_to_unicode(label)
             examples.append(
                 InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
         return examples
 
-class NSFWProcessor(DataProcessor):
-    """Processor for the CoLA data set (GLUE version)."""
-
-    def get_train_examples(self, data_dir):
-        """See base class."""
-        return self._create_examples(
-            self._read_fasttxext_format(os.path.join(data_dir, "nsfw_raw_train")), "train")
-
-    def get_dev_examples(self, data_dir):
-        """See base class."""
-        return self._create_examples(
-            self._read_fasttxext_format(os.path.join(data_dir, "nsfw_raw_test")), "test")
-
-    def get_test_examples(self, data_dir):
-        """See base class."""
-        return self._create_examples(
-            self._read_fasttxext_format(os.path.join(data_dir, "nsfw_raw_pred")), "pred")
-
-    def get_labels(self):
-        """See base cl1ass."""
-        return [ '0','1']
-
-    def _create_examples(self, lines, set_type):
-        """Creates examples for the training and dev1 sets."""
-        examples = []
-        for (i, line) in enumerate(lines):
-            guid = "%s-%s" % (set_type, i)
-            if len(lines)==1:
-                text_a = tokenization.convert_to_unicode(line[0])
-                label = "0"
-                continue
-            else:
-                try:
-                    text_a = tokenization.convert_to_unicode(line[0])
-                    label = tokenization.convert_to_unicode(line[1])
-                    image=[float(fg) for fg in line[2].split(',')]
-                except Exception as e:
-                    print(e)
-                    print(line)
-                    continue
-            examples.append(
-                InputExample(guid=guid, text_a=text_a, text_b=None, label=label,image=image))
-        return examples
 
 
 def convert_single_example(ex_index, example, label_list, max_seq_length,
@@ -429,7 +343,7 @@ def convert_single_example(ex_index, example, label_list, max_seq_length,
         input_ids=input_ids,
         input_mask=input_mask,
         segment_ids=segment_ids,
-        label_id=label_id,image=image)
+        label_id=label_id)
     return feature
 
 
@@ -461,7 +375,6 @@ def file_based_convert_examples_to_features(
         features["input_mask"] = create_int_feature(feature.input_mask)
         features["segment_ids"] = create_int_feature(feature.segment_ids)
         features["label_ids"] = create_int_feature([feature.label_id])
-        features["image"] = create_float_feature(feature.image)
         tf_example = tf.train.Example(features=tf.train.Features(feature=features))
         writer.write(tf_example.SerializeToString())
 
@@ -536,8 +449,7 @@ def main(_):
     tf.logging.set_verbosity(tf.logging.INFO)
 
     processors = {
-        "category": CategoryProcessor,
-        "nsfw":NSFWProcessor
+        "category": CategoryProcessor
     }
 
     if not FLAGS.do_train and not FLAGS.do_eval and not FLAGS.do_predict:
@@ -561,7 +473,7 @@ def main(_):
 
     processor = processors[task_name]()
 
-    label_list = processor.get_labels()
+    label_list = processor.get_labels(FLAGS.data_dir)
 
     tokenizer = tokenization.FullTokenizer(
         vocab_file=FLAGS.vocab_file, do_lower_case=FLAGS.do_lower_case)

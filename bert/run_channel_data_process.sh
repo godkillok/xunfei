@@ -1,8 +1,8 @@
 export BERT_BASE_DIR=/data/tanggp/bert_model/multi_cased_L-12_H-768_A-12
-export XNLI_DIR=/data/tanggp/nsfw_txt_input_rand15
-export OUTPUT=/data/tanggp/nsfw_txt_output15/
+export XNLI_DIR=/data/tanggp/xfyun/classify/aichallenge
+export OUTPUT=/data/tanggp/xfyun/classify/bert_model/
 python3 data_prepare.py \
-  --task_name=nsfw \
+  --task_name=category \
   --do_train=true \
   --do_eval=true \
   --do_predict=true \
