@@ -123,7 +123,7 @@ def svm_train():
 
     test_term_doc = vec.transform(test_x)
     test_preds_1 = clf.predict_proba(test_term_doc)
-    test_preds = clf.predict_proba(test_term_doc)
+    test_preds = clf.predict(test_term_doc)
     logging.info('train {} accuracy_score {},  \n {}'.format('train',accuracy_score(train_y, train_preds),classification_report(test_y2, test_preds)))
 
     dic_lab={}
