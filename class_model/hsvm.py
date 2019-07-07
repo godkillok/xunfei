@@ -61,8 +61,9 @@ def get_data_set(flie):
         # label2 = label_dic2.get(label2)
         data_x.append(text)
         data_y.append(label1)
-        data_x.append(text)
-        data_y.append(label2)
+        if "train" in flie:
+            data_x.append(text)
+            data_y.append(label2)
         data_y2.append(label2)
     assert len(data_x) == len(data_y)
     return data_x, np.array(data_y).astype(str),apps,np.array(data_y2).astype(str)
