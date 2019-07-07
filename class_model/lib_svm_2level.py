@@ -124,8 +124,9 @@ def svm_train():
         print(l2)
         dg=list(l2.argsort()[-2:][::-1])
         for i in range(l1.shape[0]):
-            sc1=l1[0]
+            sc1=l1[i]
             for lv2 in label1_label2[i]:
+
                 l2[lv2]+=10*sc1
         print(l2)
         dg2 = list(l2.argsort()[-2:][::-1])
