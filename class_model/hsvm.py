@@ -114,9 +114,11 @@ def svm_train():
 
     train_preds = clf.predict(trn_term_doc)
     train_preds_prob = clf.predict_proba(trn_term_doc)
+    print(len((clf.classes_)),train_preds_prob.shape)
+    time.sleep(20)
     for reg,prob in zip(train_preds,train_preds_prob):
         print(reg,list(prob.argsort()[-1:][::-1]))
-
+    time.sleep(20)
     from sklearn.metrics import classification_report
 
     logging.info('train {} accuracy_score {},  \n {}'.format('train',accuracy_score(train_y, train_preds),classification_report(train_y, train_preds)))
