@@ -71,7 +71,8 @@ for path in [train_path,test_path]:
     lab_count=defaultdict(int)
     with open(path,"r",encoding="utf8") as f:
         lines=f.readlines()
-        for li  in lines:
+        for i,li  in enumerate(lines):
+            print(i)
             li=li.strip()
             li=li.split()
             res={}
