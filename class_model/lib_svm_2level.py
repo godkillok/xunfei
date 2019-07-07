@@ -57,7 +57,7 @@ def get_data_set(flie):
             label_num2 += 1
 
         label = label_dic.get(label1)
-        label2 = label_dic.get(label2)
+        label2 = label_dic2.get(label2)
         data_x.append(text)
         data_y.append(label)
         data_y2.append(label2)
