@@ -103,10 +103,10 @@ def svm_train():
         base_estimator=lin_clf,
         class_hierarchy=label1_label2,
     )
-    print(clf.classes_)
+
     clf.fit(trn_term_doc, train_y)
 
-
+    print(clf.classes_)
 
     logging.info('end  svm ')
     # with open(project_path + 'svm_model.pkl', 'wb') as f:
