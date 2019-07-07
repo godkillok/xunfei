@@ -702,7 +702,7 @@ def attention_layer(from_tensor,
   # `attention_scores` = [B, N, F, T]
   attention_scores = tf.matmul(query_layer, key_layer, transpose_b=True)
   attention_scores = tf.multiply(attention_scores,
-                                 1.0 / match_g.sqrt(float(size_per_head)))
+                                 1.0 / math.sqrt(float(size_per_head)))
 
   if attention_mask is not None:
     # `attention_mask` = [B, 1, F, T]
