@@ -44,6 +44,7 @@ for path in [test_path]:
                 li["label_2st"] = id_dic[lid]
                 lab_count[li["label_2st"]] += 1
                 result.append(li)
+print(lab_count)
 with open(train_path, "w", encoding="utf8") as f:
    for  res in result:
        f.writelines(json.dumps(res,ensure_ascii=False)+'\n')
