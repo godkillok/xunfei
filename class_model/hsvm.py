@@ -141,8 +141,8 @@ def svm_train():
         prd=pred[0]
         #print(real, pred)
         for pr in pred:
-            if real==pr:
-                prd=real
+            if real==clf.classes_[pr]:
+                prd=pr
         test_y_name.append(real)
         test_preds_name.append(clf.classes_[prd])
 
