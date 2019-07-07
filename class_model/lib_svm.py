@@ -145,7 +145,7 @@ def svm_train():
     pred_preds=[]
 
     for prob in pred_preds_prob:
-        print(prob.sort()[-2:][::-1])
+        print(max(prob))
         pred_preds.append(list(prob.argsort()[-2:][::-1]))
     with open(os.path.join(project_path,"ag2.csv"),"w",encoding="utf8")  as f:
         f.writelines("id,label1,label2\n")
