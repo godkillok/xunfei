@@ -91,6 +91,7 @@ def svm_train():
 
     trn_term_doc = vec.transform(train_x)
     print(label1_label2)
+    time.sleep(20)
     tfidf_time = time.time()
     logging.info('time spend {}'.format(tfidf_time - t))
 
