@@ -168,8 +168,7 @@ def file_based_input_fn_builder(input_file, seq_length, is_training,
         "input_ids": tf.FixedLenFeature([seq_length], tf.int64),
         "input_mask": tf.FixedLenFeature([seq_length], tf.int64),
         "segment_ids": tf.FixedLenFeature([seq_length], tf.int64),
-        "label_ids": tf.FixedLenFeature([], tf.int64),
-        "image": tf.FixedLenFeature([2], tf.float32),
+        "label_ids": tf.FixedLenFeature([], tf.int64)
     }
     if multi_choice > 1:
         name_to_features = {"label_ids": tf.FixedLenFeature([], tf.int64)}
@@ -231,7 +230,7 @@ def get_real_label(input_filename):
     return label_list
 
 def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
-                 labels, num_labels, image,use_one_hot_embeddings):
+                 labels, num_labels,use_one_hot_embeddings):
     """Creates a classification model."""
     model = modeling.BertModel(
         config=bert_config,
@@ -252,8 +251,6 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
     # If you want to use the token-level output, use model.get_sequence_output()
     # instead.
     output_layer1 = model.get_pooled_output()
-    print('============shape{}--{}'.format(output_layer1.shape,image.shape))
-    #output_layer=tf.concat([output_layer1, image],1)
     output_layer=tf.layers.dense(output_layer1, 100, activation=modeling.gelu,name='dense_layer')
 
     hidden_size = output_layer.shape[-1].value
@@ -298,13 +295,12 @@ def model_fn_builder(bert_config, num_labels, init_checkpoint, learning_rate,
         input_mask = features["input_mask"]
         segment_ids = features["segment_ids"]
         label_ids = features["label_ids"]
-        image=features["image"]
 
         is_training = (mode == tf.estimator.ModeKeys.TRAIN)
 
         (total_loss, per_example_loss, logits, probabilities) = create_model(
             bert_config, is_training, input_ids, input_mask, segment_ids, label_ids,
-            num_labels,image, use_one_hot_embeddings)
+            num_labels, use_one_hot_embeddings)
 
         tvars = tf.trainable_variables()
         initialized_variable_names = {}
@@ -386,12 +382,11 @@ def model_fn_builder_gpu(bert_config, num_labels, init_checkpoint, learning_rate
         input_mask = features["input_mask"]
         segment_ids = features["segment_ids"]
         label_ids = features["label_ids"]
-        image = features["image"]
         is_training = (mode == tf.estimator.ModeKeys.TRAIN)
 
         (total_loss, per_example_loss, logits, probabilities) = create_model(
             bert_config, is_training, input_ids, input_mask, segment_ids, label_ids,
-            num_labels,image, use_one_hot_embeddings)
+            num_labels, use_one_hot_embeddings)
 
         tvars = tf.trainable_variables()
         initialized_variable_names = {}
