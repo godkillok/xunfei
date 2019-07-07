@@ -239,11 +239,12 @@ class CategoryProcessor(DataProcessor):
             li=json.loads(line)
             guid =li["app"]
             text=li["jieba"]
-            label=li["label"]
+
             if set_type == "test":
                 text_a = tokenization.convert_to_unicode(text)
                 label = "0"
             else:
+                label = li["label"]
                 text_a = tokenization.convert_to_unicode(text)
                 label = tokenization.convert_to_unicode(label)
             examples.append(
