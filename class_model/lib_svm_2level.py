@@ -124,7 +124,7 @@ def svm_train():
         for i in range(l1.shape[0]):
             sc1=l1[0]
             for lv2 in label1_label2[i]:
-                l2[lv2]*=sc1
+                l2[lv2]+=10*sc1
         dg2 = list(l2.argsort()[-2:][::-1])
         for d1,d2 in zip(dg,dg2):
             if d1!=d2:
