@@ -21,7 +21,7 @@ from __future__ import print_function
 import collections
 import copy
 import json
-import match_g
+import match
 import re
 import six
 import tensorflow as tf
