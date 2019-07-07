@@ -113,7 +113,9 @@ def svm_train():
     #     pickle.dump(lin_clf, f)
 
     train_preds = clf.predict(trn_term_doc)
-
+    train_preds_prob = clf.predict_proba(trn_term_doc)
+    for reg,prob in zip(train_preds,train_preds_prob):
+        print(reg,list(prob.argsort()[-1:][::-1]))
 
     from sklearn.metrics import classification_report
 
