@@ -48,3 +48,5 @@ print(lab_count)
 with open(train_path, "w", encoding="utf8") as f:
    for  res in result:
        f.writelines(json.dumps(res,ensure_ascii=False)+'\n')
+os.system("cd /data/tanggp/xfyun/classify/aichallenge && mv apptype_train.train_jieba_json apptype_train.train_jieba_json1")
+os.system("cd /data/tanggp/xfyun/classify/aichallenge && cat apptype_train.train_jieba_json1 new_train.jieba_json >apptype_train.train_jieba_json")
