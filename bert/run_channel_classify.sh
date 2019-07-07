@@ -13,7 +13,7 @@ python3 run_classify.py \
   --init_checkpoint=$BERT_BASE_DIR/bert_model.ckpt \
   --max_seq_length=128 \
   --train_batch_size=32 \
-  --num_lables=2 \
+  --num_lables=126 \
   --learning_rate=5e-5 \
   --num_train_epochs=4.0 \
   --eval_steps=0\
