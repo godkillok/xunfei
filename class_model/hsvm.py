@@ -50,14 +50,14 @@ def get_data_set(flie):
         app=li.get("app")
         apps.append(app)
         if label1 not in label_dic.keys():
-            label_dic[label1] = 'A_{}'.format(label_num)
-            label1_label2[ROOT].append(label_num)
-            label1_label2[label_dic[label1]]=[]
+            label_dic[label1] =label_num
+            label1_label2[ROOT].append('A_{}'.format(label_num))
+            label1_label2['A_{}'.format(label_dic[label1])]=[]
             label_num += 1
 
         if label2 not in label_dic2.keys():
             label_dic2[label2] = label_num2
-            label1_label2[label_dic[label1]].append(label_num2)
+            label1_label2['A_{}'.format(label_dic[label1])].append(label_num2)
             label_num2 += 1
 
         label = label_dic.get(label1)
