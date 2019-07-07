@@ -50,7 +50,7 @@ def get_data_set(flie):
         app=li.get("app")
         apps.append(app)
 
-        if label1 not in label_dic[ROOT]:
+        if label1 not in label1_label2[ROOT]:
             label1_label2[ROOT].append(label1)
             label1_label2[label1]=[]
 
