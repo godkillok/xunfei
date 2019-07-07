@@ -138,7 +138,6 @@ def svm_train():
     if len(dic_lab)>30:
         logging.info('{} model on {} data accuracy_score {} top2 test\n {}'.format("train", test_path,accuracy_score(test_y_name, test_preds_name),
                                                                 classification_report(test_y_name, test_preds_name)))
-    cnf=classification_report(test_y_name, test_preds_name)
 
     pred_term_doc = vec.transform(pred_x)
     pred_preds_prob = lin_clf.predict_proba(pred_term_doc)
@@ -154,10 +153,10 @@ def svm_train():
             for t in te:
                res.append(dic_lab[t])
             f.writelines(','.join(res)+'\n')
-    with open(os.path.join(project_path, "add_new_data1.csv"), "w", encoding="utf8")  as f:
+    with open(os.path.join(project_path, "add_data.csv"), "w", encoding="utf8")  as f:
         for ap, prob in zip(apps, pred_preds_prob):
             res=[ap]
-            if max(prob) > 0.65:
+            if max(prob) > 0.7:
                 for t in list(prob.argsort()[-1:][::-1]):
                     res.append(dic_lab[t])
                 f.writelines(','.join(res) + '\n')
