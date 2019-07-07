@@ -72,7 +72,8 @@ for path in [train_path,test_path]:
     with open(path,"r",encoding="utf8") as f:
         lines=f.readlines()
         for i,li  in enumerate(lines):
-            print(i)
+            if i%1000==0:
+                print(i)
             li=li.strip()
             li=li.split()
             res={}
