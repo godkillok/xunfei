@@ -13,7 +13,7 @@ import logging
 import numpy as np
 import time
 import os
-import pickle  # pickle模块
+import pickle  # pickle模块2
 import logging
 import os
 import sys
