@@ -99,12 +99,12 @@ if __name__ == '__main__':
         print (j, clf)
         dataset_blend_pred_j = np.zeros((len(pred_x), len(skf)))
         dataset_blend_test_j = np.zeros((len(test_x), len(skf)))
-        for i, (train, test) in enumerate(skf):
+        for i, (train_1, test_1) in enumerate(skf):
             print ("Fold", i)
-            X_train = train_x[train]
-            y_train = train_y[train]
-            X_test = train_x[test]
-            y_test = train_y[test]
+            X_train = train_x[train_1]
+            y_train = train_y[train_1]
+            X_test = train_x[test_1]
+            y_test = train_y[test_1]
             train_x_doc = process.transform(X_train)
             test_x_doc = process.transform(X_test)
             pred_x_doc=process.transform(pred_x)
@@ -112,7 +112,7 @@ if __name__ == '__main__':
 
             clf.fit(train_x_doc, y_train)
             y_test_prob = clf.predict_proba(test_x_doc)[:, 1]
-            dataset_blend_train[test, j] = y_test_prob
+            dataset_blend_train[test_1, j] = y_test_prob
             dataset_blend_pred_j[:, i] = clf.predict_proba(pred_x_doc)[:, 1]
             dataset_blend_test_j[:, i] = clf.predict_proba(test_xx_doc)[:, 1]
         dataset_blend_pred[:, j] = dataset_blend_pred_j.mean(1)
