@@ -14,7 +14,7 @@ python3 run_classify.py \
   --max_seq_length=128 \
   --train_batch_size=32 \
   --num_lables=126 \
-  --learning_rate=5e-4 \
+  --learning_rate=1e-5 \
   --num_train_epochs=4.0 \
   --eval_steps=0\
   --output_dir=$OUTPUT
