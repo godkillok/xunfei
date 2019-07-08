@@ -609,7 +609,7 @@ def main(_):
                         real_label=get_real_label(predict_file)
                         pred_label=[]
                         for rea,pred in zip(real_label,pre_result):
-                            print(rea,pred)
+                            #print(rea,pred)
                             pr_1=pred.argsort()[-2:][::-1][0]
                             for pr in list(pred.argsort()[-2:][::-1]):
                                 if pr==rea:
