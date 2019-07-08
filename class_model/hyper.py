@@ -24,8 +24,9 @@ from collections import defaultdict
 currentUrl = os.path.dirname(__file__)
 most_parenturl = os.path.abspath(os.path.join(currentUrl, os.pardir))
 m_p, m_c = os.path.split(most_parenturl)
-while 'nlp' not in m_c:
+while 'xunfei' not in m_c:
     m_p, m_c = os.path.split(m_p)
+print(m_p,m_c)
 sys.path.append(os.path.join(m_p, m_c))
 from  xunfei.class_model.load_data import  load_data
 from sklearn.metrics import accuracy_score
