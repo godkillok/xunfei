@@ -126,9 +126,10 @@ if __name__ == '__main__':
     clf.fit(dataset_blend_train, train_y)
 
     #clf.predict_proba(dataset_blend_test)[:, 1]
-
-    y_submission = clf.predict_proba(dataset_blend_pred)[:, 1]
-
+    gg=clf.predict_proba(dataset_blend_pred)
+    print(gg.shape)
+    y_submission = gg[:, 1]
+    print(y_submission.shape)
     print ("Linear stretch of predictions to [0,1]")
     y_submission = (y_submission - y_submission.min()) / (y_submission.max() - y_submission.min())
 
