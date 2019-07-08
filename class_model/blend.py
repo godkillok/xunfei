@@ -89,9 +89,9 @@ if __name__ == '__main__':
     # lin_clf.fit(trn_term_doc, train_y)
     print ("Creating train and test sets for blending.")
 
-    dataset_blend_train = np.zeros((train_x.shape[0], len(clfs)))
-    dataset_blend_pred = np.zeros((pred_x.shape[0], len(clfs)))
-    dataset_blend_test = np.zeros((test_x.shape[0], len(clfs)))
+    dataset_blend_train = np.zeros((len(train_x), len(clfs)))
+    dataset_blend_pred = np.zeros((len(pred_x), len(clfs)))
+    dataset_blend_test = np.zeros((len(test_x), len(clfs)))
 
     for j, clf_process in enumerate(clfs):
         clf,process=clf_process
