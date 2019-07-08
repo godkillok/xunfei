@@ -444,6 +444,7 @@ def model_fn_builder_gpu(bert_config, num_labels, init_checkpoint, learning_rate
                 mode=mode,
                 loss=total_loss)
         else:
+
             output_spec = tf.estimator.EstimatorSpec(
                 mode=mode, predictions=probabilities)
         return output_spec
@@ -607,8 +608,15 @@ def main(_):
                         pre_result = estimator.predict(input_fn=predict_input_fn)
                         real_label=get_real_label(predict_file)
                         pred_label=[]
-                        for res in pre_result:
-                            pred_label.append(np.argmax(res))
+                        for rea,pred in zip(real_label,pre_result):
+                            print(rea,pred)
+                            pr_1=pred.argsort()[-2:][::-1][0]
+                            for pr in list(pred.argsort()[-2:][::-1]):
+                                if pr==rea:
+                                    pr_1=rea
+
+                            pred_label.append(pr_1)
+
                         all_real_label+=real_label
                         all_pred_labal+=pred_label
             t2 = time.time()
