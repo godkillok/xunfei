@@ -25,7 +25,8 @@ BSD license, 3 clauses.
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn import svm
 import numpy as np
-from sklearn.cross_validation import StratifiedKFold
+
+from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.linear_model import LogisticRegression
@@ -65,7 +66,7 @@ if __name__ == '__main__':
         train_x = train_x[idx]
         train_y = train_y[idx]
 
-    skf = list(StratifiedKFold(train_y, n_folds))
+    skf = list(train_test_split(train_y, n_folds))
     lin_clf = CalibratedClassifierCV(svm.LinearSVC(C=0.1))
     lin_clf_1 = CalibratedClassifierCV(svm.LinearSVC(C=0.2))
     lin_clf_2 = CalibratedClassifierCV(svm.LinearSVC(C=0.5))
@@ -80,7 +81,7 @@ if __name__ == '__main__':
           ]
     # {lin_clf_2, tfidf_vec},
     # {lin_clf_3, tfidf_vec},
-    # {lin_clf_4, tfidf_vec}
+    # {lin_clf_4, tfidf_vec}1
 
 
 
