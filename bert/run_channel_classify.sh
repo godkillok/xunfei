@@ -1,7 +1,7 @@
 export BERT_BASE_DIR=/data/tanggp/bert_model/multi_cased_L-12_H-768_A-12
 export XNLI_DIR=/data/tanggp/xfyun/classify/aichallenge
 export OUTPUT=/data/tanggp/xfyun/classify/bert_model/
-#12
+#123
 python3 run_classify.py \
   --task_name=category \
   --do_train=true \
