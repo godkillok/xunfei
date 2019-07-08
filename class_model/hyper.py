@@ -14,6 +14,7 @@ import numpy as np
 import time
 import os
 import pickle  # pickle模块
+from  xunfei.class_model.load_data import  load_data
 from sklearn.metrics import accuracy_score
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
@@ -57,9 +58,10 @@ def get_data_set(flie):
 
 
 def svm_train():
-    train_x, train_y,apps = get_data_set(train_path)
-    test_x, test_y,apps = get_data_set(test_path)
-    pred_x,_,apps=get_data_set(pred_path)
+    # train_x, train_y,apps = get_data_set(train_path)
+    # test_x, test_y,apps = get_data_set(test_path)
+    # pred_x,_,apps=get_data_set(pred_path)
+    train_x, train_y, test_x, test_y, pred_x, apps, label_dic = load_data()
     # with open(CHANNEL_MODEL + 'svm_label.pkl', 'wb') as f:
     #     pickle.dump(label_dic, f)
 
