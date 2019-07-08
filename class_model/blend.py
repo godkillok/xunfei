@@ -96,8 +96,8 @@ if __name__ == '__main__':
     for j, clf_process in enumerate(clfs):
         clf,process=clf_process
         print (j, clf)
-        dataset_blend_pred_j = np.zeros((pred_x.shape[0], len(skf)))
-        dataset_blend_test_j = np.zeros((test_x.shape[0], len(skf)))
+        dataset_blend_pred_j = np.zeros((len(pred_x), len(skf)))
+        dataset_blend_test_j = np.zeros((len(test_x), len(skf)))
         for i, (train, test) in enumerate(skf):
             print ("Fold", i)
             X_train = train_x[train]
