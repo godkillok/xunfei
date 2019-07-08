@@ -69,7 +69,7 @@ def svm_train():
     estim = HyperoptEstimator(classifier=any_sparse_classifier('clf'),
                               preprocessing=[
                                   tfidf('tfidf', min_df=10, max_df=0.9, use_idf=1, smooth_idf=1, sublinear_tf=1)],
-                              algo=tpe.suggest, trial_timeout=1200)
+                              algo=tpe.suggest, trial_timeout=1200,refit=False)
 
     estim.fit(train_x, train_y)
 
