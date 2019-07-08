@@ -32,7 +32,7 @@ from  xunfei.class_model.load_data import  load_data
 from sklearn.metrics import accuracy_score
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
-# 12813123
+# 128131232
 column = "word_seg"
 project_path="/data/tanggp/xfyun/classify/aichallenge/"
 test_path=os.path.join(project_path,"apptype_train.test_jieba_json")
