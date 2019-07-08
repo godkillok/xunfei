@@ -24,7 +24,6 @@ BSD license, 3 clauses.
 """
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn import svm
-from __future__ import division
 import numpy as np
 from sklearn.cross_validation import StratifiedKFold
 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
