@@ -14,7 +14,7 @@ import numpy as np
 import time
 import os
 import pickle  # pickle模块
-from  xunfei.class_model.load_data import  load_data
+from  class_model.load_data import  load_data
 from sklearn.metrics import accuracy_score
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
