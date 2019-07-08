@@ -110,8 +110,8 @@ if __name__ == '__main__':
             test_xx_doc=process.transform(test_x)
 
             clf.fit(train_x_doc, y_train)
-            y_test = clf.predict_proba(test_x_doc)[:, 1]
-            dataset_blend_train[test, j] = y_test
+            y_test_prob = clf.predict_proba(test_x_doc)[:, 1]
+            dataset_blend_train[test, j] = y_test_prob
             dataset_blend_pred_j[:, i] = clf.predict_proba(pred_x_doc)[:, 1]
             dataset_blend_test_j[:, i] = clf.predict_proba(test_xx_doc)[:, 1]
         dataset_blend_pred[:, j] = dataset_blend_pred_j.mean(1)
