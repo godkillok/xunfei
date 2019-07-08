@@ -14,7 +14,20 @@ import numpy as np
 import time
 import os
 import pickle  # pickle模块
-from  class_model.load_data import  load_data
+import logging
+import os
+import sys
+import json
+import datetime
+from collections import defaultdict
+
+currentUrl = os.path.dirname(__file__)
+most_parenturl = os.path.abspath(os.path.join(currentUrl, os.pardir))
+m_p, m_c = os.path.split(most_parenturl)
+while 'nlp' not in m_c:
+    m_p, m_c = os.path.split(m_p)
+sys.path.append(os.path.join(m_p, m_c))
+from  xunfei.class_model.load_data import  load_data
 from sklearn.metrics import accuracy_score
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
