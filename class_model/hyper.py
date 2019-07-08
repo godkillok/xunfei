@@ -3,7 +3,7 @@ from sklearn.datasets import fetch_20newsgroups
 from sklearn import metrics
 from hyperopt import tpe
 import numpy as np
-
+from sklearn.metrics import accuracy_score,classification_report
 # Download the data and split into training and test sets
 
 import pandas as pd, numpy as np
@@ -88,8 +88,37 @@ def svm_train():
                               algo=tpe.suggest, trial_timeout=1200,refit=False)
 
     estim.fit(train_x, train_y)
-    print(estim.best_model())
-    print(estim.score(test_x, test_y))
+    best_model=estim.best_model()
+    print(best_model)
+    learner=best_model['learner']
+    preprocs=best_model['preprocs'][0]
+
+    lin_clf = learner
+    lin_clf = CalibratedClassifierCV(lin_clf)
+
+    trn_term_doc=preprocs.transform(train_x)
+    lin_clf.fit(trn_term_doc, train_y)
+
+    test_term_doc = preprocs.transform(test_x)
+    test_preds_prob = lin_clf.predict_proba(test_term_doc)
+
+    test_preds=[]
+    for prob in test_preds_prob:
+        test_preds.append(list(prob.argsort()[-2:][::-1]))
+
+    test_preds_ = []
+    for rea, tes in zip(test_y, test_preds):
+        prd = tes[0]
+        for te in tes:
+            if rea == te:
+                prd = te
+        test_preds_.append(prd)
+    print('accuracy_score {} top2 test\n {}'.format(accuracy_score(test_y, test_preds_),
+                                                    classification_report(test_y,
+                                                                          test_preds_)))
+
+
+    #print(estim.fit().score(test_x, test_y))
     # <<show score here>>
     #print(estim.best_model())
     # <<show model here>>
