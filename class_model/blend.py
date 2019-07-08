@@ -30,9 +30,19 @@ from sklearn.cross_validation import StratifiedKFold
 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.linear_model import LogisticRegression
-from xunfei.class_model.load_data import  load_data
+import os
+import sys
+currentUrl = os.path.dirname(__file__)
+most_parenturl = os.path.abspath(os.path.join(currentUrl, os.pardir))
+m_p, m_c = os.path.split(most_parenturl)
+while 'xunfei' not in m_c:
+    m_p, m_c = os.path.split(m_p)
+print(m_p,m_c)
+sys.path.append(os.path.join(m_p, m_c))
+
+from class_model.load_data import  load_data
 from sklearn.calibration import CalibratedClassifierCV
-from
+
 def logloss(attempt, actual, epsilon=1.0e-15):
     """Logloss, i.e. the score of the bioresponse competition.
     """
@@ -57,58 +67,69 @@ if __name__ == '__main__':
         train_y = train_y[idx]
 
     skf = list(StratifiedKFold(train_y, n_folds))
-
-    clfs =[ {RandomForestClassifier(n_estimators=100, n_jobs=-1, criterion='gini'),},
-            RandomForestClassifier(n_estimators=100, n_jobs=-1, criterion='entropy'),
-            ExtraTreesClassifier(n_estimators=100, n_jobs=-1, criterion='gini'),
-            ExtraTreesClassifier(n_estimators=100, n_jobs=-1, criterion='entropy'),
-            GradientBoostingClassifier(learning_rate=0.05, subsample=0.5, max_depth=6, n_estimators=50)]
-
     lin_clf = CalibratedClassifierCV(svm.LinearSVC(C=0.1))
-    vec = TfidfVectorizer(ngram_range=(1,3), min_df=10, max_df=0.9, use_idf=1, smooth_idf=1, sublinear_tf=1)
-    #vec=HashingVectorizer(ngram_range=(1, 3))
+    lin_clf_1 = CalibratedClassifierCV(svm.LinearSVC(C=0.2))
+    lin_clf_2 = CalibratedClassifierCV(svm.LinearSVC(C=0.5))
+    lin_clf_3 = CalibratedClassifierCV(svm.LinearSVC(C=1))
+    lin_clf_4 = CalibratedClassifierCV(svm.LinearSVC(C=10))
+    tfidf_vec = TfidfVectorizer(ngram_range=(1,3), min_df=10, max_df=0.9, use_idf=1, smooth_idf=1, sublinear_tf=1)
     data_set=train_x+test_x+pred_x
-    vec.fit_transform(data_set)
-    #
-    with open(project_path + 'tfidf.pkl', 'wb') as f:
-        pickle.dump(vec, f)
-    # with open(CHANNEL_MODEL + 'tfidf.pkl', 'rb') as f:
-    #     vec = pickle.load(f)
+    tfidf_vec.fit_transform(data_set)
+
+    clfs =[ {lin_clf,tfidf_vec},
+            {lin_clf_1,tfidf_vec},
+            {lin_clf_2, tfidf_vec},
+            {lin_clf_3, tfidf_vec},
+            {lin_clf_4, tfidf_vec}]
 
 
-    trn_term_doc = vec.transform(train_x)
 
-    lin_clf.fit(trn_term_doc, train_y)
+
+    # lin_clf.fit(trn_term_doc, train_y)
     print ("Creating train and test sets for blending.")
 
     dataset_blend_train = np.zeros((train_x.shape[0], len(clfs)))
-    dataset_blend_test = np.zeros((pred_x.shape[0], len(clfs)))
+    dataset_blend_pred = np.zeros((pred_x.shape[0], len(clfs)))
+    dataset_blend_test = np.zeros((test_x.shape[0], len(clfs)))
 
-    for j, clf in enumerate(clfs):
+    for j, clf_process in enumerate(clfs):
+        clf,process=clf_process
         print (j, clf)
-        dataset_blend_test_j = np.zeros((pred_x.shape[0], len(skf)))
+        dataset_blend_pred_j = np.zeros((pred_x.shape[0], len(skf)))
+        dataset_blend_test_j = np.zeros((test_x.shape[0], len(skf)))
         for i, (train, test) in enumerate(skf):
             print ("Fold", i)
             X_train = train_x[train]
             y_train = train_y[train]
             X_test = train_x[test]
             y_test = train_y[test]
-            clf.fit(X_train, y_train)
-            y_submission = clf.predict_proba(X_test)[:, 1]
-            dataset_blend_train[test, j] = y_submission
-            dataset_blend_test_j[:, i] = clf.predict_proba(pred_x)[:, 1]
+            train_x_doc = process.transform(X_train)
+            test_x_doc = process.transform(X_test)
+            pred_x_doc=process.transform(pred_x)
+            test_xx_doc=process.transform(test_x)
+
+            clf.fit(train_x_doc, y_train)
+            y_test = clf.predict_proba(test_x_doc)[:, 1]
+            dataset_blend_train[test, j] = y_test
+            dataset_blend_pred_j[:, i] = clf.predict_proba(pred_x_doc)[:, 1]
+            dataset_blend_test_j[:, i] = clf.predict_proba(test_xx_doc)[:, 1]
+        dataset_blend_pred[:, j] = dataset_blend_pred_j.mean(1)
         dataset_blend_test[:, j] = dataset_blend_test_j.mean(1)
 
 
     print ("Blending.")
     clf = LogisticRegression()
     clf.fit(dataset_blend_train, train_y)
-    y_submission = clf.predict_proba(dataset_blend_test)[:, 1]
+
+    #clf.predict_proba(dataset_blend_test)[:, 1]
+
+    y_submission = clf.predict_proba(dataset_blend_pred)[:, 1]
 
     print ("Linear stretch of predictions to [0,1]")
     y_submission = (y_submission - y_submission.min()) / (y_submission.max() - y_submission.min())
 
     print ("Saving Results.")
     tmp = np.vstack([range(1, len(y_submission)+1), y_submission]).T
+    print(tmp.shape)
     np.savetxt(fname='submission.csv', X=tmp, fmt='%d,%0.9f',
                header='MoleculeId,PredictedProbability', comments='')
