@@ -101,6 +101,7 @@ if __name__ == '__main__':
         dataset_blend_test_j = np.zeros((len(test_x), len(skf)))
         for i, (train_1, test_1) in enumerate(skf):
             print ("Fold", i)
+            print(train_1)
             X_train = train_x[train_1]
             y_train = train_y[train_1]
             X_test = train_x[test_1]
