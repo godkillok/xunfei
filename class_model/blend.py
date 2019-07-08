@@ -25,7 +25,7 @@ BSD license, 3 clauses.
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn import svm
 import numpy as np
-
+from sklearn.metrics import accuracy_score,classification_report
 from sklearn.model_selection import StratifiedKFold
 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
 from sklearn.ensemble import GradientBoostingClassifier
@@ -127,6 +127,20 @@ if __name__ == '__main__':
 
     #clf.predict_proba(dataset_blend_test)[:, 1]
     gg=clf.predict_proba(dataset_blend_pred)
+    dataset_blend_test_prob=clf.predict_proba(dataset_blend_test)
+    test_preds=[]
+    for prob in dataset_blend_test_prob:
+        test_preds.append(list(prob.argsort()[-2:][::-1]))
+    test_preds_=[]
+    for rea,tes in zip(test_y,test_preds):
+        prd=tes[0]
+        for te in tes:
+            if rea==te:
+                prd=te
+        test_preds_.append(prd)
+    print('accuracy_score {} top2 test\n {}'.format( accuracy_score(test_y,test_preds_),
+                                                                               classification_report(test_y,
+                                                                                                     test_preds_)))
     print(gg.shape)
     y_submission = gg[:, 1]
     print(y_submission.shape)
