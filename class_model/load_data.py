@@ -27,16 +27,16 @@ def get_data_set(flie):
     global label_num
     with open(flie) as f:
         lines = f.readlines()
-    lab_dic=defaultdict(int)
+    lab_count=defaultdict(int)
     lines_json=[]
     for li in lines:
         li = json.loads(li)
         label1 = li.get("label", "no")
-        lab_dic[label1]+=1
+        lab_count[label1]+=1
         lines_json.append(li)
 
     need_repeat={}
-    for k,v in label_dic.items():
+    for k,v in lab_count.items():
         if v<20:
             need_repeat[k]=int(20/v)+1
 
