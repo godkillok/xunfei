@@ -66,7 +66,7 @@ if __name__ == '__main__':
         train_x = train_x[idx]
         train_y = train_y[idx]
 
-    skf = list(StratifiedKFold( n_folds))
+    skf = StratifiedKFold( n_folds)
     lin_clf = CalibratedClassifierCV(svm.LinearSVC(C=0.1))
     lin_clf_1 = CalibratedClassifierCV(svm.LinearSVC(C=0.2))
     lin_clf_2 = CalibratedClassifierCV(svm.LinearSVC(C=0.5))
