@@ -77,8 +77,8 @@ if __name__ == '__main__':
     data_set=train_x+test_x+pred_x
     tfidf_vec.fit_transform(data_set)
 
-    clfs =[ {lin_clf,tfidf_vec},
-            {lin_clf_1,tfidf_vec},
+    clfs =[ [lin_clf,tfidf_vec],
+            [lin_clf_1,tfidf_vec],
           ]
     # {lin_clf_2, tfidf_vec},
     # {lin_clf_3, tfidf_vec},
@@ -96,6 +96,7 @@ if __name__ == '__main__':
 
     for j, clf_process in enumerate(clfs):
         clf,process=clf_process
+
         print (j, clf)
         dataset_blend_pred_j = np.zeros((len(pred_x), len(skf)))
         dataset_blend_test_j = np.zeros((len(test_x), len(skf)))
