@@ -30,6 +30,7 @@ import pandas as pd
 import pickle
 import json
 from sklearn.metrics import classification_report
+
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
 flags = tf.flags
@@ -342,15 +343,15 @@ def model_fn_builder(bert_config, num_labels, init_checkpoint, learning_rate,
             def metric_fn(per_example_loss, label_ids, logits):
                 predictions = tf.argmax(logits, axis=-1, output_type=tf.int32)
                 accuracy = tf.metrics.accuracy(label_ids, predictions)
-                recall=tf.metrics.recall(label_ids, predictions)
-                f1_score=tf.contrib.metrics.f1_score(label_ids, predictions)
+                # recall=tf.metrics.recall(label_ids, predictions)
+                # f1_score=tf.contrib.metrics.f1_score(label_ids, predictions)
                 loss = tf.metrics.mean(per_example_loss)
 
                 return {
                     "eval_accuracy": accuracy,
                     "eval_loss": loss,
-                    "eval_recall":recall,
-                    "eval_f1_score": f1_score,
+                    # "eval_recall":recall,
+                    # "eval_f1_score": f1_score,
                 }
 
             eval_metrics = (metric_fn, [per_example_loss, label_ids, logits])
