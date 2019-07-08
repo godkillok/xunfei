@@ -88,10 +88,10 @@ def svm_train():
                               algo=tpe.suggest, trial_timeout=1200,refit=False)
 
     estim.fit(train_x, train_y)
-
+    print(estim.best_model())
     print(estim.score(test_x, test_y))
     # <<show score here>>
-    print(estim.best_model())
+    #print(estim.best_model())
     # <<show model here>>
 
 
