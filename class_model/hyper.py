@@ -1,4 +1,4 @@
-from hpsklearn import HyperoptEstimator, any_sparse_classifier, tfidf
+from hpsklearn import HyperoptEstimator, any_sparse_classifier, tfidf,liblinear_svc
 from sklearn.datasets import fetch_20newsgroups
 from sklearn import metrics
 from hyperopt import tpe
@@ -68,7 +68,7 @@ def svm_train():
     logging.info('train {} test{}'.format(len(train_x), len(test_x)))
     t=time.time()
 
-    estim = HyperoptEstimator(classifier=any_sparse_classifier('clf'),
+    estim = HyperoptEstimator(classifier=liblinear_svc('clf'),
                               preprocessing=[
                                   tfidf('tfidf', min_df=10, max_df=0.9, use_idf=1, smooth_idf=1, sublinear_tf=1)],
                               algo=tpe.suggest, trial_timeout=1200,refit=False)
