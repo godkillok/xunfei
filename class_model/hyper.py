@@ -101,7 +101,10 @@ def svm_train():
 
     test_term_doc = preprocs.transform(test_x)
     test_preds_prob = lin_clf.predict_proba(test_term_doc)
-
+    test_preds_=lin_clf.predict(test_term_doc)
+    print('accuracy_score {} top1 test\n {}'.format(accuracy_score(test_y, test_preds_),
+                                                    classification_report(test_y,
+                                                                          test_preds_)))
     test_preds=[]
     for prob in test_preds_prob:
         test_preds.append(list(prob.argsort()[-2:][::-1]))
