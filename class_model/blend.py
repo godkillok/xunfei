@@ -78,9 +78,10 @@ if __name__ == '__main__':
 
     clfs =[ {lin_clf,tfidf_vec},
             {lin_clf_1,tfidf_vec},
-            {lin_clf_2, tfidf_vec},
-            {lin_clf_3, tfidf_vec},
-            {lin_clf_4, tfidf_vec}]
+          ]
+    # {lin_clf_2, tfidf_vec},
+    # {lin_clf_3, tfidf_vec},
+    # {lin_clf_4, tfidf_vec}
 
 
 
