@@ -99,7 +99,7 @@ if __name__ == '__main__':
     dataset_blend_train = np.zeros((len(train_x), len(clfs),len(label_dic)))
     dataset_blend_pred = np.zeros((len(pred_x), len(clfs),len(label_dic)))
     dataset_blend_test = np.zeros((len(test_x), len(clfs),len(label_dic)))
-
+    logging.info("dataset_blend_test {}".format(dataset_blend_test.shape))
     for j, clf_process in enumerate(clfs):
         clf,process=clf_process
 
