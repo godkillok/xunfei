@@ -36,10 +36,10 @@ def get_data_set(flie):
         lines_json.append(li)
 
     need_repeat={}
-    num=100
+    num=20
     for k,v in lab_count.items():
-        if v<100:
-            need_repeat[k]=int(100/v)+1
+        if v<num:
+            need_repeat[k]=int(num/v)+1
 
     if flie==train_path:
         for li in lines:
