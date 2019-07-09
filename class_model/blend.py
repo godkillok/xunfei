@@ -124,7 +124,7 @@ if __name__ == '__main__':
             dataset_blend_train[test_1,j, :] = y_test_prob
             dataset_blend_pred_j[:, i,:] = clf.predict_proba(pred_x_doc)[:, :]
             dataset_blend_test_j[:, i,:] = clf.predict_proba(test_xx_doc)[:, :]
-
+        logging.info("dataset_blend_pred_j mean (sample,prob) {} ".format(np.mean(dataset_blend_pred_j,axis=2).shape))
         dataset_blend_pred[:, j,:] =np.mean(dataset_blend_pred_j,axis=2)
         dataset_blend_test[:, j,:] =np.mean(dataset_blend_test_j,axis=2)
 
