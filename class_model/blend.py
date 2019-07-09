@@ -110,7 +110,9 @@ if __name__ == '__main__':
         tfidf_vec4 = pickle.load(f)
     clfs=[]
     from sklearn.naive_bayes import MultinomialNB
-
+    clfs.append([MultinomialNB(),tfidf_vec3])
+    clfs.append([MultinomialNB(),tfidf_vec4])
+    clfs.append([MultinomialNB(),tfidf_vec2])
     # mnb =
     # mnb.fit(X_train, y_train)
     # y_predict = mnb.predict(X_test)
@@ -120,9 +122,7 @@ if __name__ == '__main__':
         clfs.append([CalibratedClassifierCV(svm.LinearSVC(C=c)), tfidf_vec4])
 
 
-    clfs.append([MultinomialNB(),tfidf_vec3])
-    clfs.append([MultinomialNB(),tfidf_vec4])
-    clfs.append([MultinomialNB(),tfidf_vec2])
+
 
 
 
