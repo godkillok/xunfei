@@ -38,7 +38,7 @@ def get_data_set(flie):
     need_repeat={}
     for k,v in lab_count.items():
         if v<20:
-            need_repeat[k]=int(20/v)+1
+            need_repeat[k]=int(35/v)+1
 
     if flie==train_path:
         for li in lines:
