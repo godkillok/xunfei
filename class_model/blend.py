@@ -63,7 +63,7 @@ if __name__ == '__main__':
     train_x, train_y, test_x, test_y, pred_x, apps, label_dic= load_data()
     if "no" in label_dic:
         del label_dic["no"]
-    logging.info("======"*8)
+    logging.info("======"*20)
     logging.info((len(train_x),len(test_x)))
     if shuffle:
         idx = np.random.permutation(train_y.size)
