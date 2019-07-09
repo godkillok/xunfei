@@ -128,7 +128,7 @@ if __name__ == '__main__':
     #clf.predict_proba(dataset_blend_test)[:, 1]
     gg=clf.predict_proba(dataset_blend_pred)
     dataset_blend_test_prob=clf.predict_proba(dataset_blend_test)
-    test_preds_=lin_clf.predict(dataset_blend_test)
+    test_preds_=clf.predict(dataset_blend_test)
     print('accuracy_score {} top1 test\n {}'.format(accuracy_score(test_y, test_preds_),
                                                     classification_report(test_y,
                                                                           test_preds_)))
