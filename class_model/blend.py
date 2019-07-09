@@ -81,12 +81,13 @@ if __name__ == '__main__':
     data_set=train_x+test_x+pred_x
     tfidf_vec.fit_transform(data_set)
     tfidf_vec2.fit_transform(data_set)
-    clfs =[ [lin_clf,tfidf_vec],
-            [lin_clf_1,tfidf_vec],
-    [lin_clf_2, tfidf_vec],
+    clfs =[
+    # [lin_clf,tfidf_vec],
+    #         [lin_clf_1,tfidf_vec],
+    # [lin_clf_2, tfidf_vec],
             [lin_clf_3, tfidf_vec2],
     [lin_clf_3, tfidf_vec],
-    [lin_clf_4, tfidf_vec]
+    # [lin_clf_4, tfidf_vec]
           ]
 
 
