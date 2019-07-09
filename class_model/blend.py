@@ -88,16 +88,22 @@ if __name__ == '__main__':
     tfidf_vec4.fit_transform(data_set)
     tfidf_vec3.fit_transform(data_set)
     tfidf_vec2.fit_transform(data_set)
-    with open(project_path + 'tfidf_vec1.pkl', 'wb') as f:
-        pickle.dump(tfidf_vec1, f)
-    with open(project_path + 'tfidf_vec2.pkl', 'wb') as f:
-        pickle.dump(tfidf_vec2, f)
-    with open(project_path + 'tfidf_vec3.pkl', 'wb') as f:
-        pickle.dump(tfidf_vec3, f)
-    with open(project_path + 'tfidf_vec4.pkl', 'wb') as f:
-        pickle.dump(tfidf_vec4, f)
-    # with open(CHANNEL_MODEL + 'tfidf.pkl', 'rb') as f:
-    #     vec = pickle.load(f)
+    # with open(project_path + 'tfidf_vec1.pkl', 'wb') as f:
+    #     pickle.dump(tfidf_vec1, f)
+    # with open(project_path + 'tfidf_vec2.pkl', 'wb') as f:
+    #     pickle.dump(tfidf_vec2, f)
+    # with open(project_path + 'tfidf_vec3.pkl', 'wb') as f:
+    #     pickle.dump(tfidf_vec3, f)
+    # with open(project_path + 'tfidf_vec4.pkl', 'wb') as f:
+    #     pickle.dump(tfidf_vec4, f)
+    with open(project_path + 'tfidf_vec1.pkl', 'rb') as f:
+        tfidf_vec1 = pickle.load(f)
+    with open(project_path + 'tfidf_vec2.pkl', 'rb') as f:
+        tfidf_vec2 = pickle.load(f)
+    with open(project_path + 'tfidf_vec3.pkl', 'rb') as f:
+        tfidf_vec3 = pickle.load(f)
+    with open(project_path + 'tfidf_vec4.pkl', 'rb') as f:
+        tfidf_vec4 = pickle.load(f)
     clfs=[]
     for i  in [1e-5,1e-4,1e-1,1]:
         clfs.append([CalibratedClassifierCV(svm.LinearSVC(C=c)),tfidf_vec3])
