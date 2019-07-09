@@ -119,7 +119,7 @@ if __name__ == '__main__':
             test_x_doc = process.transform(X_test)
             pred_x_doc=process.transform(pred_x)
             test_xx_doc=process.transform(test_x)
-
+            print(y_train)
             clf.fit(train_x_doc, y_train)
             y_test_prob = clf.predict_proba(test_x_doc)[:,:]
             logging.info("y_test_prob {}".format(y_test_prob.shape))
