@@ -109,8 +109,21 @@ if __name__ == '__main__':
     with open(project_path + 'tfidf_vec4.pkl', 'rb') as f:
         tfidf_vec4 = pickle.load(f)
     clfs=[]
-    for c  in [1e-1,1]: #1e-5,1e-4,
+    from sklearn.naive_bayes import MultinomialNB
+
+    # mnb =
+    # mnb.fit(X_train, y_train)
+    # y_predict = mnb.predict(X_test)
+    for c  in [1e-1,1,1e-5,1e-4,1e-3,1e-2,10,2,4]: #
         clfs.append([CalibratedClassifierCV(svm.LinearSVC(C=c)),tfidf_vec3])
+        clfs.append([CalibratedClassifierCV(svm.LinearSVC(C=c)), tfidf_vec2])
+        clfs.append([CalibratedClassifierCV(svm.LinearSVC(C=c)), tfidf_vec4])
+
+
+    clfs.append([MultinomialNB(),tfidf_vec3])
+    clfs.append([MultinomialNB(),tfidf_vec4])
+    clfs.append([MultinomialNB(),tfidf_vec2])
+
 
 
 
@@ -184,7 +197,7 @@ if __name__ == '__main__':
                                                                                classification_report(test_y,
                                                                                                      test_preds_)))
     logging.info(gg.shape)
-    y_submission = gg[:, 1]
+    y_submission = gg[:, :]
     logging.info(y_submission.shape)
     logging.info ("Linear stretch of predictions to [0,1]")
     y_submission = (y_submission - y_submission.min()) / (y_submission.max() - y_submission.min())
