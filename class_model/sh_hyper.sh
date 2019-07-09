@@ -1,0 +1,1 @@
+cd /data/tanggp/xunfei/class_model/ &&  python3 blend.py  >>/data/tanggp/xunfei/class_model/log_blend.log 2>&1
