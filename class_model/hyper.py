@@ -83,7 +83,7 @@ def svm_train():
     t=time.time()
     logging.info("==="*8)
 
-    estim = HyperoptEstimator(classifier=liblinear_svc('clf'),max_evals=20,
+    estim = HyperoptEstimator(classifier=liblinear_svc('clf'),max_evals=10,
                               preprocessing=[
                                   tfidf('tfidf', min_df=10, max_df=0.9, use_idf=1, smooth_idf=1, sublinear_tf=1)],
                               algo=tpe.suggest, trial_timeout=1200,refit=False)
@@ -97,7 +97,8 @@ def svm_train():
 
     lin_clf = learner
     lin_clf = CalibratedClassifierCV(lin_clf)
-
+    data_set=train_x+test_x+pred_x
+    preprocs.fit_transform(data_set)
     trn_term_doc=preprocs.transform(train_x)
     lin_clf.fit(trn_term_doc, train_y)
 
