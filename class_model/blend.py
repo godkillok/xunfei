@@ -39,7 +39,7 @@ m_p, m_c = os.path.split(most_parenturl)
 while 'xunfei' not in m_c:
     m_p, m_c = os.path.split(m_p)
 sys.path.append(os.path.join(m_p, m_c))
-
+project_path="/data/tanggp/xfyun/classify/aichallenge"
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
 from class_model.load_data import  load_data
@@ -83,19 +83,19 @@ if __name__ == '__main__':
 
     tfidf_vec3 = TfidfVectorizer(ngram_range=(1,3), min_df=10, max_df=0.9, use_idf=1, smooth_idf=1, sublinear_tf=1)
     tfidf_vec4 = TfidfVectorizer(ngram_range=(1, 4), min_df=10, max_df=0.9, use_idf=1, smooth_idf=1, sublinear_tf=1)
-    #data_set=train_x+test_x+pred_x
-    # tfidf_vec1.fit_transform(data_set)
-    # tfidf_vec4.fit_transform(data_set)
-    # tfidf_vec3.fit_transform(data_set)
-    # tfidf_vec2.fit_transform(data_set)
-    # with open(project_path + 'tfidf_vec1.pkl', 'wb') as f:
-    #     pickle.dump(tfidf_vec1, f)
-    # with open(project_path + 'tfidf_vec2.pkl', 'wb') as f:
-    #     pickle.dump(tfidf_vec2, f)
-    # with open(project_path + 'tfidf_vec3.pkl', 'wb') as f:
-    #     pickle.dump(tfidf_vec3, f)
-    # with open(project_path + 'tfidf_vec4.pkl', 'wb') as f:
-    #     pickle.dump(tfidf_vec4, f)
+    data_set=train_x+test_x+pred_x
+    tfidf_vec1.fit_transform(data_set)
+    tfidf_vec4.fit_transform(data_set)
+    tfidf_vec3.fit_transform(data_set)
+    tfidf_vec2.fit_transform(data_set)
+    with open(project_path + 'tfidf_vec1.pkl', 'wb') as f:
+        pickle.dump(tfidf_vec1, f)
+    with open(project_path + 'tfidf_vec2.pkl', 'wb') as f:
+        pickle.dump(tfidf_vec2, f)
+    with open(project_path + 'tfidf_vec3.pkl', 'wb') as f:
+        pickle.dump(tfidf_vec3, f)
+    with open(project_path + 'tfidf_vec4.pkl', 'wb') as f:
+        pickle.dump(tfidf_vec4, f)
     with open(project_path + 'tfidf_vec1.pkl', 'rb') as f:
         tfidf_vec1 = pickle.load(f)
     with open(project_path + 'tfidf_vec2.pkl', 'rb') as f:
