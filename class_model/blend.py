@@ -103,7 +103,7 @@ if __name__ == '__main__':
     for j, clf_process in enumerate(clfs):
         clf,process=clf_process
 
-        logging.info (j, clf)
+        logging.info((j, clf))
         dataset_blend_pred_j = np.zeros((len(pred_x),len(skf),len(label_dic)))
         dataset_blend_test_j = np.zeros((len(test_x), len(skf),len(label_dic)))
         for i, (train_1, test_1) in enumerate(skf):
@@ -120,7 +120,7 @@ if __name__ == '__main__':
 
             clf.fit(train_x_doc, y_train)
             y_test_prob = clf.predict_proba(test_x_doc)[:,:]
-            logging.info("")
+            logging.info("y_test_prob {}".format(y_test_prob.shape))
             dataset_blend_train[test_1,j, :] = y_test_prob
             dataset_blend_pred_j[:, i,:] = clf.predict_proba(pred_x_doc)[:, :]
             dataset_blend_test_j[:, i,:] = clf.predict_proba(test_xx_doc)[:, :]
