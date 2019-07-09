@@ -54,6 +54,20 @@ tfidf.fit(dataset)
 svdT = TruncatedSVD(n_components=390)
 svdTFit = svdT.fit(tfidf.transform(dataset))
 
+with open(project_path + 'tfidf.pkl', 'wb') as f:
+    pickle.dump(tfidf, f)
+with open(project_path + 'svdTFit.pkl', 'wb') as f:
+    pickle.dump(svdTFit, f)
+with open(project_path + 'cvec.pkl', 'wb') as f:
+    pickle.dump(cvec, f)
+
+
+with open(project_path + 'tfidf.pkl', 'rb') as f:
+    tfidf = pickle.load(f)
+with open(project_path + 'svdTFit.pkl', 'rb') as f:
+    svdTFit = pickle.load(f)
+with open(project_path + 'cvec.pkl', 'rb') as f:
+    cvec = pickle.load(f)
 logging.info("pre bulid feature....")
 
 def buildFeats(x_text):
