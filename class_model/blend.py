@@ -128,14 +128,15 @@ if __name__ == '__main__':
         dataset_blend_pred[:, j,:] =np.mean(dataset_blend_pred_j,axis=2)
         dataset_blend_test[:, j,:] =np.mean(dataset_blend_test_j,axis=2)
 
-    logging.info('dataset_blend_train {}'.format(dataset_blend_train.shape))
+    logging.info((len(pred_x),len(skf),len(label_dic)))
+    logging.info('dataset_blend_train1 {}'.format(dataset_blend_train.shape)) #size of train sample, size of clf, size of class
     logging.info('dataset_blend_pred {}'.format(dataset_blend_pred.shape))
     dataset_blend_train=dataset_blend_train.reshape(dataset_blend_train.shape[0],dataset_blend_train.shape[1]*dataset_blend_train.shape[2])
     dataset_blend_pred = dataset_blend_pred.reshape(dataset_blend_pred.shape[0],
                                                     dataset_blend_pred.shape[1] * dataset_blend_pred.shape[2])
     dataset_blend_test = dataset_blend_test.reshape(dataset_blend_test.shape[0],
                                                     dataset_blend_test.shape[1] * dataset_blend_test.shape[2])
-    logging.info('dataset_blend_train {}'.format(dataset_blend_train.shape))
+    logging.info('dataset_blend_train2 {}'.format(dataset_blend_train.shape)) #size of train sample, size of clf*size of class
 
     logging.info ("Blending.")
     clf = LogisticRegression()
