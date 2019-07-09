@@ -77,12 +77,14 @@ if __name__ == '__main__':
     lin_clf_3 = CalibratedClassifierCV(svm.LinearSVC(C=1))
     lin_clf_4 = CalibratedClassifierCV(svm.LinearSVC(C=10))
     tfidf_vec = TfidfVectorizer(ngram_range=(1,3), min_df=10, max_df=0.9, use_idf=1, smooth_idf=1, sublinear_tf=1)
+    tfidf_vec2 = TfidfVectorizer(ngram_range=(1, 3), min_df=10, max_df=0.9, use_idf=1, smooth_idf=1, sublinear_tf=1)
     data_set=train_x+test_x+pred_x
     tfidf_vec.fit_transform(data_set)
-
+    tfidf_vec2.fit_transform(data_set)
     clfs =[ [lin_clf,tfidf_vec],
             [lin_clf_1,tfidf_vec],
     [lin_clf_2, tfidf_vec],
+            [lin_clf_3, tfidf_vec2],
     [lin_clf_3, tfidf_vec],
     [lin_clf_4, tfidf_vec]
           ]
