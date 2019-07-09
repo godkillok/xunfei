@@ -37,9 +37,11 @@ most_parenturl = os.path.abspath(os.path.join(currentUrl, os.pardir))
 m_p, m_c = os.path.split(most_parenturl)
 while 'xunfei' not in m_c:
     m_p, m_c = os.path.split(m_p)
-print(m_p,m_c)
+logging.info(m_p,m_c)
 sys.path.append(os.path.join(m_p, m_c))
-
+import logging
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
 from class_model.load_data import  load_data
 from sklearn.calibration import CalibratedClassifierCV
 
@@ -88,7 +90,7 @@ if __name__ == '__main__':
 
 
     # lin_clf.fit(trn_term_doc, train_y)
-    print ("Creating train and test sets for blending.")
+    logging.info ("Creating train and test sets for blending.")
 
     dataset_blend_train = np.zeros((len(train_x), len(clfs)))
     dataset_blend_pred = np.zeros((len(pred_x), len(clfs)))
@@ -97,12 +99,12 @@ if __name__ == '__main__':
     for j, clf_process in enumerate(clfs):
         clf,process=clf_process
 
-        print (j, clf)
+        logging.info (j, clf)
         dataset_blend_pred_j = np.zeros((len(pred_x), len(skf)))
         dataset_blend_test_j = np.zeros((len(test_x), len(skf)))
         for i, (train_1, test_1) in enumerate(skf):
-            print ("Fold", i)
-            print(train_1)
+            logging.info ("Fold", i)
+            logging.info(train_1)
             X_train = np.array(train_x)[train_1]
             y_train = np.array(train_y)[train_1]
             X_test = np.array(train_x)[test_1]
@@ -121,7 +123,7 @@ if __name__ == '__main__':
         dataset_blend_test[:, j] = dataset_blend_test_j.mean(1)
 
 
-    print ("Blending.")
+    logging.info ("Blending.")
     clf = LogisticRegression()
     clf.fit(dataset_blend_train, train_y)
 
@@ -129,7 +131,7 @@ if __name__ == '__main__':
     gg=clf.predict_proba(dataset_blend_pred)
     dataset_blend_test_prob=clf.predict_proba(dataset_blend_test)
     test_preds_=clf.predict(dataset_blend_test)
-    print('accuracy_score {} top1 test\n {}'.format(accuracy_score(test_y, test_preds_),
+    logging.info('accuracy_score {} top1 test\n {}'.format(accuracy_score(test_y, test_preds_),
                                                     classification_report(test_y,
                                                                           test_preds_)))
     test_preds=[]
@@ -142,17 +144,17 @@ if __name__ == '__main__':
             if rea==te:
                 prd=te
         test_preds_.append(prd)
-    print('accuracy_score {} top2 test\n {}'.format( accuracy_score(test_y,test_preds_),
+    logging.info('accuracy_score {} top2 test\n {}'.format( accuracy_score(test_y,test_preds_),
                                                                                classification_report(test_y,
                                                                                                      test_preds_)))
-    print(gg.shape)
+    logging.info(gg.shape)
     y_submission = gg[:, 1]
-    print(y_submission.shape)
-    print ("Linear stretch of predictions to [0,1]")
+    logging.info(y_submission.shape)
+    logging.info ("Linear stretch of predictions to [0,1]")
     y_submission = (y_submission - y_submission.min()) / (y_submission.max() - y_submission.min())
 
-    print ("Saving Results.")
+    logging.info ("Saving Results.")
     tmp = np.vstack([range(1, len(y_submission)+1), y_submission]).T
-    print(tmp.shape)
+    logging.info(tmp.shape)
     np.savetxt(fname='submission.csv', X=tmp, fmt='%d,%0.9f',
                header='MoleculeId,PredictedProbability', comments='')
