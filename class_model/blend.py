@@ -78,20 +78,29 @@ if __name__ == '__main__':
     lin_clf_2 = CalibratedClassifierCV(svm.LinearSVC(C=0.5))
     lin_clf_3 = CalibratedClassifierCV(svm.LinearSVC(C=1))
     lin_clf_4 = CalibratedClassifierCV(svm.LinearSVC(C=10))
-    tfidf_vec = TfidfVectorizer(ngram_range=(1,3), min_df=10, max_df=0.9, use_idf=1, smooth_idf=1, sublinear_tf=1)
-    tfidf_vec2 = TfidfVectorizer(ngram_range=(1, 4), min_df=10, max_df=0.9, use_idf=1, smooth_idf=1, sublinear_tf=1)
-    data_set=train_x+test_x+pred_x
-    tfidf_vec.fit_transform(train_x)
-    #tfidf_vec2.fit_transform(data_set)
-    clfs =[
-    # [lin_clf,tfidf_vec],
-    #         [lin_clf_1,tfidf_vec],
-    # [lin_clf_2, tfidf_vec],
-            [lin_clf_3, tfidf_vec],
-    [lin_clf_3, tfidf_vec],
-    # [lin_clf_4, tfidf_vec]
-          ]
+    tfidf_vec2 = TfidfVectorizer(ngram_range=(1,2), min_df=10, max_df=0.9, use_idf=1, smooth_idf=1, sublinear_tf=1)
+    tfidf_vec1 = TfidfVectorizer(ngram_range=(1,1), min_df=10, max_df=0.9, use_idf=1, smooth_idf=1, sublinear_tf=1)
 
+    tfidf_vec3 = TfidfVectorizer(ngram_range=(1,3), min_df=10, max_df=0.9, use_idf=1, smooth_idf=1, sublinear_tf=1)
+    tfidf_vec4 = TfidfVectorizer(ngram_range=(1, 4), min_df=10, max_df=0.9, use_idf=1, smooth_idf=1, sublinear_tf=1)
+    data_set=train_x+test_x+pred_x
+    tfidf_vec.fit_transform(data_set)
+    tfidf_vec4.fit_transform(data_set)
+    tfidf_vec3.fit_transform(data_set)
+    tfidf_vec2.fit_transform(data_set)
+    with open(project_path + 'tfidf_vec1.pkl', 'wb') as f:
+        pickle.dump(tfidf_vec1, f)
+    with open(project_path + 'tfidf_vec2.pkl', 'wb') as f:
+        pickle.dump(tfidf_vec2, f)
+    with open(project_path + 'tfidf_vec3.pkl', 'wb') as f:
+        pickle.dump(tfidf_vec3, f)
+    with open(project_path + 'tfidf_vec4.pkl', 'wb') as f:
+        pickle.dump(tfidf_vec4, f)
+    # with open(CHANNEL_MODEL + 'tfidf.pkl', 'rb') as f:
+    #     vec = pickle.load(f)
+    clfs=[]
+    for i  in [1e-5,1e-4,1e-1,1]:
+        clfs.append([CalibratedClassifierCV(svm.LinearSVC(C=c)),tfidf_vec3])
 
 
 
