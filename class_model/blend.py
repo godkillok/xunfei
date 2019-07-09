@@ -96,16 +96,16 @@ if __name__ == '__main__':
     # lin_clf.fit(trn_term_doc, train_y)
     logging.info ("Creating train and test sets for blending.")
 
-    dataset_blend_train = np.zeros((len(train_x), len(clfs)))
-    dataset_blend_pred = np.zeros((len(pred_x), len(clfs)))
-    dataset_blend_test = np.zeros((len(test_x), len(clfs)))
+    dataset_blend_train = np.zeros((len(train_x), len(clfs),len(label_dic)))
+    dataset_blend_pred = np.zeros((len(pred_x), len(clfs),len(label_dic)))
+    dataset_blend_test = np.zeros((len(test_x), len(clfs),len(label_dic)))
 
     for j, clf_process in enumerate(clfs):
         clf,process=clf_process
 
         logging.info (j, clf)
-        dataset_blend_pred_j = np.zeros((len(pred_x), len(skf)))
-        dataset_blend_test_j = np.zeros((len(test_x), len(skf)))
+        dataset_blend_pred_j = np.zeros((len(pred_x),len(skf),len(label_dic)))
+        dataset_blend_test_j = np.zeros((len(test_x), len(skf),len(label_dic)))
         for i, (train_1, test_1) in enumerate(skf):
             logging.info (("Fold", i))
             logging.info(train_1)
@@ -119,14 +119,23 @@ if __name__ == '__main__':
             test_xx_doc=process.transform(test_x)
 
             clf.fit(train_x_doc, y_train)
-            y_test_prob = clf.predict_proba(test_x_doc)[:, 1]
-            dataset_blend_train[test_1, j] = y_test_prob
-            dataset_blend_pred_j[:, i] = clf.predict_proba(pred_x_doc)[:, 1]
-            dataset_blend_test_j[:, i] = clf.predict_proba(test_xx_doc)[:, 1]
+            y_test_prob = clf.predict_proba(test_x_doc)[:,:]
+            logging.info("")
+            dataset_blend_train[test_1,j, :] = y_test_prob
+            dataset_blend_pred_j[:, i,:] = clf.predict_proba(pred_x_doc)[:, :]
+            dataset_blend_test_j[:, i,:] = clf.predict_proba(test_xx_doc)[:, :]
 
-        dataset_blend_pred[:, j] = dataset_blend_pred_j.mean(1)
-        dataset_blend_test[:, j] = dataset_blend_test_j.mean(1)
+        dataset_blend_pred[:, j,:] =np.mean(dataset_blend_pred_j,axis=2)
+        dataset_blend_test[:, j,:] =np.mean(dataset_blend_test_j,axis=2)
 
+    logging.info('dataset_blend_train {}'.format(dataset_blend_train.shape))
+    logging.info('dataset_blend_pred {}'.format(dataset_blend_pred.shape))
+    dataset_blend_train=dataset_blend_train.reshape(dataset_blend_train.shape[0],dataset_blend_train.shape[1]*dataset_blend_train.shape[2])
+    dataset_blend_pred = dataset_blend_pred.reshape(dataset_blend_pred.shape[0],
+                                                    dataset_blend_pred.shape[1] * dataset_blend_pred.shape[2])
+    dataset_blend_test = dataset_blend_test.reshape(dataset_blend_test.shape[0],
+                                                    dataset_blend_test.shape[1] * dataset_blend_test.shape[2])
+    logging.info('dataset_blend_train {}'.format(dataset_blend_train.shape))
 
     logging.info ("Blending.")
     clf = LogisticRegression()
