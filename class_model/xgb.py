@@ -66,12 +66,12 @@ def buildFeats(x_text):
     temp['tfidf_mean'] = temp_tfidf.mean(axis=1)
     temp['tfidf_len'] = (temp_tfidf != 0).sum(axis=1)
 
-    temp_cvec = cvec.transform(texts)
+    temp_cvec = cvec.transform(x_text)
     temp['cvec_sum'] = temp_cvec.sum(axis=1)
     temp['cvec_mean'] = temp_cvec.mean(axis=1)
     temp['cvec_len'] = (temp_cvec != 0).sum(axis=1)
 
-    tempc = list(temp.columns)
+    tempc = list(temp.keys)
     temp_lsa = svdT.transform(temp_tfidf)
 
     for i in range(np.shape(temp_lsa)[1]):
@@ -103,3 +103,31 @@ test_preds = lr_clf.predict(testDf)
 
 logging.info('train {} accuracy_score {},  \n {}'.format('test', accuracy_score(test_y, test_preds),
                                                          classification_report(test_y, test_preds)))
+
+
+parms = {'task': 'train',
+    'boosting_type': 'gbdt',
+    'objective': 'multiclass',
+    'num_class': 9,
+    'metric': {'multi_logloss'},
+    'learning_rate': 0.05,
+    'max_depth': 5,
+    'num_iterations': 400,
+    'num_leaves': 95,
+    'min_data_in_leaf': 60,
+    'lambda_l1': 1.0,
+    'feature_fraction': 0.8,
+    'bagging_fraction': 0.8,
+    'bagging_freq': 5}
+
+rnds = 260
+print('Format a Train and Validation Set for LGB')
+
+d_train = lgb.Dataset(trainDf, label=train_y)
+d_val = lgb.Dataset(testDf, label=test_y)
+
+mod = lgb.train(parms, train_set=d_train, num_boost_round=rnds,
+               valid_sets=[d_val], valid_names=['dval'], verbose_eval=20,
+               early_stopping_rounds=20)
+
+pred = mod.predict(testDf.drop(['ID'],axis=1))
