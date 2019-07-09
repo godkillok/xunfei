@@ -57,7 +57,7 @@ if __name__ == '__main__':
 
     np.random.seed(0)  # seed to shuffle the train set
 
-    n_folds = 10
+    n_folds = 5
     shuffle = False
 
     train_x, train_y, test_x, test_y, pred_x, apps, label_dic= load_data()
@@ -76,7 +76,7 @@ if __name__ == '__main__':
     lin_clf = CalibratedClassifierCV(svm.LinearSVC(C=0.1))
     lin_clf_1 = CalibratedClassifierCV(svm.LinearSVC(C=0.2))
     lin_clf_2 = CalibratedClassifierCV(svm.LinearSVC(C=0.5))
-    lin_clf_3 = CalibratedClassifierCV(svm.LinearSVC(C=1))
+    lin_clf_3 = CalibratedClassifierCV(svm.LinearSVC(C=1),n_folds=2)
     lin_clf_4 = CalibratedClassifierCV(svm.LinearSVC(C=10))
     tfidf_vec = TfidfVectorizer(ngram_range=(1,3), min_df=10, max_df=0.9, use_idf=1, smooth_idf=1, sublinear_tf=1)
     tfidf_vec2 = TfidfVectorizer(ngram_range=(1, 4), min_df=10, max_df=0.9, use_idf=1, smooth_idf=1, sublinear_tf=1)
