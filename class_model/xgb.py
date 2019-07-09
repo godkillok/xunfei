@@ -54,6 +54,7 @@ tfidf.fit(dataset)
 svdT = TruncatedSVD(n_components=390)
 svdTFit = svdT.fit(tfidf.transform(dataset))
 
+logging.info("pre bulid feature....")
 
 def buildFeats(x_text):
     temp = {}
@@ -75,6 +76,7 @@ def buildFeats(x_text):
 
     for i in range(np.shape(temp_lsa)[1]):
         tempc.append('lsa' + str(i + 1))
+    temp=pd.DataFrame.from_dict(temp)
     temp = pd.concat([temp, pd.DataFrame(temp_lsa, index=temp.index)], axis=1)
 
     return temp, tempc
