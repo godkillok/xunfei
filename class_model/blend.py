@@ -55,7 +55,7 @@ def logloss(attempt, actual, epsilon=1.0e-15):
 
 if __name__ == '__main__':
 
-    np.random.seed(0)  # seed to shuffle the train set
+    np.random.seed(0)  # seed to shuffle the train set1
 
     n_folds = 5
     shuffle = False
