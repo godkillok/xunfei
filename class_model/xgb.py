@@ -44,7 +44,7 @@ tfidf = TfidfVectorizer(min_df=5, max_df=0.9, use_idf=1, smooth_idf=1, ngram_ran
                         lowercase=True, analyzer='word', token_pattern=r'\w+', sublinear_tf=True,
                         stop_words='english')
 
-cvec = CountVectorizer(min_df=5, ngram_range=(1, 3), max_features=maxFeats,
+cvec = CountVectorizer(min_df=5, ngram_range=(1, 3), max_df=0.9,
                        strip_accents='unicode',
                        lowercase=True, analyzer='word', token_pattern=r'\w+',
                        stop_words='english')
