@@ -38,28 +38,28 @@ from sklearn.calibration import CalibratedClassifierCV
 train_x, train_y, test_x, test_y, pred_x, apps, label_dic = load_data()
 if "no" in label_dic:
     del label_dic["no"]
-dataset = train_x + test_x + pred_x
-tfidf = TfidfVectorizer(min_df=5, max_df=0.9, use_idf=1, smooth_idf=1, ngram_range=(1, 3),
-                        strip_accents='unicode',
-                        lowercase=True, analyzer='word', token_pattern=r'\w+', sublinear_tf=True,
-                        stop_words='english')
-
-cvec = CountVectorizer(min_df=5, ngram_range=(1, 3), max_df=0.9,
-                       strip_accents='unicode',
-                       lowercase=True, analyzer='word', token_pattern=r'\w+',
-                       stop_words='english')
-cvec.fit(dataset)
-
-tfidf.fit(dataset)
-svdT = TruncatedSVD(n_components=390)
-svdTFit = svdT.fit(tfidf.transform(dataset))
-
-with open(project_path + 'tfidf.pkl', 'wb') as f:
-    pickle.dump(tfidf, f)
-with open(project_path + 'svdTFit.pkl', 'wb') as f:
-    pickle.dump(svdTFit, f)
-with open(project_path + 'cvec.pkl', 'wb') as f:
-    pickle.dump(cvec, f)
+# dataset = train_x + test_x + pred_x
+# tfidf = TfidfVectorizer(min_df=5, max_df=0.9, use_idf=1, smooth_idf=1, ngram_range=(1, 3),
+#                         strip_accents='unicode',
+#                         lowercase=True, analyzer='word', token_pattern=r'\w+', sublinear_tf=True,
+#                         stop_words='english')
+#
+# cvec = CountVectorizer(min_df=5, ngram_range=(1, 3), max_df=0.9,
+#                        strip_accents='unicode',
+#                        lowercase=True, analyzer='word', token_pattern=r'\w+',
+#                        stop_words='english')
+# cvec.fit(dataset)
+#
+# tfidf.fit(dataset)
+# svdT = TruncatedSVD(n_components=390)
+# svdTFit = svdT.fit(tfidf.transform(dataset))
+#
+# with open(project_path + 'tfidf.pkl', 'wb') as f:
+#     pickle.dump(tfidf, f)
+# with open(project_path + 'svdTFit.pkl', 'wb') as f:
+#     pickle.dump(svdTFit, f)
+# with open(project_path + 'cvec.pkl', 'wb') as f:
+#     pickle.dump(cvec, f)
 
 
 with open(project_path + 'tfidf.pkl', 'rb') as f:
