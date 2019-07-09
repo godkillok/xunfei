@@ -86,7 +86,7 @@ def buildFeats(x_text):
     temp['cvec_len'] = (temp_cvec != 0).sum(axis=1)
 
     tempc = list(temp.keys())
-    temp_lsa = svdT.transform(temp_tfidf)
+    temp_lsa = svdTFit.transform(temp_tfidf)
 
     for i in range(np.shape(temp_lsa)[1]):
         tempc.append('lsa' + str(i + 1))
