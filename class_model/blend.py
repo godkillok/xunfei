@@ -114,7 +114,7 @@ if __name__ == '__main__':
             X_train = np.array(train_x)[train_1]
             y_train = np.array(train_y)[train_1]
             X_test = np.array(train_x)[test_1]
-            y_test =  np.array(test_y)[test_1]
+            y_test =  np.array(train_y)[test_1]
             train_x_doc = process.transform(X_train)
             test_x_doc = process.transform(X_test)
             pred_x_doc=process.transform(pred_x)
