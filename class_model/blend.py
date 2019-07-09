@@ -70,6 +70,7 @@ if __name__ == '__main__':
 
     sfolder = StratifiedKFold( n_folds)
     skf =list(sfolder.split(train_x, train_y))
+    lin_clf = CalibratedClassifierCV(svm.LinearSVC(C=0.00001))
     lin_clf = CalibratedClassifierCV(svm.LinearSVC(C=0.1))
     lin_clf_1 = CalibratedClassifierCV(svm.LinearSVC(C=0.2))
     lin_clf_2 = CalibratedClassifierCV(svm.LinearSVC(C=0.5))
@@ -81,10 +82,10 @@ if __name__ == '__main__':
 
     clfs =[ [lin_clf,tfidf_vec],
             [lin_clf_1,tfidf_vec],
+    [lin_clf_2, tfidf_vec],
+    [lin_clf_3, tfidf_vec],
+    [lin_clf_4, tfidf_vec]
           ]
-    # {lin_clf_2, tfidf_vec},
-    # {lin_clf_3, tfidf_vec},
-    # {lin_clf_4, tfidf_vec}
 
 
 
