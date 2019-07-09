@@ -89,9 +89,9 @@ testDf.columns = testcol
 predDf.columns = predcol
 lr_clf = LogisticRegression(random_state=0, solver='sag',multi_class='ovr', verbose = 1)
 
-lr_clf.fit(trainDf, y_train)
+lr_clf.fit(trainDf, train_y)
 
-train_preds = lin_clf.predict(trainDf)
+train_preds = lr_clf.predict(trainDf)
 
 from sklearn.metrics import classification_report
 
@@ -99,7 +99,7 @@ logging.info('train {} accuracy_score {},  \n {}'.format('train', accuracy_score
                                                          classification_report(train_y, train_preds)))
 
 
-test_preds = lin_clf.predict(testDf)
+test_preds = lr_clf.predict(testDf)
 
 logging.info('train {} accuracy_score {},  \n {}'.format('test', accuracy_score(test_y, test_preds),
                                                          classification_report(test_y, test_preds)))
