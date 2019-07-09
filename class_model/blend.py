@@ -206,5 +206,5 @@ if __name__ == '__main__':
     logging.info ("Saving Results.")
     # tmp = np.vstack([range(1, len(y_submission)+1), y_submission]).T
     # logging.info(tmp.shape)
-    np.savetxt(fname='submission.csv', X=tmp,
-               header='MoleculeId,PredictedProbability', comments='')
+    # np.savetxt(fname='submission.csv', X=tmp,
+    #            header='MoleculeId,PredictedProbability', comments='')
