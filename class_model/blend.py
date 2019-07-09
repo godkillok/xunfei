@@ -198,12 +198,13 @@ if __name__ == '__main__':
                                                                                                      test_preds_)))
     logging.info(gg.shape)
     y_submission = gg[:, :]
+    np.save('y_submission_x', y_submission)
     logging.info(y_submission.shape)
     logging.info ("Linear stretch of predictions to [0,1]")
-    y_submission = (y_submission - y_submission.min()) / (y_submission.max() - y_submission.min())
+    # y_submission = (y_submission - y_submission.min()) / (y_submission.max() - y_submission.min())
 
     logging.info ("Saving Results.")
-    tmp = np.vstack([range(1, len(y_submission)+1), y_submission]).T
-    logging.info(tmp.shape)
-    np.savetxt(fname='submission.csv', X=tmp, fmt='%d,%0.9f',
+    # tmp = np.vstack([range(1, len(y_submission)+1), y_submission]).T
+    # logging.info(tmp.shape)
+    np.savetxt(fname='submission.csv', X=tmp,
                header='MoleculeId,PredictedProbability', comments='')
