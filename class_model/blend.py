@@ -57,7 +57,7 @@ if __name__ == '__main__':
 
     np.random.seed(0)  # seed to shuffle the train set1
 
-    n_folds = 5
+    n_folds = 2
     shuffle = False
 
     train_x, train_y, test_x, test_y, pred_x, apps, label_dic= load_data()
