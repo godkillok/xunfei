@@ -81,14 +81,16 @@ def svm_train():
 
     logging.info('train {} test{}'.format(len(train_x), len(test_x)))
     t=time.time()
+    logging.info("==="*8)
 
     estim = HyperoptEstimator(classifier=liblinear_svc('clf'),max_evals=20,
                               preprocessing=[
                                   tfidf('tfidf', min_df=10, max_df=0.9, use_idf=1, smooth_idf=1, sublinear_tf=1)],
                               algo=tpe.suggest, trial_timeout=1200,refit=False)
-
+    logging.info(estim)
     estim.fit(train_x, train_y)
     best_model=estim.best_model()
+
     logging.info(best_model)
     learner=best_model['learner']
     preprocs=best_model['preprocs'][0]
