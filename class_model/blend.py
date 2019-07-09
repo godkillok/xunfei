@@ -106,7 +106,7 @@ if __name__ == '__main__':
         dataset_blend_pred_j = np.zeros((len(pred_x), len(skf)))
         dataset_blend_test_j = np.zeros((len(test_x), len(skf)))
         for i, (train_1, test_1) in enumerate(skf):
-            logging.info ("Fold", i)
+            logging.info (("Fold", i))
             logging.info(train_1)
             X_train = np.array(train_x)[train_1]
             y_train = np.array(train_y)[train_1]
