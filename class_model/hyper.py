@@ -26,7 +26,7 @@ most_parenturl = os.path.abspath(os.path.join(currentUrl, os.pardir))
 m_p, m_c = os.path.split(most_parenturl)
 while 'xunfei' not in m_c:
     m_p, m_c = os.path.split(m_p)
-print(m_p,m_c)
+
 sys.path.append(os.path.join(m_p, m_c))
 from  class_model.load_data import  load_data
 from sklearn.metrics import accuracy_score
@@ -82,14 +82,14 @@ def svm_train():
     logging.info('train {} test{}'.format(len(train_x), len(test_x)))
     t=time.time()
 
-    estim = HyperoptEstimator(classifier=liblinear_svc('clf'),max_evals=2,
+    estim = HyperoptEstimator(classifier=liblinear_svc('clf'),max_evals=20,
                               preprocessing=[
                                   tfidf('tfidf', min_df=10, max_df=0.9, use_idf=1, smooth_idf=1, sublinear_tf=1)],
                               algo=tpe.suggest, trial_timeout=1200,refit=False)
 
     estim.fit(train_x, train_y)
     best_model=estim.best_model()
-    print(best_model)
+    logging.info(best_model)
     learner=best_model['learner']
     preprocs=best_model['preprocs'][0]
 
@@ -102,7 +102,7 @@ def svm_train():
     test_term_doc = preprocs.transform(test_x)
     test_preds_prob = lin_clf.predict_proba(test_term_doc)
     test_preds_=lin_clf.predict(test_term_doc)
-    print('accuracy_score {} top1 test\n {}'.format(accuracy_score(test_y, test_preds_),
+    logging.info('accuracy_score {} top1 test\n {}'.format(accuracy_score(test_y, test_preds_),
                                                     classification_report(test_y,
                                                                           test_preds_)))
     test_preds=[]
@@ -116,14 +116,14 @@ def svm_train():
             if rea == te:
                 prd = te
         test_preds_.append(prd)
-    print('accuracy_score {} top2 test\n {}'.format(accuracy_score(test_y, test_preds_),
+    logging.info('accuracy_score {} top2 test\n {}'.format(accuracy_score(test_y, test_preds_),
                                                     classification_report(test_y,
                                                                           test_preds_)))
 
 
-    #print(estim.fit().score(test_x, test_y))
+    #logging.info(estim.fit().score(test_x, test_y))
     # <<show score here>>
-    #print(estim.best_model())
+    #logging.info(estim.best_model())
     # <<show model here>>
 
 
