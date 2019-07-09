@@ -32,6 +32,7 @@ from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.linear_model import LogisticRegression
 import os
 import sys
+import pickle
 import logging
 currentUrl = os.path.dirname(__file__)
 most_parenturl = os.path.abspath(os.path.join(currentUrl, os.pardir))
@@ -83,6 +84,7 @@ if __name__ == '__main__':
 
     tfidf_vec3 = TfidfVectorizer(ngram_range=(1,3), min_df=10, max_df=0.9, use_idf=1, smooth_idf=1, sublinear_tf=1)
     tfidf_vec4 = TfidfVectorizer(ngram_range=(1, 4), min_df=10, max_df=0.9, use_idf=1, smooth_idf=1, sublinear_tf=1)
+
     data_set=train_x+test_x+pred_x
     tfidf_vec1.fit_transform(data_set)
     tfidf_vec4.fit_transform(data_set)
@@ -96,6 +98,8 @@ if __name__ == '__main__':
         pickle.dump(tfidf_vec3, f)
     with open(project_path + 'tfidf_vec4.pkl', 'wb') as f:
         pickle.dump(tfidf_vec4, f)
+
+
     with open(project_path + 'tfidf_vec1.pkl', 'rb') as f:
         tfidf_vec1 = pickle.load(f)
     with open(project_path + 'tfidf_vec2.pkl', 'rb') as f:
