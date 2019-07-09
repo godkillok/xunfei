@@ -61,6 +61,7 @@ if __name__ == '__main__':
     shuffle = False
 
     train_x, train_y, test_x, test_y, pred_x, apps, label_dic= load_data()
+    del label_dic["no"]
     logging.info("======"*8)
     logging.info((len(train_x),len(test_x)))
     if shuffle:
