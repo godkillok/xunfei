@@ -97,7 +97,7 @@ def buildFeats(x_text):
 trainDf, traincol = buildFeats(train_x)
 testDf, testcol = buildFeats(test_x)
 predDf, predcol = buildFeats(pred_x)
-
+logging.info("bulid feature done")
 trainDf.columns = traincol
 testDf.columns = testcol
 predDf.columns = predcol
