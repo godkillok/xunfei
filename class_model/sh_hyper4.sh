@@ -1,3 +1,3 @@
-rm -rf /data/tanggp/xunfei/class_model/log_hyper.log
-cd /data/tanggp/xunfei/class_model/ &&  python3 hyper_2.py  >>/data/tanggp/xunfei/class_model/log_hyper4.log 2>&1
+rm -rf /data/tanggp/xunfei/class_model/log_hyper4.log
+cd /data/tanggp/xunfei/class_model/ &&  python3 hyper_4.py  >>/data/tanggp/xunfei/class_model/log_hyper4.log 2>&1
 
