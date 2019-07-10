@@ -65,10 +65,16 @@ def score(params):
     #lin_clf = CalibratedClassifierCV(lin_clf)
     lin_clf.fit(trn_term_doc, train_y)
     train_preds=lin_clf.predict(trn_term_doc)
+
+
     acc=accuracy_score(train_y, train_preds)
     loss=1-acc
     logging.info("===" * 8)
-    logging.info("acc {},loss {},params: \n{}".format(acc,loss,params))
+
+    test_term_doc = vec.transform(test_x)
+    test_preds = lin_clf.predict(test_term_doc)
+    acc2 = accuracy_score(test_y, test_preds)
+    logging.info("acc {}, on test  set is {} ,loss {},params: \n{}".format(acc,acc2,loss,params))
     return {'loss': loss, 'status': STATUS_OK}
 
 def optimize(
@@ -81,7 +87,6 @@ def optimize(
               "intercept_scaling":hp.loguniform("intercept_scaling", np.log(1e-1), np.log(1e1))
               }
     best = fmin(score, space, algo=tpe.suggest,
-                # trials=trials,
                 max_evals=250)
     return best
 
