@@ -74,8 +74,8 @@ def svm_train():
     logging.info('time spend {}'.format(tfidf_time - t))
 
     logging.info('begin svm ')
-    #lin_clf = svm.LinearSVC(C=0.1)
-    lin_clf=svm.LinearSVC(C=0.00042039795569725065, class_weight=None, dual=False,fit_intercept=True, intercept_scaling=0.626785020680403,loss='squared_hinge', max_iter=1000, multi_class='ovr', penalty='l2',random_state=3, tol=0.003167925502816056, verbose=False)
+    lin_clf = svm.LinearSVC(C=0.1)
+    #lin_clf=svm.LinearSVC(C=0.00042039795569725065, class_weight=None, dual=False,fit_intercept=True, intercept_scaling=0.626785020680403,loss='squared_hinge', max_iter=1000, multi_class='ovr', penalty='l2',random_state=3, tol=0.003167925502816056, verbose=False)
     lin_clf = CalibratedClassifierCV(lin_clf)
     lin_clf.fit(trn_term_doc, train_y)
     logging.info('end  svm ')
