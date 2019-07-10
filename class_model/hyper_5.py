@@ -73,7 +73,7 @@ def score(params):
 
     test_term_doc = vec.transform(test_x)
     test_preds = lin_clf.predict(test_term_doc)
-    test_preds_prob = lin_clf.predict(test_term_doc)
+    test_preds_prob = lin_clf.predict_proba(test_term_doc)
     acc2 = accuracy_score(test_y, test_preds)
 
     test_preds=[]
