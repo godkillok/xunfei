@@ -68,13 +68,13 @@ def score(params):
 
 
     acc=accuracy_score(train_y, train_preds)
-    loss=1-acc
+
     logging.info("===" * 8)
 
     test_term_doc = vec.transform(test_x)
     test_preds = lin_clf.predict(test_term_doc)
     acc2 = accuracy_score(test_y, test_preds)
-
+    loss = 1 - acc2
     t2 = time.time()
     logging.info("acc {}, on test  set is {} ,loss {} time {},params: \n{}".format(acc,acc2,loss,t2-t1,params))
     return {'loss': loss, 'status': STATUS_OK}
