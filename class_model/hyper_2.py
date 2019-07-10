@@ -45,7 +45,7 @@ def score(params):
 
 
 
-    logging.info("==="*8)
+
     logging.info(params)
     vec = TfidfVectorizer(ngram_range=(1,int(params["ngram_range"])), min_df=params["min_df"], max_df=params["max_df"], use_idf=1, smooth_idf=1, sublinear_tf=1)
     #vec=HashingVectorizer(ngram_range=(1, 3))
@@ -66,6 +66,7 @@ def score(params):
     train_preds=lin_clf.predict(trn_term_doc)
     acc=accuracy_score(train_y, train_preds)
     loss=1-acc
+    logging.info("===" * 8)
     logging.info("acc {},loss {},params: \n{}".format(acc,loss,params))
     return {'loss': loss, 'status': STATUS_OK}
 
