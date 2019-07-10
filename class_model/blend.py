@@ -94,16 +94,10 @@ if __name__ == '__main__':
     # mnb =
     # mnb.fit(X_train, y_train)
     # y_predict = mnb.predict(X_test)
-    for c  in [1e-1,1,1e-2]: #,1e-5,1e-4,1e-3,,10,2,4
+    for c  in [1e-1,1,1e-2,1]: #,1e-5,1e-4,1e-3,,10,2,4
         clfs.append([CalibratedClassifierCV(svm.LinearSVC(C=c)),tfidf_vec3])
-        clfs.append([CalibratedClassifierCV(svm.LinearSVC(C=c)), tfidf_vec2])
+        # clfs.append([CalibratedClassifierCV(svm.LinearSVC(C=c)), tfidf_vec2])
         clfs.append([CalibratedClassifierCV(svm.LinearSVC(C=c)), tfidf_vec4])
-
-
-
-
-
-
 
     # lin_clf.fit(trn_term_doc, train_y)
     logging.info ("Creating train and test sets for blending.")
