@@ -46,6 +46,7 @@ def score(params):
 
 
     logging.info("==="*8)
+    logging.info(params)
     vec = TfidfVectorizer(ngram_range=(1,int(params["ngram_range"])), min_df=params["min_df"], max_df=params["max_df"], use_idf=1, smooth_idf=1, sublinear_tf=1)
     #vec=HashingVectorizer(ngram_range=(1, 3))
     data_set = train_x + test_x + pred_x
