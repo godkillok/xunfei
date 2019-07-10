@@ -46,7 +46,7 @@ def score(params):
 
 
 
-
+    t1=time.time()
     logging.info(params)
     vec = TfidfVectorizer(ngram_range=(1,int(params["ngram_range"])), min_df=params["min_df"], max_df=params["max_df"], use_idf=1, smooth_idf=1, sublinear_tf=1)
     #vec=HashingVectorizer(ngram_range=(1, 3))
@@ -74,7 +74,8 @@ def score(params):
     test_term_doc = vec.transform(test_x)
     test_preds = lin_clf.predict(test_term_doc)
     acc2 = accuracy_score(test_y, test_preds)
-    logging.info("acc {}, on test  set is {} ,loss {},params: \n{}".format(acc,acc2,loss,params))
+    t2 = time.time()
+    logging.info("acc {}, on test  set is {} ,loss {} time {},params: \n{}".format(acc,acc2,loss,t2-t1,params))
     return {'loss': loss, 'status': STATUS_OK}
 
 def optimize(
