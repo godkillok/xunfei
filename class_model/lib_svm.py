@@ -76,7 +76,7 @@ def svm_train():
     logging.info('begin svm ')
     #lin_clf = svm.LinearSVC(C=0.1)
     para={'C': 0.5554463675284619, 'intercept_scaling': 0.8732299675506615, 'max_df': 0.9, 'min_df': 18, 'ngram_range': 2.0}
-    lin_clf=svm.LinearSVC(C=para["C"], class_weight=None, dual=False,fit_intercept=True, intercept_scaling=para["intercept_scaling"],loss='squared_hinge', max_iter=1000, multi_class='ovr', penalty='l2',random_state=3, tol=0.003167925502816056, verbose=False)
+    lin_clf=svm.LinearSVC(C=para["C"], class_weight=None, dual=False,fit_intercept=True, intercept_scaling=para["intercept_scaling"],loss='squared_hinge')
     lin_clf = CalibratedClassifierCV(lin_clf)
     lin_clf.fit(trn_term_doc, train_y)
     logging.info('end  svm ')
