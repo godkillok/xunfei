@@ -58,7 +58,7 @@ def svm_train():
     logging.info('train {} test{}'.format(len(train_x), len(test_x)))
     t=time.time()
     data_set = train_x + test_x+pred_x
-    vec = TfidfVectorizer(ngram_range=(1,3), min_df=10, max_df=0.9, use_idf=1, smooth_idf=1, sublinear_tf=1)
+    vec = TfidfVectorizer(ngram_range=(1,2), min_df=18, max_df=0.9, use_idf=1, smooth_idf=1, sublinear_tf=1)
     #vec=HashingVectorizer(ngram_range=(1, 3))
     vec.fit_transform(data_set)
     #
@@ -74,8 +74,9 @@ def svm_train():
     logging.info('time spend {}'.format(tfidf_time - t))
 
     logging.info('begin svm ')
-    lin_clf = svm.LinearSVC(C=0.1)
-    #lin_clf=svm.LinearSVC(C=0.00042039795569725065, class_weight=None, dual=False,fit_intercept=True, intercept_scaling=0.626785020680403,loss='squared_hinge', max_iter=1000, multi_class='ovr', penalty='l2',random_state=3, tol=0.003167925502816056, verbose=False)
+    #lin_clf = svm.LinearSVC(C=0.1)
+    para={'C': 0.5554463675284619, 'intercept_scaling': 0.8732299675506615, 'max_df': 0.9, 'min_df': 18, 'ngram_range': 2.0}
+    lin_clf=svm.LinearSVC(C=para["C"], class_weight=None, dual=False,fit_intercept=True, intercept_scaling=para["intercept_scaling"],loss='squared_hinge', max_iter=1000, multi_class='ovr', penalty='l2',random_state=3, tol=0.003167925502816056, verbose=False)
     lin_clf = CalibratedClassifierCV(lin_clf)
     lin_clf.fit(trn_term_doc, train_y)
     logging.info('end  svm ')
