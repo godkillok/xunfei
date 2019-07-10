@@ -94,6 +94,7 @@ def buildFeats(x_text):
     temp = pd.concat([temp, pd.DataFrame(temp_lsa, index=temp.index)], axis=1)
 
     return temp, tempc
+
 trainDf, traincol = buildFeats(train_x)
 testDf, testcol = buildFeats(test_x)
 predDf, predcol = buildFeats(pred_x)
@@ -101,7 +102,7 @@ logging.info("bulid feature done trainDf.shape {}".format(trainDf.shape))
 trainDf.columns = traincol
 testDf.columns = testcol
 predDf.columns = predcol
-lr_clf = LogisticRegression(random_state=0, solver='sag',multi_class='ovr', verbose = 0,n_jobs=-1)
+lr_clf = LogisticRegression(random_state=0, solver='saga',multi_class='ovr', verbose =False ,n_jobs=-1)
 
 lr_clf.fit(trainDf, train_y)
 
