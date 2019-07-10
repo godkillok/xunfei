@@ -41,6 +41,7 @@ from sklearn.calibration import CalibratedClassifierCV
 
 train_x, train_y, test_x, test_y, pred_x, apps, label_dic = load_data()
 logging.info('train {} test{}'.format(len(train_x), len(test_x)))
+data_set = train_x + test_x + pred_x
 def score(params):
 
 
@@ -49,7 +50,7 @@ def score(params):
     logging.info(params)
     vec = TfidfVectorizer(ngram_range=(1,int(params["ngram_range"])), min_df=params["min_df"], max_df=params["max_df"], use_idf=1, smooth_idf=1, sublinear_tf=1)
     #vec=HashingVectorizer(ngram_range=(1, 3))
-    data_set = train_x + test_x + pred_x
+
     vec.fit_transform(data_set)
     #
     # with open(project_path + 'tfidf.pkl', 'wb') as f:
