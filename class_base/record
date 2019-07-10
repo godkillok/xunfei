@@ -16,7 +16,8 @@ c=0.001
    macro avg       0.74      0.56      0.61      6152
 weighted avg       0.76      0.74      0.73      6152
 
-c=0.1 accuracy_score 0.7561768530559168
+c=0.1
+top2 accuracy_score 0.7561768530559168
    micro avg       0.76      0.76      0.76      6152
    macro avg       0.75      0.59      0.63      6152
 weighted avg       0.77      0.76      0.74      6152
