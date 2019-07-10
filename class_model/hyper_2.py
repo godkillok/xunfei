@@ -1,10 +1,3 @@
-from hpsklearn import HyperoptEstimator, any_sparse_classifier, tfidf,liblinear_svc
-from sklearn.datasets import fetch_20newsgroups
-from sklearn import metrics
-from hyperopt import tpe
-import numpy as np
-from sklearn.metrics import accuracy_score,classification_report
-# Download the data and split into training and test sets
 
 import pandas as pd, numpy as np
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer,HashingVectorizer
@@ -17,12 +10,7 @@ import pickle  # pickle模块2
 import logging
 import os
 import sys
-import json
-import datetime
-from collections import defaultdict
-import xgboost as xgb
-from sklearn.cross_validation import train_test_split
-from sklearn.metrics import roc_auc_score
+
 
 # Hyperparameters tuning
 
