@@ -102,7 +102,7 @@ logging.info("bulid feature done trainDf.shape {}".format(trainDf.shape))
 trainDf.columns = traincol
 testDf.columns = testcol
 predDf.columns = predcol
-lr_clf = LogisticRegression(random_state=0, solver='saga',multi_class='ovr', verbose =False ,n_jobs=-1)
+lr_clf = LogisticRegression(random_state=0, solver='saga',multi_class='ovr', max_iter=1000,verbose =False ,n_jobs=-1)
 
 lr_clf.fit(trainDf, train_y)
 
