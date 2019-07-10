@@ -16,10 +16,16 @@ c=0.001
    macro avg       0.74      0.56      0.61      6152
 weighted avg       0.76      0.74      0.73      6152
 
-c=0.1
+c=0.1 accuracy_score 0.7561768530559168
    micro avg       0.76      0.76      0.76      6152
    macro avg       0.75      0.59      0.63      6152
 weighted avg       0.77      0.76      0.74      6152
+
+top1 accuracy_score 0.5983420026007802
+   micro avg       0.60      0.60      0.60      6152
+   macro avg       0.56      0.43      0.46      6152
+weighted avg       0.60      0.60      0.58      6152
+
 
 c=0.2
    micro avg       0.75      0.75      0.75      6152
@@ -36,12 +42,8 @@ c=0.1 结巴
    macro avg       0.75      0.59      0.63      6152
 weighted avg       0.77      0.76      0.75      6152
 
-C=1 level1
+C=1 level1的 不是level2的
    micro avg       0.77      0.77      0.77      6152
    macro avg       0.67      0.58      0.61      6152
 weighted avg       0.76      0.77      0.76      6152
 
-C=1 level1
-   micro avg       0.77      0.77      0.77      6152
-   macro avg       0.67      0.58      0.61      6152
-weighted avg       0.76      0.77      0.76      6152
