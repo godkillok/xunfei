@@ -124,7 +124,7 @@ parms = {'task': 'train',
 
 rnds = 260
 print('Format a Train and Validation Set for LGB')
-print(trainDf.describe())
+# print(trainDf.describe())
 d_train = lgb.Dataset(trainDf, label=train_y)
 d_val = lgb.Dataset(testDf, label=test_y)
 
