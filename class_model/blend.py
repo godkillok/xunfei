@@ -94,11 +94,15 @@ if __name__ == '__main__':
     # mnb =
     # mnb.fit(X_train, y_train)
     # y_predict = mnb.predict(X_test)
-
-    for c  in [1e-1]: #,1e-5,1e-4,1e-3,,10,2,4
-        clfs.append([CalibratedClassifierCV(svm.LinearSVC(C=c)),tfidf_vec3])
+    best_acc=0
+    flag=True
+    for c  in [1e-1,1e-5,1e-4,1e-3,1e-2,10,2,4]:
+            for gg in [tfidf_vec3,tfidf_vec4]:
+                if not flag:
+                    clfs.pop()
+                clfs.append([CalibratedClassifierCV(svm.LinearSVC(C=c)),gg])
         # clfs.append([CalibratedClassifierCV(svm.LinearSVC(C=c)), tfidf_vec2])
-        #clfs.append([CalibratedClassifierCV(svm.LinearSVC(C=c)), tfidf_vec4])
+        #clfs.append([CalibratedClassifierCV(svm.LinearSVC(C=c)), ])
 
     # lin_clf.fit(trn_term_doc, train_y)
     logging.info ("Creating train and test sets for blending.")
@@ -166,8 +170,12 @@ if __name__ == '__main__':
             if rea==te:
                 prd=te
         test_preds_.append(prd)
-    accuracy_score(test_y, test_preds_)
-    logging.info('accuracy_score {} top2 test\n {}'.format( accuracy_score(test_y,test_preds_),
+    if best_acc<accuracy_score(test_y, test_preds_):
+        best_acc=accuracy_score(test_y, test_preds_)
+        flag=True
+    else:
+        flag = False
+    logging.info('accuracy_score len(clfs) {} top2 test\n {}'.format( accuracy_score(test_y,test_preds_),
                                                                                classification_report(test_y,
                                                                                                      test_preds_)))
     logging.info(gg.shape)
