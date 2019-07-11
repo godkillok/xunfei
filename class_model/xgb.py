@@ -139,18 +139,18 @@ parms = {'task': 'train',
     'bagging_freq': 5}
 
 rnds = 260
-print('Format a Train and Validation Set for LGB')
-# print(trainDf.describe())
-d_train = lgb.Dataset(trainDf, label=train_y)
-d_val = lgb.Dataset(testDf, label=test_y)
-
-mod = lgb.train(parms, train_set=d_train, num_boost_round=rnds,
-               valid_sets=[d_val], valid_names=['dval'], verbose_eval=20,
-               early_stopping_rounds=20)
-
-test_preds = mod.predict(testDf)
-logging.info('xgbt train {} accuracy_score {},  \n {}'.format('test', accuracy_score(test_y, test_preds),
-                                                         classification_report(test_y, test_preds)))
-
+# print('Format a Train and Validation Set for LGB')
+# # print(trainDf.describe())
+# d_train = lgb.Dataset(trainDf, label=train_y)
+# d_val = lgb.Dataset(testDf, label=test_y)
+#
+# mod = lgb.train(parms, train_set=d_train, num_boost_round=rnds,
+#                valid_sets=[d_val], valid_names=['dval'], verbose_eval=20,
+#                early_stopping_rounds=20)
+#
+# test_preds = mod.predict(testDf)
+# logging.info('xgbt train {} accuracy_score {},  \n {}'.format('test', accuracy_score(test_y, test_preds),
+#                                                          classification_report(test_y, test_preds)))
+#
 
 
