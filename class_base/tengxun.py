@@ -16,13 +16,13 @@ for fi in [test_path,train_path,pred_path]:
             word_list+=jieba.split()
 
 word_list=set(word_list)
-print(word_list[:10])
 embed=[]
 with open(pre_train,"r",encoding="utf8") as f:
     for li in f.readline():
         word=li.split()[0]
         if word in word_list:
             embed.append(li)
+print(len(embed))
 with open(embed_path,"w",encoding="utf8") as f:
     for em in embed:
         f.writelines(em)
