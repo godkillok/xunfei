@@ -8,7 +8,6 @@ import random
 import random
 import json
 import time
-from common_tool import per_line
 flags = tf.app.flags
 path="/data/tanggp/xfyun/classify/aichallenge"
 flags.DEFINE_string("data_dir", path, "Directory containing the dataset")
