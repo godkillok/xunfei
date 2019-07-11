@@ -12,7 +12,7 @@ flags = tf.app.flags
 path="/data/tanggp/xfyun/classify/aichallenge"
 flags.DEFINE_string("data_dir", path, "Directory containing the dataset")
 flags.DEFINE_string("pad_word", '<pad>', "used for pad sentence")
-flags.DEFINE_string("OOV", 'unk', "used for pad sentence")
+flags.DEFINE_string("OOV", '<unk>', "used for pad sentence")
 flags.DEFINE_string("path_vocab", os.path.join(path,"textcnn_words.txt"), "used for word index")
 flags.DEFINE_string("path_author",  os.path.join(path, 'textcnn_author_sort'), "Directory containing the dataset")
 flags.DEFINE_string("path_label",  os.path.join(path, 'textcnn_label_sort'), "Directory containing the dataset")
