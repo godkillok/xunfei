@@ -110,7 +110,7 @@ logging.info("bulid feature done trainDf.shape {}".format(trainDf.shape))
 parms = {'task': 'train',
     'boosting_type': 'gbdt',
     'objective': 'multiclass',
-    'num_class': 9,
+    'num_class': 125,
     'metric': {'multi_logloss'},
     'learning_rate': 0.05,
     'max_depth': 5,
