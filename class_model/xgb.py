@@ -132,7 +132,7 @@ mod = lgb.train(parms, train_set=d_train, num_boost_round=rnds,
                valid_sets=[d_val], valid_names=['dval'], verbose_eval=20,
                early_stopping_rounds=20)
 
-test_preds = mod.predict(testDf.drop(['ID'],axis=1))
+test_preds = mod.predict(d_val,axis=1)
 logging.info('xgbt train {} accuracy_score {},  \n {}'.format('test', accuracy_score(test_y, test_preds),
                                                          classification_report(test_y, test_preds)))
 
