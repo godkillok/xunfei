@@ -96,9 +96,9 @@ if __name__ == '__main__':
     size_test_sentences = update_vocab(os.path.join(args.data_dir, 'apptype_train.test_jieba_json'), words,word_lenth)
     size_test_sentences = update_vocab(os.path.join(args.data_dir, 'app_desc.jieba_json'), words, word_lenth)
     print("- done.")
-    word_lenth_count=Counter(word_lenth)
-    for i in word_lenth_count.items():
-        print(i)
+    # word_lenth_count=Counter(word_lenth)
+    # for i in word_lenth_count.items():
+    #     print(i)
 
     print('most common 100 {}'.format(words.most_common(100)))
     print('before remove {}'.format(len(words.keys())))
@@ -115,7 +115,7 @@ if __name__ == '__main__':
     save_vocab_to_txt_file(words_, os.path.join(args.data_dir, 'textcnn_words.txt'))
     print("- done.")
 
-
+    labels=[]
     update_label(os.path.join(args.data_dir, 'apptype_train.train_jieba_json1'), labels)
     update_label(os.path.join(args.data_dir, 'apptype_train.test_jieba_json'), labels)
     # update_label(os.path.join(args.data_dir, 'txt_valid'), labels)
@@ -139,7 +139,7 @@ if __name__ == '__main__':
         'pad_word': PAD_WORD,
         'num_oov_buckets': NUM_OOV_BUCKETS,
         "label_size":len(labels_sort),
-        "author_size":len(author_sort)
+        "author_size":len(authors_sort)
     }
     save_dict_to_json(sizes, os.path.join(args.data_dir, 'textcnn_dataset_params.json'))
 
