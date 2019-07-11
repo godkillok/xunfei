@@ -2,11 +2,6 @@
   "dataset_reader": {
     "type": "text_classification_txt",
     "chinese_space": true,
-    "tokenizer": {
-    	"word_splitter": {
-    		"type": "jieba"
-    	}
-    	},
     "token_indexers": {
       "tokens": {
         "type": "single_id"
@@ -14,22 +9,22 @@
     }
   },
   "vocabulary": {
-    "only_include_pretrained_words": true,
+    "only_include_pretrained_words": false,
         "pretrained_files": {
-            "tokens": "/media/beidou/项目工程/BeidouMarineShare/PythonWork/wxy/data/sgns.wiki.word2vec300.txt"
+            "tokens": "/data/tanggp/xfyun/classify/aichallenge/Tencent_AILab_ChineseEmbedding.txt"
         }
   },
-  "train_data_path": "/media/beidou/项目工程/BeidouMarineShare/PythonWork/wxy/data/cnews/cnews.train.txt",
-  "validation_data_path": "/media/beidou/项目工程/BeidouMarineShare/PythonWork/wxy/data/cnews/cnews.val.txt",
+  "train_data_path": "/data/tanggp/xfyun/classify/aichallenge/apptype_train.train_jieba_json",
+  "validation_data_path": "/data/tanggp/xfyun/classify/aichallenge/apptype_train.test_jieba_json",
   "model": {
     "type": "basic_classifier",
     "text_field_embedder": {
       "token_embedders": {
         "tokens": {
           "type": "embedding",
-          "pretrained_file": "/media/beidou/项目工程/BeidouMarineShare/PythonWork/wxy/data/sgns.wiki.word2vec300.txt",
+          "pretrained_file": "/data/tanggp/xfyun/classify/aichallenge/Tencent_AILab_ChineseEmbedding.txt",
           "embedding_dim": 300,
-          "trainable": false
+          "trainable": true
         }
       }
     },
