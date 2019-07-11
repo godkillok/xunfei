@@ -25,7 +25,7 @@ with open(pre_train,"r",encoding="utf8") as f:
             if word in word_list:
                 embed.append(li)
         except:
-            pass
+            print(li)
 print(len(embed))
 with open(embed_path,"w",encoding="utf8") as f:
     for em in embed:
