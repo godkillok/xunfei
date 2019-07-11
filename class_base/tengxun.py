@@ -23,6 +23,6 @@ with open(pre_train,"r",encoding="utf8") as f:
         word=li.split()[0]
         if word in word_list:
             embed.append(li)
-with open(embed_path,"r",encoding="utf8") as f:
+with open(embed_path,"w",encoding="utf8") as f:
     for em in embed:
         f.writelines(em)
