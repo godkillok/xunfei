@@ -13,6 +13,7 @@ import gc
 # import matplotlib.pyplot as plt
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn import svm
+from xgboost import XGBClassifier
 from sklearn.metrics import accuracy_score, classification_report
 from sklearn.model_selection import StratifiedKFold
 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
@@ -154,3 +155,19 @@ rnds = 260
 #
 
 
+model = XGBClassifier(learning_rate=0.01,
+                      n_estimators=100,           # 树的个数-10棵树建立xgboost
+                      max_depth=4,               # 树的深度
+                      min_child_weight = 1,      # 叶子节点最小权重
+                      gamma=0.,                  # 惩罚项中叶子结点个数前的参数
+                      subsample=1,               # 所有样本建立决策树
+                      colsample_btree=1,         # 所有特征建立决策树
+                      scale_pos_weight=1,        # 解决样本个数不平衡的问题
+                      random_state=27,           # 随机数
+                      slient = 0
+                      )
+model.fit(trainDf, train_y)
+test_preds = model.predict(testDf)
+
+logging.info('train {} accuracy_score {},  \n {}'.format('test', accuracy_score(test_y, test_preds),
+                                                         classification_report(test_y, test_preds)))
