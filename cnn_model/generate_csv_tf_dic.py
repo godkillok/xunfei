@@ -83,7 +83,7 @@ def per_thouds_lines_dict(result_lines, path_text, count,flag_name=''):
             text += [pad_word] * (sentence_max_len - len(text))
         g={"text":text,"label":label,"author":author,"app":app}
         tf_lines.append(g)
-        write_tfrecords(tf_lines, path_text, count)
+    write_tfrecords(tf_lines, path_text, count)
 
 def ini():
     global pad_word,OOV
