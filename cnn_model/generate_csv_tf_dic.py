@@ -49,7 +49,7 @@ def feature_auto(value):
         return tf.train.Feature(float_list=tf.train.FloatList(value=[value]))
 
 
-def parse_line_dict(record,vocab_dict,author_dict,label_dict,categories_dict):
+def parse_line_dict(record,vocab_dict,author_dict,label_dict):
     record = json.loads(record)
     tokens=record.get("jieba")
     tokens=tokens.split()
@@ -112,7 +112,7 @@ def ini():
 
     return vocab_dict,author_dict,label_dict
 
-def generate_tf_dic(path_text,vocab_dict,author_dict,label_dict,categories_dict):
+def generate_tf_dic(path_text,vocab_dict,author_dict,label_dict):
 
 
     result_lines = []
@@ -122,7 +122,7 @@ def generate_tf_dic(path_text,vocab_dict,author_dict,label_dict,categories_dict)
         random.shuffle(lines)
         for line in lines:
             count+=1
-            result_lines.append(parse_line_dict(line,vocab_dict,author_dict,label_dict,categories_dict))
+            result_lines.append(parse_line_dict(line,vocab_dict,author_dict,label_dict))
             if count>0 and count % 50000 == 0:
                 print(count)
                 per_thouds_lines_dict(result_lines, path_text, count)
@@ -172,9 +172,9 @@ def write_tfrecords(tf_lines, path_text, count):
 
 def main():
     vocab_dict, author_dict, label_dict= ini()
-    generate_tf_dic(os.path.join(FLAGS.data_dir, 'apptype_train.train_jieba_json1'),vocab_dict,author_dict,label_dict,categories_dict)
-    generate_tf_dic(os.path.join(FLAGS.data_dir, 'apptype_train.test_jieba_json'),vocab_dict,author_dict,label_dict,categories_dict)
-    generate_tf_dic(os.path.join(FLAGS.data_dir, 'app_desc.jieba_json'), vocab_dict, author_dict, label_dict, categories_dict)
+    generate_tf_dic(os.path.join(FLAGS.data_dir, 'apptype_train.train_jieba_json1'),vocab_dict,author_dict,label_dict)
+    generate_tf_dic(os.path.join(FLAGS.data_dir, 'apptype_train.test_jieba_json'),vocab_dict,author_dict,label_dict)
+    generate_tf_dic(os.path.join(FLAGS.data_dir, 'app_desc.jieba_json'), vocab_dict, author_dict, label_dict)
     # s3_input = FLAGS.data_dir
     # for root, dirs, files in os.walk(s3_input):
     #     for file in files:
