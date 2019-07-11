@@ -23,24 +23,25 @@ else:
 
 flags = tf.app.flags
 # configurations for training1
+path="/data/tanggp/xfyun/classify/aichallenge"
 flags.DEFINE_bool("do_train", True, "Whether to run training.")
 flags.DEFINE_bool("do_predict", True, "Whether to run the model in inference mode on the test set.")
 flags.DEFINE_integer("batch_size", 256, "batch size")
-flags.DEFINE_string("data_dir", '/data/tanggp/youtube8m', "The input datadir.")
+flags.DEFINE_string("data_dir",path , "The input datadir.")
 flags.DEFINE_integer("shuffle_buffer_size", 20000, "dataset shuffle buffer size")  # 只影响取数据的随机性
 flags.DEFINE_integer("num_parallel_calls", 40, "Num of cpu cores")
 flags.DEFINE_integer("num_parallel_readers", 40, "Number of files read at the same time")
 flags.DEFINE_float("learning_rate", 0.01, "Initial learning rate")
 flags.DEFINE_integer("steps_check", 500, "steps per checkpoint")
-flags.DEFINE_string("train_file", "/data/tanggp/youtube8m/author_text_cnn_txt_train_*", "train file pattern")
-flags.DEFINE_string("valid_file", "/data/tanggp/youtube8m/author_text_cnn_txt_golden_*", "train file pattern")
+flags.DEFINE_string("train_file", os.path.join(path,"author_text_cnn_apptype_train_26320.tfrecords"), "train file pattern")
+flags.DEFINE_string("valid_file", os.path.join(path,"author_text_cnn_apptype_train_6152.tfrecords"), "train file pattern")
 #flags.DEFINE_string("valid_file", "/data/tanggp/youtube8m/text_cnn_txt_golden_*", "evalue file pattern")
 flags.DEFINE_string("emb_file", None, "Path for pre_trained embedding")
 #flags.DEFINE_string("emb_file", "", "Path for pre_trained embedding")
-flags.DEFINE_string("params_file", "/data/tanggp/youtube8m/textcnn_dataset_params.json", "parameters file")
-flags.DEFINE_string("word_path", "/data/tanggp/youtube8m/textcnn_words.txt", "word vocabulary file")
-flags.DEFINE_string("model_dir", "/data/tanggp/textcnn_baseline_model", "Path to save model")
-flags.DEFINE_string("result_file", "/data/tanggp/textcnn_baseline_model/base_result.txt", "Path to save predict result")
+flags.DEFINE_string("params_file", os.path.join(path,"textcnn_dataset_params.json"), "parameters file")
+flags.DEFINE_string("word_path", os.path.join(path,"textcnn_words.txt"), "word vocabulary file")
+flags.DEFINE_string("model_dir", os.path.join(path,"textcnn_baseline_model"), "Path to save model")
+flags.DEFINE_string("result_file", os.path.join(path,"textcnn_baseline_model","base_result.txt"), "Path to save predict result")
 flags.DEFINE_float("warmup_proportion", 0.1, "Proportion of training to perform linear learning rate warmup for.")
 # configurations for the model
 flags.DEFINE_float("dropout_prob", 0.2, "Dropout rate")  # 以0.2的概率drop out
@@ -73,12 +74,10 @@ def input_fn(filenames, config, shuffle_buffer_size):
     def parser(record):
         keys_to_features = {
             "text": tf.FixedLenFeature([config['max_length']], tf.int64),
-            "categories": tf.FixedLenFeature([1], tf.int64),
             "author": tf.FixedLenFeature([1], tf.int64),
             "label": tf.FixedLenFeature([1], tf.int64)}
         parsed = tf.parse_single_example(record, keys_to_features)
-        return {"text": parsed['text'], "author": parsed['author'],
-                "categories": parsed['categories'], 'label':parsed['label']}
+        return {"text": parsed['text'], "author": parsed['author'],'label':parsed['label']}
 
     # Load txt file, one example per line
     files = tf.data.Dataset.list_files(filenames)  # A dataset of all files matching a pattern.
@@ -136,7 +135,7 @@ if __name__ == '__main__':
             'num_warmup_steps': num_warmup_steps,
             'train_steps': train_steps,
             'summary_dir':model_dir,
-            "label_size":20,
+            "label_size":125,
             'use_focal_loss':False,
             'use_author_feature': False,
             'use_category_feature': False,
