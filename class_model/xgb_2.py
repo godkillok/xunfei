@@ -96,15 +96,35 @@ def buildFeats(x_text):
     return temp, tempc
 
 trainDf, traincol = buildFeats(train_x)
-logging.info(trainDf.dtypes)
+trainDf=trainDf.as_matrix()
+#logging.info(trainDf.dtypes)
 import time
 time.sleep(30)
 testDf, testcol = buildFeats(test_x)
+testDf=testDf.as_matrix()
 predDf, predcol = buildFeats(pred_x)
+predDf=predDf.as_matrix()
 logging.info("bulid feature done trainDf.shape {}".format(trainDf.shape))
-trainDf.columns = traincol
-testDf.columns = testcol
-predDf.columns = predcol
+# trainDf.columns = traincol
+# testDf.columns = testcol
+# predDf.columns = predcol
+
+lr_clf = LogisticRegression(random_state=0, solver='saga',multi_class='ovr', max_iter=1000,verbose =False ,n_jobs=-1)
+#
+lr_clf.fit(trainDf, train_y)
+#
+train_preds = lr_clf.predict(trainDf)
+
+from sklearn.metrics import classification_report
+
+logging.info('train {} accuracy_score {},  \n {}'.format('train', accuracy_score(train_y, train_preds),
+                                                         classification_report(train_y, train_preds)))
+
+
+test_preds = lr_clf.predict(testDf)
+
+logging.info('train {} accuracy_score {},  \n {}'.format('test', accuracy_score(test_y, test_preds),
+                                                         classification_report(test_y, test_preds)))
 
 
 parms = {'task': 'train',
@@ -137,20 +157,3 @@ logging.info('xgbt train {} accuracy_score {},  \n {}'.format('test', accuracy_s
                                                          classification_report(test_y, test_preds)))
 
 
-
-lr_clf = LogisticRegression(random_state=0, solver='saga',multi_class='ovr', max_iter=1000,verbose =False ,n_jobs=-1)
-#
-lr_clf.fit(trainDf, train_y)
-#
-train_preds = lr_clf.predict(trainDf)
-
-from sklearn.metrics import classification_report
-
-logging.info('train {} accuracy_score {},  \n {}'.format('train', accuracy_score(train_y, train_preds),
-                                                         classification_report(train_y, train_preds)))
-
-
-test_preds = lr_clf.predict(testDf)
-
-logging.info('train {} accuracy_score {},  \n {}'.format('test', accuracy_score(test_y, test_preds),
-                                                         classification_report(test_y, test_preds)))
