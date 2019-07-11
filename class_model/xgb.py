@@ -102,23 +102,7 @@ logging.info("bulid feature done trainDf.shape {}".format(trainDf.shape))
 trainDf.columns = traincol
 testDf.columns = testcol
 predDf.columns = predcol
-# lr_clf = LogisticRegression(random_state=0, solver='saga',multi_class='ovr', max_iter=1000,verbose =False ,n_jobs=-1)
-#
-# lr_clf.fit(trainDf, train_y)
-#
-# train_preds = lr_clf.predict(trainDf)
-#
-# from sklearn.metrics import classification_report
-#
-# logging.info('train {} accuracy_score {},  \n {}'.format('train', accuracy_score(train_y, train_preds),
-#                                                          classification_report(train_y, train_preds)))
-#
-#
-# test_preds = lr_clf.predict(testDf)
-#
-# logging.info('train {} accuracy_score {},  \n {}'.format('test', accuracy_score(test_y, test_preds),
-#                                                          classification_report(test_y, test_preds)))
-#
+
 
 parms = {'task': 'train',
     'boosting_type': 'gbdt',
@@ -145,4 +129,25 @@ mod = lgb.train(parms, train_set=d_train, num_boost_round=rnds,
                valid_sets=[d_val], valid_names=['dval'], verbose_eval=20,
                early_stopping_rounds=20)
 
-pred = mod.predict(testDf.drop(['ID'],axis=1))
+test_preds = mod.predict(testDf.drop(['ID'],axis=1))
+logging.info('xgbt train {} accuracy_score {},  \n {}'.format('test', accuracy_score(test_y, test_preds),
+                                                         classification_report(test_y, test_preds)))
+
+
+
+lr_clf = LogisticRegression(random_state=0, solver='saga',multi_class='ovr', max_iter=1000,verbose =False ,n_jobs=-1)
+#
+lr_clf.fit(trainDf, train_y)
+#
+train_preds = lr_clf.predict(trainDf)
+
+from sklearn.metrics import classification_report
+
+logging.info('train {} accuracy_score {},  \n {}'.format('train', accuracy_score(train_y, train_preds),
+                                                         classification_report(train_y, train_preds)))
+
+
+test_preds = lr_clf.predict(testDf)
+
+logging.info('train {} accuracy_score {},  \n {}'.format('test', accuracy_score(test_y, test_preds),
+                                                         classification_report(test_y, test_preds)))
