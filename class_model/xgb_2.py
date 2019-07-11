@@ -76,14 +76,14 @@ def buildFeats(x_text):
     temp['unique_words'] = [len(set(x.split())) for x in x_text]
     #
     temp_tfidf = tfidf.transform(x_text)
-    temp['tfidf_sum'] =temp_tfidf.sum(axis=1).tolist()
-    temp['tfidf_mean'] = temp_tfidf.mean(axis=1).tolist()
-    temp['tfidf_len'] = (temp_tfidf != 0).sum(axis=1).tolist()
+    temp['tfidf_sum'] =temp_tfidf.sum(axis=1).astype(np.float).tolist()
+    temp['tfidf_mean'] = temp_tfidf.mean(axis=1).astype(np.float).tolist()
+    temp['tfidf_len'] = (temp_tfidf != 0).sum(axis=1).astype(np.float).tolist()
 
     temp_cvec = cvec.transform(x_text)
-    temp['cvec_sum'] = temp_cvec.sum(axis=1).tolist()
-    temp['cvec_mean'] = temp_cvec.mean(axis=1).tolist()
-    temp['cvec_len'] =(temp_cvec != 0).sum(axis=1).tolist()
+    temp['cvec_sum'] = temp_cvec.sum(axis=1).astype(np.float).tolist()
+    temp['cvec_mean'] = temp_cvec.mean(axis=1).astype(np.float).tolist()
+    temp['cvec_len'] =(temp_cvec != 0).sum(axis=1).astype(np.float).tolist()
 
     tempc = list(temp.keys())
     temp_lsa = svdTFit.transform(temp_tfidf)
