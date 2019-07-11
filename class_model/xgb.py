@@ -96,6 +96,9 @@ def buildFeats(x_text):
     return temp, tempc
 
 trainDf, traincol = buildFeats(train_x)
+print(trainDf.dtypes)
+import time
+time.sleep(30)
 testDf, testcol = buildFeats(test_x)
 predDf, predcol = buildFeats(pred_x)
 logging.info("bulid feature done trainDf.shape {}".format(trainDf.shape))
