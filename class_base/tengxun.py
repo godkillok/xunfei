@@ -20,9 +20,12 @@ print(len(word_list))
 embed=[]
 with open(pre_train,"r",encoding="utf8") as f:
     for li in f.readline():
-        word=li.split()[0]
-        if word in word_list:
-            embed.append(li)
+        try:
+            word=li.split()[0]
+            if word in word_list:
+                embed.append(li)
+        except:
+            pass
 print(len(embed))
 with open(embed_path,"w",encoding="utf8") as f:
     for em in embed:
