@@ -16,6 +16,7 @@ for fi in [test_path,train_path,pred_path]:
             word_list+=jieba.split()
 
 word_list=set(word_list)
+print(len(word_list))
 embed=[]
 with open(pre_train,"r",encoding="utf8") as f:
     for li in f.readline():
