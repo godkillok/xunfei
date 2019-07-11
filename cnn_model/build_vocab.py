@@ -4,7 +4,6 @@ from collections import Counter
 import json
 import os
 import re
-from common_tool import per_line
 parser = argparse.ArgumentParser()
 parser.add_argument('--min_count_word', default=20, help="Minimum count for words in the dataset", type=int)
 parser.add_argument('--data_dir', default="/data/tanggp/xfyun/classify/aichallenge", help="Directory containing the dataset")
