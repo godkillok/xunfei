@@ -72,18 +72,18 @@ logging.info("pre bulid feature....")
 
 def buildFeats(x_text):
     temp = {}
-    temp['doc_len'] = [len(x.split()) for x in x_text]
-    temp['unique_words'] = [len(set(x.split())) for x in x_text]
-
+    # temp['doc_len'] = [len(x.split()) for x in x_text]
+    # temp['unique_words'] = [len(set(x.split())) for x in x_text]
+    #
     temp_tfidf = tfidf.transform(x_text)
-    temp['tfidf_sum'] =list(temp_tfidf.sum(axis=1))
-    temp['tfidf_mean'] = list(temp_tfidf.mean(axis=1))
-    temp['tfidf_len'] = list((temp_tfidf != 0).sum(axis=1))
-
-    temp_cvec = cvec.transform(x_text)
-    temp['cvec_sum'] = list(temp_cvec.sum(axis=1))
-    temp['cvec_mean'] = list(temp_cvec.mean(axis=1))
-    temp['cvec_len'] = list((temp_cvec != 0).sum(axis=1))
+    # temp['tfidf_sum'] =list(temp_tfidf.sum(axis=1))
+    # temp['tfidf_mean'] = list(temp_tfidf.mean(axis=1))
+    # temp['tfidf_len'] = list((temp_tfidf != 0).sum(axis=1))
+    #
+    # temp_cvec = cvec.transform(x_text)
+    # temp['cvec_sum'] = list(temp_cvec.sum(axis=1))
+    # temp['cvec_mean'] = list(temp_cvec.mean(axis=1))
+    # temp['cvec_len'] = list((temp_cvec != 0).sum(axis=1))
 
     tempc = list(temp.keys())
     temp_lsa = svdTFit.transform(temp_tfidf)
@@ -91,7 +91,7 @@ def buildFeats(x_text):
     for i in range(np.shape(temp_lsa)[1]):
         tempc.append('lsa' + str(i + 1))
     temp=pd.DataFrame.from_dict(temp)
-    temp = pd.concat([temp, pd.DataFrame(temp_lsa, index=temp.index)], axis=1)
+    #temp = pd.concat([temp, pd.DataFrame(temp_lsa, index=temp.index)], axis=1)
 
     return temp, tempc
 
