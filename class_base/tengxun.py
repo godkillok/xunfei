@@ -1,7 +1,7 @@
 import os
 import json
-from gensim.models.word2vec import KeyedVectors
-wv_from_text = KeyedVectors.load_word2vec_format(file, binary=False)
+# from gensim.models.word2vec import KeyedVectors
+# wv_from_text = KeyedVectors.load_word2vec_format(file, binary=False)
 
 project_path="/data/tanggp/xfyun/classify/aichallenge"
 test_path=os.path.join(project_path,"apptype_train.test_jieba_json")
