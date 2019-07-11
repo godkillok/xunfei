@@ -62,7 +62,7 @@ def parse_line_dict(record,vocab_dict,author_dict,label_dict):
         else:
             author = label[:4]
 
-        au=author_dict.get[author]
+        au=author_dict[author]
         return [text, label_dict.get(label),au,app]
     else:
         return [text, None, None,app]
