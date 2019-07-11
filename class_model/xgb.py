@@ -93,7 +93,7 @@ def buildFeats(x_text):
     temp=pd.DataFrame.from_dict(temp)
     #temp = pd.concat([temp, pd.DataFrame(temp_lsa, index=temp.index)], axis=1)
 
-    return temp, tempc
+    return temp_lsa, tempc
 
 trainDf, traincol = buildFeats(train_x)
 print(trainDf.dtypes)
