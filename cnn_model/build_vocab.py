@@ -12,7 +12,7 @@ parser.add_argument('--data_dir', default="/data/tanggp/xfyun/classify/aichallen
 import json
 
 # Hyper parameters for the vocab
-NUM_OOV_BUCKETS = 'unk' # number of buckets (= number of ids) for unknown words
+NUM_OOV_BUCKETS = '<unk>' # number of buckets (= number of ids) for unknown words
 PAD_WORD='<pad>'
 label_class=[]
 
