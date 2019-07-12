@@ -25,7 +25,7 @@ from sklearn.calibration import CalibratedClassifierCV
 
 def get_data_set(flie):
     global label_num
-    with open(flie) as f:
+    with open(flie,"r",encoding="utf8") as f:
         lines = f.readlines()
     lab_count=defaultdict(int)
     lines_json=[]
