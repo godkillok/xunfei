@@ -61,7 +61,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # 只显示warning 和 error
 tf.logging.set_verbosity(logging.INFO)
 
 
-timestamp = time.strftime("%m.%d.%H.%M", time.localtime())
+timestamp = time.strftime("%m_%d_%H", time.localtime())
 if FLAGS.do_train:
     model_dir = os.path.join(FLAGS.model_dir)
     with open('model_dir.pkl', 'wb') as f:
