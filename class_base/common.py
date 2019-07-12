@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-project_path="/data/tanggp/xfyun/classify/aichallenge"
+project_path="/data/tanggp/xun_class//aichallenge"
 train_path=os.path.join(project_path,"apptype_train.dat")
 test_path=os.path.join(project_path,"app_desc.dat")
 id_path=os.path.join(project_path,"apptype_id_name.txt")

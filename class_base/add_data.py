@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-project_path="/data/tanggp/xfyun/classify/aichallenge"
+project_path="/data/tanggp/xun_class//aichallenge"
 add_path=os.path.join(project_path,"add_data.csv")
 test_path=os.path.join(project_path,"app_desc.jieba_json")
 id_path=os.path.join(project_path,"apptype_id_name.txt")
@@ -48,5 +48,5 @@ print(lab_count)
 with open(train_path, "w", encoding="utf8") as f:
    for  res in result:
        f.writelines(json.dumps(res,ensure_ascii=False)+'\n')
-os.system("cd /data/tanggp/xfyun/classify/aichallenge && mv apptype_train.train_jieba_json apptype_train.train_jieba_json1")
-os.system("cd /data/tanggp/xfyun/classify/aichallenge && cat apptype_train.train_jieba_json1 new_train.jieba_json >apptype_train.train_jieba_json")
+os.system("cd /data/tanggp/xun_class//aichallenge && mv apptype_train.train_jieba_json apptype_train.train_jieba_json1")
+os.system("cd /data/tanggp/xun_class//aichallenge && cat apptype_train.train_jieba_json1 new_train.jieba_json >apptype_train.train_jieba_json")
