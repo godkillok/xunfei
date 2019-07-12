@@ -92,4 +92,4 @@ def top_2_label_code(test_preds_prob,test_y):
                 prd = real
         test_y_name.append(real)
         test_preds_code.append(prd)
-    return test_preds_code,
+    return test_y_name,test_preds_code,
