@@ -74,10 +74,10 @@ def input_fn(filenames, config, shuffle_buffer_size):
     def parser(record):
         keys_to_features = {
             "text": tf.FixedLenFeature([config['max_length']], tf.int64),
-            "author": tf.FixedLenFeature([1], tf.int64),
+            # "author": tf.FixedLenFeature([1], tf.int64),
             "label": tf.FixedLenFeature([1], tf.int64)}
         parsed = tf.parse_single_example(record, keys_to_features)
-        return {"text": parsed['text'], "author": parsed['author'],'label':parsed['label']}
+        return {"text": parsed['text'], 'label':parsed['label']} #"author": parsed['author'],
 
     # Load txt file, one example per line
     files = tf.data.Dataset.list_files(filenames)  # A dataset of all files matching a pattern.

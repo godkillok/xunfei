@@ -78,25 +78,6 @@ class CnnModel(Model):
         h_pool = tf.concat(pooled_outputs, -1)  # 按照第四维进行连接，h_pool的shape为[batch_size,1,1,num_filters_total]
         output_layer  = tf.reshape(h_pool, [-1, num_filters_total])  # 扁平化数据，跟全连接层相连
 
-        if self.config['use_author_feature']:
-            author_embedding_table = tf.get_variable(name='author_embedding_name',
-                                                     shape=[self.config['author_size'], self.config['feature_dim']],
-                                                     initializer=tf.keras.initializers.he_normal(), dtype=tf.float32)
-            author_embedding = tf.reshape(tf.nn.embedding_lookup(author_embedding_table, self.author_id),
-                                          [-1, self.config['feature_dim']])
-
-            output_layer = tf.concat([output_layer , author_embedding], axis=1)
-
-        if self.config['use_category_feature']:
-            category_embedding_table = tf.get_variable(name='category_embedding_name',
-                                                       shape=[self.config['category_size'], self.config['feature_dim']],
-                                                       initializer=tf.keras.initializers.he_normal(), dtype=tf.float32)
-
-            category_embedding = tf.reshape(tf.nn.embedding_lookup(category_embedding_table, self.category_ids),
-                                            [-1, 2 * self.config['feature_dim']])
-
-            output_layer = tf.concat([output_layer, category_embedding], axis=1)
-
         if self.config['use_keyword_feature']:
             keyword_embedding_table = tf.get_variable(name='keyword_embedding_name',
                                                       shape=[self.config['keyword_size'], self.config['feature_dim']],
