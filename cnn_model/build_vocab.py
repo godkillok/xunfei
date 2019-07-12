@@ -6,7 +6,7 @@ import os
 import re
 parser = argparse.ArgumentParser()
 parser.add_argument('--min_count_word', default=20, help="Minimum count for words in the dataset", type=int)
-parser.add_argument('--data_dir', default="/data/tanggp/xfyun/classify/aichallenge", help="Directory containing the dataset")
+parser.add_argument('--data_dir', default="/data/tanggp/xun_class/aichallenge", help="Directory containing the dataset")
 
 
 import json
