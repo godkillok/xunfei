@@ -56,9 +56,9 @@ def model_fn(features, labels, mode, params):
             metrics = {
                 'acc': tf.metrics.accuracy(squeeze_label_ids, predict_label_ids),
                 # 分别计算各个类的P, R 然后按类求平均值
-                'precision': precision(squeeze_label_ids, predict_label_ids, params['label_size'], average='macro'),
-                'recall': recall(squeeze_label_ids, predict_label_ids, params['label_size'], average='macro'),
-                'f1': f1(squeeze_label_ids, predict_label_ids, params['label_size'], average='macro'),
+                # 'precision': precision(squeeze_label_ids, predict_label_ids, params['label_size'], average='macro'),
+                # # 'recall': recall(squeeze_label_ids, predict_label_ids, params['label_size'], average='macro'),
+                # 'f1': f1(squeeze_label_ids, predict_label_ids, params['label_size'], average='macro'),
             }
             return tf.estimator.EstimatorSpec(mode, loss=loss, eval_metric_ops=metrics)
         elif mode == tf.estimator.ModeKeys.TRAIN:
