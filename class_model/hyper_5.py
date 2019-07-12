@@ -77,7 +77,7 @@ def score(params):
     acc2 = accuracy_score(test_y, test_preds)
     logging.info((len(test_preds_prob),len(test_y)))
 
-    test_y2,test_preds=top_2_label_code(test_preds_prob, test_y[:])
+    test_y2,test_preds=top_2_label_code(test_preds_prob, test_y)
 
 
     acc3 = accuracy_score(test_y2, test_preds)
