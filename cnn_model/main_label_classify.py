@@ -101,7 +101,7 @@ if __name__ == '__main__':
     with open(FLAGS.params_file) as f:
         config = json.load(f)
     #config["train_size"]=9722067
-    config["max_length"]=200
+    config["max_length"]=250
     config["id_word"]=vocab_dict
     config["word_dim"]=128
     if config["train_size"] < FLAGS.shuffle_buffer_size:

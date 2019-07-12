@@ -18,7 +18,7 @@ flags.DEFINE_string("path_author",  os.path.join(path, 'textcnn_author_sort'), "
 flags.DEFINE_string("path_label",  os.path.join(path, 'textcnn_label_sort'), "Directory containing the dataset")
 FLAGS = flags.FLAGS
 
-sentence_max_len = 200
+sentence_max_len = 250
 pad_word = FLAGS.pad_word
 OOV =FLAGS.OOV
 label_class=[]
