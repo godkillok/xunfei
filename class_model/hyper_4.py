@@ -22,7 +22,7 @@ while 'xunfei' not in m_c:
     m_p, m_c = os.path.split(m_p)
 
 sys.path.append(os.path.join(m_p, m_c))
-from  class_model.load_data import  load_data
+from  class_model.load_data import  load_data,top_2_label_code
 from sklearn.metrics import accuracy_score
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
@@ -74,9 +74,17 @@ def score(params):
     test_term_doc = vec.transform(test_x)
     test_preds = lin_clf.predict(test_term_doc)
     acc2 = accuracy_score(test_y, test_preds)
-    loss = 1 - (acc2+acc)/2
+    acc3 =0
+    if acc2>0.58:
+        lin_clf = CalibratedClassifierCV(lin_clf)
+        lin_clf.fit(trn_term_doc, train_y)
+        test_preds_prob = lin_clf.predict_proba(test_term_doc)
+        test_preds = top_2_label_code(test_preds_prob, test_y)
+        acc3 = accuracy_score(test_y, test_preds)
+
+    loss = 1 -acc2
     t2 = time.time()
-    logging.info("acc {}, on test  set is {} ,loss {} time {},params: \n{}".format(acc,acc2,loss,t2-t1,params))
+    logging.info("acc {}, on test  set is {} and top2 is {},loss {} time {},params: \n{}".format(acc,acc2,acc3,loss,t2-t1,params))
     return {'loss': loss, 'status': STATUS_OK}
 
 def optimize(
