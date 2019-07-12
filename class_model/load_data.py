@@ -77,3 +77,19 @@ def load_data():
     pred_x,_,apps=get_data_set(pred_path)
     return train_x,train_y,test_x, test_y,pred_x,apps,label_dic
 
+def top_2_label_code(test_preds_prob,test_y):
+    test_preds = []
+    for prob in test_preds_prob:
+        test_preds.append(list(prob.argsort()[-2:][::-1]))
+
+    test_y_name = []
+    test_preds_code= []
+    for real, pred in zip(test_y, test_preds):
+        prd = pred[0]
+        # print(real, pred)
+        for pr in pred:
+            if real == pr:
+                prd = real
+        test_y_name.append(real)
+        test_preds_code.append(prd)
+    return test_preds_code,
