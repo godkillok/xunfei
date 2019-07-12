@@ -9,7 +9,7 @@ import random
 import json
 import time
 flags = tf.app.flags
-path="/data/tanggp/xfyun/classify/aichallenge"
+path="/data/tanggp/xun_class//aichallenge"
 flags.DEFINE_string("data_dir", path, "Directory containing the dataset")
 flags.DEFINE_string("pad_word", '<pad>', "used for pad sentence")
 flags.DEFINE_string("OOV", '<unk>', "used for pad sentence")
