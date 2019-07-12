@@ -79,9 +79,9 @@ def score(params):
         lin_clf = CalibratedClassifierCV(lin_clf)
         lin_clf.fit(trn_term_doc, train_y)
         test_preds_prob = lin_clf.predict_proba(test_term_doc)
-        test_y, test_preds = top_2_label_code(test_preds_prob, test_y)
+        test_y2, test_preds = top_2_label_code(test_preds_prob, test_y[:])
 
-        acc3 = accuracy_score(test_y, test_preds)
+        acc3 = accuracy_score(test_y2, test_preds)
     loss = 1 - acc2
     t2 = time.time()
     logging.info("acc {}, on test  set is {}  and top2 {},loss {} time {},params: \n{}".format(acc,acc2,acc3,loss,t2-t1,params))
