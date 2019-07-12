@@ -149,7 +149,7 @@ def write_tfrecords(tf_lines, path_text, count):
         label = data["label"]
         author=data["author"]
         app=data["app"]
-        if label:
+        if not label is  None:
             example = tf.train.Example(features=tf.train.Features(feature={
                 'text': feature_auto(list(text)),
                 'label': feature_auto(int(label)),
