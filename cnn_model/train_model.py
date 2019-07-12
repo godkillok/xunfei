@@ -2,8 +2,29 @@
 # -*- coding: utf-8 -*-
 
 
+import pandas as pd, numpy as np
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer,HashingVectorizer
+from sklearn import svm
+import logging
+import numpy as np
+import time
+import os
+import pickle  # pickle模块2
+import logging
+import os
+import sys
+
+
+# Hyperparameters tuning
+
+from hyperopt import STATUS_OK, Trials, fmin, hp, tpe
+currentUrl = os.path.dirname(__file__)
+most_parenturl = os.path.abspath(os.path.join(currentUrl, os.pardir))
+m_p, m_c = os.path.split(most_parenturl)
+while 'xunfei' not in m_c:
+    m_p, m_c = os.path.split(m_p)
 import tensorflow as tf
-from cnn_model import CnnModel
+from cnn_model.cnn_model import CnnModel
 import optimization
 from tf_metrics import precision, recall, f1
 
@@ -11,9 +32,8 @@ def model_fn(features, labels, mode, params):
     training = (mode == tf.estimator.ModeKeys.TRAIN)
     input_ids = features["text"]
     author_id = features["author"]
-    category_ids = features["categories"]
     label_id = features["label"]
-    cnn = CnnModel(params, input_ids, author_id, category_ids, training)
+    cnn = CnnModel(params, input_ids, author_id, training)
     logits, predict_label_ids, l2_loss = cnn.build_network()
     squeeze_label_ids = tf.squeeze(label_id, axis=1)
     if mode == tf.estimator.ModeKeys.PREDICT:
