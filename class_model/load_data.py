@@ -11,7 +11,7 @@ logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
 # 12813123
 column = "word_seg"
-project_path="/data/tanggp/xfyun/classify/aichallenge/"
+project_path="/data/tanggp/xun_class//aichallenge/"
 test_path=os.path.join(project_path,"apptype_train.test_jieba_json")
 train_path=os.path.join(project_path,"apptype_train.train_jieba_json")
 pred_path=os.path.join(project_path,"app_desc.jieba_json")
@@ -76,3 +76,4 @@ def load_data():
     test_x, test_y,apps = get_data_set(test_path)
     pred_x,_,apps=get_data_set(pred_path)
     return train_x,train_y,test_x, test_y,pred_x,apps,label_dic
+

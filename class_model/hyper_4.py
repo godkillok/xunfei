@@ -27,7 +27,7 @@ from sklearn.metrics import accuracy_score
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
 
-project_path="/data/tanggp/xfyun/classify/aichallenge/"
+project_path="/data/tanggp/xun_class//aichallenge/"
 test_path=os.path.join(project_path,"apptype_train.test_jieba_json")
 train_path=os.path.join(project_path,"apptype_train.train_jieba_json")
 pred_path=os.path.join(project_path,"app_desc.jieba_json")
