@@ -81,7 +81,7 @@ def score(params):
 
 
     acc3 = accuracy_score(test_y2, test_preds)
-    loss = 1 - (acc+acc3)/2
+    loss = 1 - acc3
     t2 = time.time()
     logging.info("acc {}, on test  set is {} and top2 acc {},loss {} time {},params: \n{}".format(acc,acc2,acc3,loss,t2-t1,params))
     return {'loss': loss, 'status': STATUS_OK}
