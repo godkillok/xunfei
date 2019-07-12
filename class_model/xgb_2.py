@@ -29,7 +29,7 @@ m_p, m_c = os.path.split(most_parenturl)
 while 'xunfei' not in m_c:
     m_p, m_c = os.path.split(m_p)
 sys.path.append(os.path.join(m_p, m_c))
-project_path = "/data/tanggp/xfyun/classify/aichallenge"
+project_path = "/data/tanggp/xun_class//aichallenge"
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
 from class_model.load_data import load_data
