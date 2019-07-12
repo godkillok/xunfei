@@ -95,6 +95,11 @@ def top_2_label_code(test_preds_prob,test_y):
     return test_y_name,test_preds_code
 
 def pred_prob(file_name,vec,pred_x,lin_clf):
+    root,_=os.path.split(file_name)
+    try:
+        os.makedirs(root)
+    except:
+        pass
     pred_term_doc = vec.transform(pred_x)
     pred_preds_prob = lin_clf.predict_proba(pred_term_doc)
     np.save(file_name,pred_preds_prob)
