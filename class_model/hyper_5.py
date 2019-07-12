@@ -82,7 +82,7 @@ def score(params):
 
     acc3 = accuracy_score(test_y2, test_preds)
     if acc3>0.1:
-        pred_prob('{}-{}'.format('h5',acc3),vec,pred_x,lin_clf)
+        pred_prob(os.path.join(project_path,'hyper','{}-{}'.format('h5',acc3)),vec,pred_x,lin_clf)
     loss = 1 - acc3
     t2 = time.time()
     logging.info("acc {}, on test  set is {} and top2 acc {},loss {} time {},params: \n{}".format(acc,acc2,acc3,loss,t2-t1,params))
