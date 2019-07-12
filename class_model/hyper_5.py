@@ -22,7 +22,7 @@ while 'xunfei' not in m_c:
     m_p, m_c = os.path.split(m_p)
 
 sys.path.append(os.path.join(m_p, m_c))
-from  class_model.load_data import  load_data
+from  class_model.load_data import  load_data,top_2_label_code
 from sklearn.metrics import accuracy_score
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
@@ -76,23 +76,10 @@ def score(params):
     test_preds_prob = lin_clf.predict_proba(test_term_doc)
     acc2 = accuracy_score(test_y, test_preds)
 
-    test_preds=[]
-    for prob in test_preds_prob:
-        test_preds.append(list(prob.argsort()[-2:][::-1]))
-
-    test_y_name=[]
-    test_preds_name=[]
-    for  real, pred in zip( test_y, test_preds):
-        prd=pred[0]
-        #print(real, pred)
-        for pr in pred:
-            if real==pr:
-                prd=real
-        test_y_name.append(real)
-        test_preds_name.append(prd)
+    test_preds=top_2_label_code(test_preds_prob, test_y)
 
 
-    acc3 = accuracy_score(test_y_name, test_preds_name)
+    acc3 = accuracy_score(test_y, test_preds)
     loss = 1 - (acc+acc3)/2
     t2 = time.time()
     logging.info("acc {}, on test  set is {} and top2 acc {},loss {} time {},params: \n{}".format(acc,acc2,acc3,loss,t2-t1,params))
