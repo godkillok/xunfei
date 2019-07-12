@@ -33,7 +33,7 @@ from tf_metrics import precision, recall, f1
 def model_fn(features, labels, mode, params):
     training = (mode == tf.estimator.ModeKeys.TRAIN)
     input_ids = features["text"]
-    author_id = ''#features["author"]
+    author_id = features["author"]
     label_id = features["label"]
     cnn = CnnModel(params, input_ids, author_id, training)
     logits, predict_label_ids, l2_loss = cnn.build_network()
