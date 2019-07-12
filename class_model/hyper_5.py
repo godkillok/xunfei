@@ -22,7 +22,7 @@ while 'xunfei' not in m_c:
     m_p, m_c = os.path.split(m_p)
 
 sys.path.append(os.path.join(m_p, m_c))
-from  class_model.load_data import  load_data,top_2_label_code
+from  class_model.load_data import  load_data,top_2_label_code,pred_prob
 from sklearn.metrics import accuracy_score
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
@@ -81,6 +81,8 @@ def score(params):
 
 
     acc3 = accuracy_score(test_y2, test_preds)
+    if acc3>0.1:
+        pred_prob('{}-{}'.format('h5',acc3),vec,pred_x,lin_clf)
     loss = 1 - acc3
     t2 = time.time()
     logging.info("acc {}, on test  set is {} and top2 acc {},loss {} time {},params: \n{}".format(acc,acc2,acc3,loss,t2-t1,params))
