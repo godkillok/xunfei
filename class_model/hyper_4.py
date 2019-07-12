@@ -79,7 +79,8 @@ def score(params):
         lin_clf = CalibratedClassifierCV(lin_clf)
         lin_clf.fit(trn_term_doc, train_y)
         test_preds_prob = lin_clf.predict_proba(test_term_doc)
-        test_preds = top_2_label_code(test_preds_prob, test_y)
+        test_y, test_preds = top_2_label_code(test_preds_prob, test_y)
+
         acc3 = accuracy_score(test_y, test_preds)
 
     loss = 1 -(acc2+acc)/2
