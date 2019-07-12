@@ -24,7 +24,7 @@ m_p, m_c = os.path.split(most_parenturl)
 while 'xunfei' not in m_c:
     m_p, m_c = os.path.split(m_p)
 import tensorflow as tf
-from cnn_model.cnn_model import CnnModel
+from cnn_model.cnn_model_ import CnnModel
 import optimization
 from tf_metrics import precision, recall, f1
 
