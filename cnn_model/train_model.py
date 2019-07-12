@@ -23,6 +23,8 @@ most_parenturl = os.path.abspath(os.path.join(currentUrl, os.pardir))
 m_p, m_c = os.path.split(most_parenturl)
 while 'xunfei' not in m_c:
     m_p, m_c = os.path.split(m_p)
+
+sys.path.append(os.path.join(m_p, m_c))
 import tensorflow as tf
 from cnn_model.cnn_model_ import CnnModel
 import optimization
