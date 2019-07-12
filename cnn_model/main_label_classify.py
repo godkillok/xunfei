@@ -23,7 +23,7 @@ else:
 
 flags = tf.app.flags
 # configurations for training1
-path="/data/tanggp/xfyun/classify/aichallenge"
+path="/data/tanggp/xun_class/aichallenge"
 flags.DEFINE_bool("do_train", True, "Whether to run training.")
 flags.DEFINE_bool("do_predict", True, "Whether to run the model in inference mode on the test set.")
 flags.DEFINE_integer("batch_size", 256, "batch size")
