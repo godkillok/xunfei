@@ -250,7 +250,10 @@ def main_class_hyper(hyper):
         cmd = "cd {} && rm -rf {}".format(os.path.join(path, "textcnn_model"), "base")
     logging.info("==========")
     logger.info(cmd)
-    os.system(cmd)
+    try:
+        os.system(cmd)
+    except:
+        pass
     logger.info("The total program takes {} hours =and top2 acc is {}".format(elapsed_time,acc2))
     hyper["top1"]=acc1
     hyper["cmd"]=cmd
