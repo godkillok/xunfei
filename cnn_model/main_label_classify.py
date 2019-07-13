@@ -37,6 +37,7 @@ flags.DEFINE_integer("num_parallel_calls", 40, "Num of cpu cores")
 flags.DEFINE_integer("num_parallel_readers", 40, "Number of files read at the same time")
 flags.DEFINE_float("learning_rate", 0.01, "Initial learning rate")
 flags.DEFINE_integer("steps_check", 500, "steps per checkpoint")
+flags.DEFINE_string("history_dir", os.path.join(path,"cnn_result"), "train file pattern")
 flags.DEFINE_string("train_file", os.path.join(path,"author_text_cnn_apptype_train_26320.tfrecords"), "train file pattern")
 flags.DEFINE_string("valid_file", os.path.join(path,"author_text_cnn_apptype_train_6152.tfrecords"), "train file pattern")
 #flags.DEFINE_string("valid_file", "/data/tanggp/youtube8m/text_cnn_txt_golden_*", "evalue file pattern")
@@ -80,12 +81,12 @@ model_dir = os.path.join(FLAGS.model_dir)
 def input_fn(filenames, config, shuffle_buffer_size):
     def parser(record):
         keys_to_features = {
-            "guid":tf.FixedLenFeature([1], tf.string),
+            "app":tf.FixedLenFeature([1], tf.string),
             "text": tf.FixedLenFeature([config['max_length']], tf.int64),
             "author": tf.FixedLenFeature([1], tf.int64),
             "label": tf.FixedLenFeature([1], tf.int64)}
         parsed = tf.parse_single_example(record, keys_to_features)
-        return {"guid":parsed['guid'],"text": parsed['text'], 'label':parsed['label'] ,"author": parsed['author']}
+        return {"guid":parsed['app'],"text": parsed['text'], 'label':parsed['label'] ,"author": parsed['author']}
 
     # Load txt file, one example per line
     files = tf.data.Dataset.list_files(filenames)  # A dataset of all files matching a pattern.
@@ -247,6 +248,15 @@ def main_class_hyper(hyper):
     elapsed_time = (time.time() - start) / 60 / 60
     if acc2 > 0.7:
         cmd = "cd {} && mv {} model_{}".format(os.path.join(path, "textcnn_model"), "base", acc2)
+        output_eval_file = os.path.join(FLAGS.history_dir, "cnn_{}_results.txt".format(acc2))
+        # try:
+        #     os.makedirs(FLAGS.history_dir)
+        # except:
+        #     pass
+        # with tf.gfile.GFile(output_eval_file, "a") as writer:
+        #     for guid, prob in zip(all_guid, all_prob):
+        #         writer.write('{},{} \n'.format(guid, ','.join([str(pr) for pr in prob])))
+
     else:
         cmd = "cd {} && rm -rf {}".format(os.path.join(path, "textcnn_model"), "base")
     logging.info("==========")
@@ -374,6 +384,14 @@ def main_class():
     elapsed_time = (time.time() - start) / 60 / 60
     if acc2 > 0.7:
         cmd = "cd {} && mv {} model_{}".format(os.path.join(path, "textcnn_model"), "base", acc2)
+        output_eval_file = os.path.join(FLAGS.history_dir, "p_{}_results.txt".format(acc2))
+        try:
+            os.makedirs(FLAGS.history_dir)
+        except:
+            pass
+        with tf.gfile.GFile(output_eval_file, "a") as writer:
+            for guid, prob in zip(all_guid, all_prob):
+                writer.write('{},{} \n'.format(guid, ','.join([str(pr) for pr in prob])))
     else:
         cmd = "cd {} && rm -rf {}".format(os.path.join(path, "textcnn_model"), "base")
     logging.info("==========")
