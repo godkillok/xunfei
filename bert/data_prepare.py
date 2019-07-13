@@ -353,7 +353,7 @@ def file_based_convert_examples_to_features(
     writer = tf.python_io.TFRecordWriter(file_name0)
 
     for (ex_index, example) in enumerate(examples):
-        if ex_index % 50000 == 0:
+        if ex_index % 110000 == 0:
             file_name0 = os.path.join(path, file_name + '_{}.tfrecord'.format(ex_index))
             writer = tf.python_io.TFRecordWriter(file_name0)
             tf.logging.info("Writing example %d of %d" % (ex_index, len(examples)))
