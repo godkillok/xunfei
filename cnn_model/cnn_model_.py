@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-from model import Model
-from focal_loss import focal_loss_softmax
+from cnn_model.model import Model
+from cnn_model.focal_loss import focal_loss_softmax
 import tensorflow as tf
 
 def gelu(input_tensor):
@@ -31,8 +31,8 @@ class CnnModel(Model):
                          word_embedding_name="embedding_table", emb_path=self.config['emb_file'])
         self.variable_summaries('embedding', embedding)
         embedded_words_expanded = self. expand_dims(embedding, -1)
-        logits, predict_label_ids, l2_loss = self.build_cnn(embedded_words_expanded)
-        return logits, predict_label_ids, l2_loss
+        logits, predict_label_ids, l2_loss,probabilities = self.build_cnn(embedded_words_expanded)
+        return logits, predict_label_ids, l2_loss,probabilities
     #build_loss(self, labels, logits, l2_loss=0.0)
     def build_loss(self, labels, logits, l2_loss=0):
         """Build loss function.
@@ -56,22 +56,29 @@ class CnnModel(Model):
         for filter_size in self.config['filter_sizes']:
             with tf.variable_scope("conv-maxpool-%s" % filter_size):
                 # 卷积层
-                filter_shape = [filter_size, self.config['word_dim'], 1, self.config['num_filters']]
-                w =  self.initialize_weight("w", filter_shape)
-                conv = tf.nn.conv2d(input_tensor, w, strides=[1, 1, 1, 1],
-                                    padding="VALID", name="conv")  # 未使用全零填充
+                #filter_shape = [filter_size, , 1, ]
+                # w =  self.initialize_weight("w", filter_shape)
+                # conv = tf.nn.conv2d(input_tensor, w, strides=[1, 1, 1, 1],
+                #                     padding="VALID", name="conv")  # 未使用全零填充
+
+                conv = tf.layers.conv2d(
+                    input_tensor,
+                    filters=self.config['num_filters'],
+                    kernel_size=[filter_size,self.config['word_dim']],
+                    strides=(1, 1),
+                    padding="VALID",activation=tf.nn.relu)
                 # 加BN层
                 conv =  self.batch_norm(conv)
-                # intermediate_act_fn = self.get_activation('relu')
+                #intermediate_act_fn = self.get_activation(self.config['activation'])
                 # relu = tf.layers.dense(
                 #     conv,
                 #     self.config['num_filters'],
                 #     activation=intermediate_act_fn,
                 #     kernel_initializer=tf.zeros_initializer())
-                b =  self.initialize_bias("b", self.config['num_filters'])
-                relu = tf.nn.relu(tf.nn.bias_add(conv, b), name="relu")
+                # b =  self.initialize_bias("b", self.config['num_filters'])
+                #relu = intermediate_act_fn(tf.nn.bias_add(conv, b), name="relu")
                 # 池化
-                pooled = tf.nn.max_pool(relu, ksize=[1, self.config['max_length'] - filter_size + 1, 1, 1],
+                pooled = tf.nn.max_pool(conv, ksize=[1, self.config['max_length'] - filter_size + 1, 1, 1],
                                         strides=[1, 1, 1, 1], padding="VALID", name="pool")
                 pooled_outputs.append(pooled)
         num_filters_total = self.config['num_filters'] * len(self.config['filter_sizes'])
@@ -102,7 +109,7 @@ class CnnModel(Model):
             output_b =  self.initialize_bias("output_b", shape=self.config['label_size'])
             logits = tf.nn.xw_plus_b(output_layer, output_w, output_b)
             l2_loss += tf.nn.l2_loss(output_w) + tf.nn.l2_loss(output_b)
-
+        probabilities = tf.nn.softmax(logits, axis=-1)
         predict_label_ids = tf.argmax(logits, axis=1, name="predict_label_id")  # 预测结果
-        return logits, predict_label_ids, l2_loss
+        return logits, predict_label_ids, l2_loss,probabilities
 
