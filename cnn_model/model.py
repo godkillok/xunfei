@@ -41,6 +41,21 @@ class Model(object):
             shape: Shape of the new or existing variable.
         """
         return tf.get_variable(name, shape, dtype=tf.float32, initializer=tf.constant_initializer(0.02))
+    def gelu(self,input_tensor):
+
+        """Gaussian Error Linear Unit.
+
+        This is a smoother version of the RELU.
+        Original paper: https://arxiv.org/abs/1606.08415
+
+        Args:
+          input_tensor: float Tensor to perform activation.
+
+        Returns:
+          `input_tensor` with the GELU activation applied.
+        """
+        cdf = 0.5 * (1.0 + tf.erf(input_tensor / tf.sqrt(2.0)))
+        return input_tensor * cdf
 
     def get_activation(self, activation_string):
         """Maps a string to a Python function, e.g., "relu" => `tf.nn.relu`.
@@ -52,6 +67,8 @@ class Model(object):
             return None
         elif act == "relu":
             return tf.nn.relu
+        elif act == "gelu":
+            return self.gelu
         elif act == "tanh":
             return tf.tanh
         else:
