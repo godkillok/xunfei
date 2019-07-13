@@ -347,8 +347,9 @@ def main_class():
         test_y_name, test_preds_code=top_2_label_code(prob_list, true_label_code)
         acc2=accuracy_score( test_y_name, test_preds_code)
         logger.info(best_dir)
+        logger.info("The total program acc1 {} and top2 acc is {}".format(accuracy_score(true_label_list, predict_label_list), acc2))
 
-        logger.info(classification_report(true_label_list, predict_label_list))
+        # logger.info(classification_report(true_label_list, predict_label_list))
     elapsed_time = (time.time() - start) / 60 / 60
     logger.info("The total program takes {} hours and top2 acc is {}".format(elapsed_time,acc2))
     return acc2
