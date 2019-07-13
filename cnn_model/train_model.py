@@ -36,7 +36,7 @@ def model_fn(features, labels, mode, params):
     author_id = features["author"]
     label_id = features["label"]
     cnn = CnnModel(params, input_ids, author_id, training)
-    logits, predict_label_ids, l2_loss = cnn.build_network()
+    logits, predict_label_ids, l2_loss,probabilities = cnn.build_network()
     squeeze_label_ids = tf.squeeze(label_id, axis=1)
     if mode == tf.estimator.ModeKeys.PREDICT:
         # Predictions
@@ -45,6 +45,7 @@ def model_fn(features, labels, mode, params):
         predictions = {
             'true_label_ids': squeeze_label_ids,
             'predict_label_ids': predict_label_ids,
+            'probabilities':probabilities
         }
         return tf.estimator.EstimatorSpec(mode, predictions=predictions)
     else:
