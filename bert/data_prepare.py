@@ -156,7 +156,8 @@ class InputExample(object):
 class InputFeatures(object):
     """A single set of features of data."""
 
-    def __init__(self, input_ids, input_mask, segment_ids, label_id):
+    def __init__(self, input_ids, input_mask, segment_ids, label_id,guid=''):
+        self.guid=guid
         self.input_ids = input_ids
         self.input_mask = input_mask
         self.segment_ids = segment_ids
@@ -326,7 +327,7 @@ def convert_single_example(ex_index, example, label_list, max_seq_length,
     assert len(segment_ids) == max_seq_length
 
     label_id = label_map[example.label]
-
+    guid=example.guid
     if ex_index < 5:
         tf.logging.info("*** Example ***")
         tf.logging.info("guid: %s" % (example.guid))
@@ -338,6 +339,7 @@ def convert_single_example(ex_index, example, label_list, max_seq_length,
         tf.logging.info("label: %s (id = %d)" % (example.label, label_id))
 
     feature = InputFeatures(
+        guid=guid,
         input_ids=input_ids,
         input_mask=input_mask,
         segment_ids=segment_ids,
@@ -372,7 +374,8 @@ def file_based_convert_examples_to_features(
         def create_float_feature(values):
             f = tf.train.Feature(float_list=tf.train.FloatList(value=list(values)))
             return f
-
+        def  create_str_feature(values):
+            return tf.train.Feature(bytes_list=tf.train.BytesList(value=[values.encode()]))
         features = collections.OrderedDict()
         features["input_ids"] = create_int_feature(feature.input_ids)
         features["input_mask"] = create_int_feature(feature.input_mask)
