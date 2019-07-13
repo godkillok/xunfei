@@ -179,7 +179,7 @@ class DataProcessor(object):
         """Gets a collection of `InputExample`s for prediction."""
         raise NotImplementedError()
 
-    def get_labels(self):
+    def get_labels(self, data_dir):
         """Gets the list of labels for this data set."""
         raise NotImplementedError()
 
@@ -224,7 +224,7 @@ class CategoryProcessor(DataProcessor):
     def get_labels(self,data_dir):
         """See base class."""
         labels=[]
-        with open(os.path.join(data_dir, "apptype_id_name.txt"),"r",encoding="utf8") as f:
+        with open(os.path.join(data_dir, "textcnn_label_sort"),"r",encoding="utf8") as f:
             lines=f.readlines()
             for li in lines:
                 li=li.strip()
