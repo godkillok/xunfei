@@ -156,7 +156,7 @@ def main_class_hyper(hyper):
     session_config.gpu_options.per_process_gpu_memory_fraction = 0.7
     session_config.gpu_options.allow_growth = True
     run_config = tf.estimator.RunConfig(save_checkpoints_steps=FLAGS.steps_check, session_config=session_config,
-                                        keep_checkpoint_max=3)
+                                        keep_checkpoint_max=3,tf_random_seed=1)
     num_warmup_steps = int(train_steps *warmup_proportion)
     early_stop_steps = int(train_steps * 0.4)
     estimator = tf.estimator.Estimator(
@@ -273,7 +273,7 @@ def main_class():
     session_config.gpu_options.per_process_gpu_memory_fraction = 0.7
     session_config.gpu_options.allow_growth = True
     run_config = tf.estimator.RunConfig(save_checkpoints_steps=FLAGS.steps_check, session_config=session_config,
-                                        keep_checkpoint_max=3)
+                                        keep_checkpoint_max=3,tf_random_seed=1)
     num_warmup_steps = int(train_steps * FLAGS.warmup_proportion)
     early_stop_steps = int(train_steps * 0.4)
     estimator = tf.estimator.Estimator(
