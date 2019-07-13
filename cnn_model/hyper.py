@@ -43,7 +43,8 @@ def score(params):
     logging.info(params)
     acc=main_class()
     loss=-acc
-    logging.info("acc {}, on test  set is {} and top2 acc {},loss {} time {},params: \n{}".format(acc,acc2,acc3,loss,t2-t1,params))
+    t2 = time.time()
+    logging.info("top2 acc {},loss {} time {},params: \n{}".format(acc,loss,t2-t1,params))
     return {'loss': loss, 'status': STATUS_OK}
 
 def optimize(
