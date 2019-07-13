@@ -175,19 +175,14 @@ class Model(object):
         print('Loading pretrained embeddings from {}...'.format(emb_path))
         pre_trained = {}
         emb_invalid = 0
-        for i, line in enumerate(open(emb_path, 'r', encoding='utf8')):
-            line = line.rstrip().split()
-            if len(line) == embedding_size + 1:
-                pre_trained[line[0]] = np.array(
-                    [float(x) for x in line[1:]]
-                ).astype(np.float32)
-            else:
-                emb_invalid += 1
         for i in range(n_words):
             word = id_word[str(i)]
             embedding = word2vec_model.get_word_vector(word)
             if embedding is not None:
                 embedding_table[i] = embedding
+            else:
+                emb_invalid += 1
+        print("emb_invalid{}".format(emb_invalid))
         return embedding_table
 
     def embedding_lookup(self, input_ids, id_word, embedding_size=128, initializer_range=0.02,
