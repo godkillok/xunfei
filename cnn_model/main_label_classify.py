@@ -361,8 +361,14 @@ def main_class():
         logger.info("The total program acc1 {} and top2 acc is {}".format(accuracy_score(true_label_list, predict_label_list), acc2))
 
         # logger.info(classification_report(true_label_list, predict_label_list))
-    elapsed_time = (time.time() - start) / 60 / 60
-    logger.info("The total program takes {} hours and top2 acc is {}".format(elapsed_time,acc2))
+    if acc2 > 0.7:
+        cmd = "cd {} && mv {} model_{}".format(os.path.join(path, "textcnn_model"), "base", acc2)
+    else:
+        cmd = "cd {} && rm -rf {}".format(os.path.join(path, "textcnn_model"), "base")
+    logging.info("==========")
+    logger.info(cmd)
+    os.system(cmd)
+    logger.info("The total program takes {} hours =and top2 acc is {}".format(elapsed_time,acc2))
     return acc2
 
 
