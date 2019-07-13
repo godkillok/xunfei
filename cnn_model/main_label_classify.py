@@ -260,6 +260,7 @@ def main_class_hyper(hyper):
     hyper["top2"]=acc2
     with open(os.path.join(path, "textcnn_model","all_history"),"a",encoding="utf8") as f:
         f.writelines(json.dumps(hyper)+'\n')
+    logger.info("write to {}".format(json.dumps(hyper)))
     return acc2
 
 def main_class():
