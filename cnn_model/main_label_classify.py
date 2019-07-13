@@ -251,7 +251,7 @@ def main_class_hyper(hyper):
     logging.info("==========")
     logger.info(cmd)
     os.system(cmd)
-    logger.info("The total program takes {} hours and top2 acc is {}".format(elapsed_time,acc2))
+    logger.info("The total program takes {} hours =and top2 acc is {}".format(elapsed_time,acc2))
     return acc2
 
 def main_class():
