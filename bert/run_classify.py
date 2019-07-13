@@ -17,13 +17,20 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
-
+import os
+currentUrl = os.path.dirname(__file__)
+most_parenturl = os.path.abspath(os.path.join(currentUrl, os.pardir))
+m_p, m_c = os.path.split(most_parenturl)
+while 'xunfei' not in m_c:
+    m_p, m_c = os.path.split(m_p)
+import sys
+sys.path.append(os.path.join(m_p, m_c))
 import collections
 import csv
 import os
-import modeling
-import optimization
-import tokenization
+from  bert import modeling
+from  bert import optimization
+from  bert import  tokenization
 import tensorflow as tf
 import logging
 import pandas as pd
@@ -36,6 +43,8 @@ logging.basicConfig(level=logging.INFO,
 flags = tf.flags
 
 FLAGS = flags.FLAGS
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+tf.logging.set_verbosity(logging.ERROR) # 只显示warning 和 error # 只显示warning 和 error
 
 bert_model = '/home/tom/chinese/'
 data_path = '/home/tom/swagaf/data'
@@ -86,7 +95,7 @@ flags.DEFINE_bool(
     "Whether to run the model in inference mode on the test set.")
 
 flags.DEFINE_integer("train_batch_size", 16, "Total batch size for training.")
-
+flags.DEFINE_integer("drop_rate", 0.9, "Total batch size for training.")
 flags.DEFINE_integer("eval_batch_size", 8, "Total batch size for eval.")
 
 flags.DEFINE_integer("predict_batch_size", 8, "Total batch size for predict.")
@@ -166,6 +175,7 @@ def file_based_input_fn_builder(input_file, seq_length, is_training,
     """Creates an `input_fn` closure to be passed to TPUEstimator."""
 
     name_to_features_ = {
+        "guid":tf.FixedLenFeature([], tf.string),
         "input_ids": tf.FixedLenFeature([seq_length], tf.int64),
         "input_mask": tf.FixedLenFeature([seq_length], tf.int64),
         "segment_ids": tf.FixedLenFeature([seq_length], tf.int64),
@@ -251,8 +261,8 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
     # }
     # If you want to use the token-level output, use model.get_sequence_output()
     # instead.
-    output_layer1 = model.get_pooled_output()
-    output_layer=tf.layers.dense(output_layer1, 100, activation=modeling.gelu,name='dense_layer')
+    output_layer = model.get_pooled_output()
+    #output_layer=tf.layers.dense(output_layer1, 100, activation=modeling.gelu,name='dense_layer')
 
     hidden_size = output_layer.shape[-1].value
     output_weights = tf.get_variable(
@@ -265,7 +275,7 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
     with tf.variable_scope("loss"):
         if is_training:
             # I.e., 0.1 dropout
-            output_layer = tf.nn.dropout(output_layer, keep_prob=0.9)
+            output_layer = tf.nn.dropout(output_layer, keep_prob=FLAGS.drop_rate)
 
         logits = tf.matmul(output_layer, output_weights, transpose_b=True)
         logits = tf.nn.bias_add(logits, output_bias)
@@ -453,7 +463,7 @@ def model_fn_builder_gpu(bert_config, num_labels, init_checkpoint, learning_rate
 
 
 def main(_):
-    tf.logging.set_verbosity(tf.logging.INFO)
+    tf.logging.set_verbosity(tf.logging.ERROR)
 
     if not FLAGS.do_train and not FLAGS.do_eval and not FLAGS.do_predict:
         raise ValueError(
@@ -499,7 +509,7 @@ def main(_):
             d = json.load(f)
         num_train_example = d['num_train_example']
         num_train_steps = d['num_train_steps']
-        num_warmup_steps = d['num_warmup_steps']
+        num_warmup_steps =para['num_warmup_steps']
 
     model_fn = model_fn_builder(
         bert_config=bert_config,
