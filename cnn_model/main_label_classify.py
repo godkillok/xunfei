@@ -194,7 +194,7 @@ def main_class_hyper(hyper):
     #                                                                 max_steps_without_increase=no_increase_steps,
     #                                                                min_steps=early_stop_steps, run_every_secs=120)
     acc2=0
-
+    acc1=0
     # timeline_hook = tf.train.ProfilerHook(save_steps=FLAGS.steps_check, output_dir=model_dir + '/timeline/')
     if FLAGS.do_train == True:
         input_fn_for_train = lambda: input_fn(FLAGS.train_file, config, FLAGS.shuffle_buffer_size)
