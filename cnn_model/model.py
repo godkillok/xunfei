@@ -168,8 +168,12 @@ class Model(object):
           embedding_size: Width of the word embeddings.
           axis: Specifies the dimension index at which to expand the shape of `input`.
         """
-        import fasttext as ft
-        word2vec_model = ft.load_model(emb_path)
+        if '.bin' in emb_path:
+            import fasttext as ft
+            word2vec_model = ft.load_model(emb_path)
+        else:
+            from gensim.models import KeyedVectors
+            word2vec_model = KeyedVectors.load_word2vec_format(emb_path, binary=False, limit=100)
         n_words = len(id_word)
         embedding_table = np.random.normal(loc=0.0, scale=initializer_range, size=(n_words, embedding_size))
         print('Loading pretrained embeddings from {}...'.format(emb_path))
@@ -177,12 +181,16 @@ class Model(object):
         emb_invalid = 0
         for i in range(n_words):
             word = id_word[str(i)]
-            embedding = word2vec_model.get_word_vector(word)
+            if '.bin' in emb_path:
+                embedding = word2vec_model.get_word_vector(word)
+
             if embedding is not None:
                 embedding_table[i] = embedding
             else:
                 emb_invalid += 1
         print("emb_invalid{}".format(emb_invalid))
+        import time
+        time.sleep(30)
         return embedding_table
 
     def embedding_lookup(self, input_ids, id_word, embedding_size=128, initializer_range=0.02,
