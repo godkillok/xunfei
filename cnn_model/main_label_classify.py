@@ -285,7 +285,7 @@ def main_class():
             'train_steps': train_steps,
             'summary_dir': model_dir,
             "label_size": 125,
-            "activation": "relu",
+            "activation": "gelu",
             'use_focal_loss': False,
             'use_author_feature': False,
             'use_category_feature': False,
