@@ -481,7 +481,7 @@ def main(_):
     processor = processors[task_name]()
 
     label_list = processor.get_labels(FLAGS.data_dir)
-    label_list.remove("no")
+    # label_list.remove("no")
     print(len(label_list))
     import time
     time.sleep(20)
