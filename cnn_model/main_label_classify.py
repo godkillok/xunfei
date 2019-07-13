@@ -164,7 +164,6 @@ def main_class_hyper(hyper):
         model_dir=model_dir,
         config=run_config,
         params={
-            "word_dim": config["word_dim"],
             "id_word": config["id_word"],
             "train_size": config["train_size"],
             'max_length': config["max_length"],
@@ -257,7 +256,7 @@ def main_class():
     config["train_size"]=26320
     config["max_length"] = 250
     config["id_word"] = vocab_dict
-    config["word_dim"] = 128
+    config["word_dim"] = 300
     if config["train_size"] < FLAGS.shuffle_buffer_size:
         FLAGS.shuffle_buffer_size = config["train_size"]
 
@@ -283,7 +282,6 @@ def main_class():
             'learning_rate': FLAGS.learning_rate,
             'l2_reg_lambda': FLAGS.l2_reg_lambda,
             'dropout_prob': FLAGS.dropout_prob,
-            'word_dim': FLAGS.word_dim,
             'vocab': FLAGS.word_path,
             'num_filters': FLAGS.num_filters,
             'filter_sizes': list(map(int, FLAGS.filter_sizes.split(","))),
