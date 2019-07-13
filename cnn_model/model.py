@@ -168,7 +168,7 @@ class Model(object):
           embedding_size: Width of the word embeddings.
           axis: Specifies the dimension index at which to expand the shape of `input`.
         """
-        import fastText as ft
+        import fasttext as ft
         word2vec_model = ft.load_model(emb_path)
         n_words = len(id_word)
         embedding_table = np.random.normal(loc=0.0, scale=initializer_range, size=(n_words, embedding_size))
