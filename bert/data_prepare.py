@@ -502,8 +502,8 @@ def main(_):
         d = {
             'num_train_example': num_train_example,
             'num_train_steps': num_train_steps,
-            'num_warmup_steps': num_warmup_steps
-
+            'num_warmup_steps': num_warmup_steps,
+            "label_list":{i:la for i,la in enumerate(label_list)}
         }
         with open(train_meta, 'w') as f:
             json.dump(d, f)
