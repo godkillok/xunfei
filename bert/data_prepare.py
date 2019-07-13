@@ -228,9 +228,8 @@ class CategoryProcessor(DataProcessor):
             lines=f.readlines()
             for li in lines:
                 li=li.strip()
-                lid,lname=li.split()
-                if len(lid)>4:
-                    labels.append(lid)
+                lid,cou=li.split("\x01\t")
+                labels.append(lid)
         return labels
 
     def _create_examples(self, lines, set_type):
