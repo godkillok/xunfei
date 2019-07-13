@@ -377,7 +377,7 @@ def file_based_convert_examples_to_features(
         def  create_str_feature(values):
             return tf.train.Feature(bytes_list=tf.train.BytesList(value=[values.encode()]))
         features = collections.OrderedDict()
-        features["guid"] = create_int_feature(feature.guid)
+        features["guid"] = create_str_feature(feature.guid)
         features["input_ids"] = create_int_feature(feature.input_ids)
         features["input_mask"] = create_int_feature(feature.input_mask)
         features["segment_ids"] = create_int_feature(feature.segment_ids)
