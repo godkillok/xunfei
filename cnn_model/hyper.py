@@ -51,7 +51,7 @@ def optimize(
              random_state=SEED):
 
     hyper={}
-    hyper["batch_size"]=hp.quniform('batch_size', 100, 700, 5)
+    hyper["batch_size"]=hp.quniform('batch_size', 100, 500, 5)
     hyper["warmup_proportion"]=hp.uniform('warmup_proportion', 0.0, 0.6)
     hyper["learning_rate"]=hp.uniform('learning_rate', 0.0, 0.6)
     hyper["optimizer"]=hp.choice('optimizer', ['Adam', 'Nadam', 'RMSprop']),
