@@ -20,7 +20,7 @@ def top_2_label_code(test_preds_prob,test_y):
     return test_y_name,test_preds_code
 
 
-def  post_pred(path_label,model_dir,history_dir,output_results):
+def post_pred(path_label,model_dir,history_dir,output_results):
     with open(path_label, 'r', encoding='utf8') as f:
         lines = f.readlines()
         id2label = {i: l.strip().split("\x01\t")[0] for i, l in enumerate(lines)}
