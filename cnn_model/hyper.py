@@ -54,9 +54,9 @@ def optimize(
     hyper["batch_size"]=hp.quniform('batch_size', 100, 500, 5)
     hyper["warmup_proportion"]=hp.uniform('warmup_proportion', 0.0, 0.6)
     hyper["learning_rate"]=hp.uniform('learning_rate', 0.0, 0.6)
-    hyper["optimizer"]=hp.choice('optimizer', ['Adam', 'Nadam', 'RMSprop']),
+    #hyper["optimizer"]=hp.choice('optimizer', ['Adam', 'Nadam', 'RMSprop']),
     hyper["l2_reg_lambda"]=hp.loguniform("l2_reg_lambda", 0.1, 0.5)
-    hyper["num_filters"]=hp.quniform('batch_size', 100, 700, 20)
+    hyper["num_filters"]=hp.quniform('num_filters', 100, 700, 20)
     hyper["dropout_prob"]=hp.uniform('conv_dropout_proba', 0.0, 0.35),
     hyper["activation"]=hp.choice('activation', ['relu', 'elu'])
     hyper["f1"]=hp.choice('f1', [False, True])
