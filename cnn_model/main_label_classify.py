@@ -46,8 +46,8 @@ flags.DEFINE_string("emb_file", "/data/tanggp/xun_class/cc.zh.300.bin", "Path fo
 #flags.DEFINE_string("emb_file", "", "Path for pre_trained embedding")
 flags.DEFINE_string("params_file", os.path.join(path,"textcnn_dataset_params.json"), "parameters file")
 flags.DEFINE_string("word_path", os.path.join(path,"textcnn_words.txt"), "word vocabulary file")
-flags.DEFINE_string("model_dir", os.path.join(path,"textcnn_model","base_2"), "Path to save model")
-flags.DEFINE_string("result_file", os.path.join(path,"textcnn_model","base_2","base_result.txt"), "Path to save predict result")
+flags.DEFINE_string("model_dir", os.path.join(path,"textcnn_model","base"), "Path to save model")
+flags.DEFINE_string("result_file", os.path.join(path,"textcnn_model","base","base_result.txt"), "Path to save predict result")
 flags.DEFINE_float("warmup_proportion", 0.1, "Proportion of training to perform linear learning rate warmup for.")
 # configurations for the model
 flags.DEFINE_float("dropout_prob", 0.2, "Dropout rate")  # 以0.2的概率drop out
