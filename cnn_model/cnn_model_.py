@@ -66,10 +66,10 @@ class CnnModel(Model):
                     filters=self.config['num_filters'],
                     kernel_size=[filter_size,self.config['word_dim']],
                     strides=(1, 1),
-                    padding="VALID",activation=tf.nn.relu)
+                    padding="VALID",activation=self.get_activation(self.config['activation']))
                 # 加BN层
                 conv =  self.batch_norm(conv)
-                #intermediate_act_fn = self.get_activation(self.config['activation'])
+                #intermediate_act_fn =
                 # relu = tf.layers.dense(
                 #     conv,
                 #     self.config['num_filters'],
