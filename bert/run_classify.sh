@@ -11,7 +11,7 @@ python3 run_classify.py \
   --vocab_file=$BERT_BASE_DIR/vocab.txt \
   --bert_config_file=$BERT_BASE_DIR/bert_config.json \
   --init_checkpoint=$BERT_BASE_DIR/bert_model.ckpt \
-  --max_seq_length=128 \
+  --max_seq_length=300 \
   --train_batch_size=32 \
   --num_lables=126 \
   --learning_rate=1e-5 \
