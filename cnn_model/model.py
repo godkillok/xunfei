@@ -168,6 +168,8 @@ class Model(object):
           embedding_size: Width of the word embeddings.
           axis: Specifies the dimension index at which to expand the shape of `input`.
         """
+        import fastText as ft
+        word2vec_model = ft.load_model(emb_path)
         n_words = len(id_word)
         embedding_table = np.random.normal(loc=0.0, scale=initializer_range, size=(n_words, embedding_size))
         print('Loading pretrained embeddings from {}...'.format(emb_path))
@@ -183,8 +185,9 @@ class Model(object):
                 emb_invalid += 1
         for i in range(n_words):
             word = id_word[str(i)]
-            if word in pre_trained:
-                embedding_table[i] = pre_trained[word]
+            embedding = word2vec_model.get_word_vector(word)
+            if embedding is not None:
+                embedding_table[i] = embedding
         return embedding_table
 
     def embedding_lookup(self, input_ids, id_word, embedding_size=128, initializer_range=0.02,
