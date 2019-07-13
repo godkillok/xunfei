@@ -240,8 +240,9 @@ def main_class_hyper(hyper):
                 writer.write(predict_label + '\t' + true_label + "\n")
         test_y_name, test_preds_code=top_2_label_code(prob_list, true_label_code)
         acc2=accuracy_score( test_y_name, test_preds_code)
+        if acc2>0.74:
+            os.system("cd {} && mv {} model_{}".format( os.path.join(path,"textcnn_model"),"base",acc2))
         logger.info(best_dir)
-
         logger.info(classification_report(true_label_list, predict_label_list))
     elapsed_time = (time.time() - start) / 60 / 60
     logger.info("The total program takes {} hours and top2 acc is {}".format(elapsed_time,acc2))
