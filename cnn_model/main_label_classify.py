@@ -14,6 +14,25 @@ import logging
 #from best_checkpoint_copier import BestCheckpointCopier
 from sklearn.metrics import classification_report, confusion_matrix,accuracy_score
 from logger import get_logger
+from  cnn_model.post_pred import post_pred
+import time
+
+import logging
+import os
+import sys
+
+
+# Hyperparameters tuning
+
+from hyperopt import STATUS_OK, Trials, fmin, hp, tpe
+currentUrl = os.path.dirname(__file__)
+most_parenturl = os.path.abspath(os.path.join(currentUrl, os.pardir))
+m_p, m_c = os.path.split(most_parenturl)
+while 'xunfei' not in m_c:
+    m_p, m_c = os.path.split(m_p)
+
+sys.path.append(os.path.join(m_p, m_c))
+
 log_file_name = os.path.basename(__file__).split('.', 1)[0] + '.log'
 # Save params
 
@@ -40,13 +59,14 @@ flags.DEFINE_integer("steps_check", 500, "steps per checkpoint")
 flags.DEFINE_string("history_dir", os.path.join(path,"cnn_result"), "train file pattern")
 flags.DEFINE_string("train_file", os.path.join(path,"author_text_cnn_apptype_train_26320.tfrecords"), "train file pattern")
 flags.DEFINE_string("valid_file", os.path.join(path,"author_text_cnn_apptype_train_6152.tfrecords"), "train file pattern")
-#flags.DEFINE_string("valid_file", "/data/tanggp/youtube8m/text_cnn_txt_golden_*", "evalue file pattern")
+flags.DEFINE_string("pred_file", os.path.join(path,"author_text_cnn_apptype_train_6152.tfrecords"), "evalue file pattern")
 # flags.DEFINE_string("emb_file", "/data/tanggp/xun_class/merge_sgns_bigram_char300.txt-1", "Path for pre_trained embedding")
 flags.DEFINE_string("emb_file", "/data/tanggp/xun_class/cc.zh.300.bin", "Path for pre_trained embedding")
 
 #flags.DEFINE_string("emb_file", "", "Path for pre_trained embedding")
 flags.DEFINE_string("params_file", os.path.join(path,"textcnn_dataset_params.json"), "parameters file")
 flags.DEFINE_string("word_path", os.path.join(path,"textcnn_words.txt"), "word vocabulary file")
+flags.DEFINE_string("label_path", os.path.join(path,'textcnn_label_sort'), "word vocabulary file")
 flags.DEFINE_string("model_dir", os.path.join(path,"textcnn_model","base"), "Path to save model")
 flags.DEFINE_string("result_file", os.path.join(path,"textcnn_model","base","base_result.txt"), "Path to save predict result")
 flags.DEFINE_float("warmup_proportion", 0.1, "Proportion of training to perform linear learning rate warmup for.")
@@ -103,22 +123,7 @@ def id_word_map():
         vocab_dict = {str(i):l.strip() for i, l in enumerate(lines)}
     return vocab_dict
 
-def top_2_label_code(test_preds_prob,test_y):
-    test_preds = []
-    for prob in test_preds_prob:
-        test_preds.append(list(prob.argsort()[-2:][::-1]))
 
-    test_y_name = []
-    test_preds_code= []
-    for real, pred in zip(test_y, test_preds):
-        prd = pred[0]
-        # print(real, pred)
-        for pr in pred:
-            if real == pr:
-                prd = real
-        test_y_name.append(real)
-        test_preds_code.append(prd)
-    return test_y_name,test_preds_code
 
 def main_class_hyper(hyper):
     start = time.time()
@@ -216,7 +221,7 @@ def main_class_hyper(hyper):
     if FLAGS.do_predict == True:
         best_dir = model_dir + '/best'
 
-        path_label = os.path.join(FLAGS.data_dir, 'textcnn_label_sort')
+        path_label = os.path.join(FLAGS.data_dir, )
         with open(path_label, 'r', encoding='utf8') as f:
             lines = f.readlines()
             id2label = {i: l.strip().split("\x01\t")[0] for i, l in enumerate(lines)}
@@ -350,53 +355,12 @@ def main_class():
         logger.info("after train and evaluate")
     if FLAGS.do_predict == True:
         best_dir = model_dir + '/best'
-
-        path_label = os.path.join(FLAGS.data_dir, 'textcnn_label_sort')
-        with open(path_label, 'r', encoding='utf8') as f:
-            lines = f.readlines()
-            id2label = {i: l.strip().split("\x01\t")[0] for i, l in enumerate(lines)}
-
-        # predict
-        predict_label_list = []
-        true_label_list = []
-        prob_list=[]
-        true_label_code=[]
-        input_fn_for_test = lambda: input_fn(FLAGS.valid_file, config, 0)
+        input_fn_for_test = lambda: input_fn(FLAGS.pred_file, config, 0)
         output_results = estimator.predict(input_fn_for_test, checkpoint_path=tf.train.latest_checkpoint(best_dir))
-
-        with open(FLAGS.result_file, 'w') as writer:
-            for prediction in output_results:
-                predict_label_id = prediction["predict_label_ids"]
-                true_label_id = prediction["true_label_ids"]
-                prob_list.append(prediction["probabilities"])
-                predict_label = id2label[predict_label_id]
-                true_label = id2label[true_label_id]
-                predict_label_list.append(predict_label)
-                true_label_code.append(true_label_id)
-                true_label_list.append(true_label)
-                writer.write(predict_label + '\t' + true_label + "\n")
-        test_y_name, test_preds_code=top_2_label_code(prob_list, true_label_code)
-        acc2=accuracy_score( test_y_name, test_preds_code)
+        path_label = FLAGS.label_path
+        history_dir=FLAGS.history_dir
+        acc2=post_pred(path_label, model_dir, history_dir, output_results)
         logger.info(best_dir)
-        logger.info("The total program acc1 {} and top2 acc is {}".format(accuracy_score(true_label_list, predict_label_list), acc2))
-
-        # logger.info(classification_report(true_label_list, predict_label_list))
-    elapsed_time = (time.time() - start) / 60 / 60
-    if acc2 > 0.7:
-        cmd = "cd {} && mv {} model_{}".format(os.path.join(path, "textcnn_model"), "base", acc2)
-        output_eval_file = os.path.join(FLAGS.history_dir, "p_{}_results.txt".format(acc2))
-        try:
-            os.makedirs(FLAGS.history_dir)
-        except:
-            pass
-        with tf.gfile.GFile(output_eval_file, "a") as writer:
-            for guid, prob in zip(all_guid, all_prob):
-                writer.write('{},{} \n'.format(guid, ','.join([str(pr) for pr in prob])))
-    else:
-        cmd = "cd {} && rm -rf {}".format(os.path.join(path, "textcnn_model"), "base")
-    logging.info("==========")
-    logger.info(cmd)
-    os.system(cmd)
     logger.info("The total program takes {} hours =and top2 acc is {}".format(elapsed_time,acc2))
 
 
