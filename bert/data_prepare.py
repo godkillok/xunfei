@@ -350,7 +350,7 @@ def file_based_convert_examples_to_features(
     """Convert a set of `InputExampl1e`s to a TFRecord file.1"""
     path, file_name = os.path.split(output_file)
     try:
-        os.makedirs(os.path.join(path, "bert"))
+        os.makedirs(os.path.join(path, "bert_multi"))
     except:
         pass
     file_name0 = os.path.join(os.path.join(path,"bert"), file_name + '_multi_0.tfrecord')
