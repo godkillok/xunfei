@@ -1,4 +1,5 @@
-export BERT_BASE_DIR=/data/tanggp/bert_model/multi_cased_L-12_H-768_A-12
+export BERT_BASE_DIR=/data/tanggp/bert/multi_cased_L-12_H-768_A-12
+#/data/tanggp/bert/chinese_L-12_H-768_A-12
 export XNLI_DIR=/data/tanggp/xun_class/aichallenge
 export OUTPUT=/data/tanggp/xun_class/bert_model/
 python3 data_prepare.py \
