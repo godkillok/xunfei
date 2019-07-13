@@ -1,9 +1,4 @@
 
-import pandas as pd, numpy as np
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer,HashingVectorizer
-from sklearn import svm
-import logging
-import numpy as np
 import time
 import os
 import pickle  # pickle模块2
@@ -39,9 +34,7 @@ import json
 
 from sklearn.calibration import CalibratedClassifierCV
 
-train_x, train_y, test_x, test_y, pred_x, apps, label_dic = load_data()
-logging.info('train {} test{}'.format(len(train_x), len(test_x)))
-data_set = train_x + test_x + pred_x
+
 def score(params):
 
 
