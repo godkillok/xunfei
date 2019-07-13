@@ -252,7 +252,7 @@ def main_class():
     vocab_dict = id_word_map()
     with open(FLAGS.params_file) as f:
         config = json.load(f)
-    # config["train_size"]=9722067
+    config["train_size"]=26320
     config["max_length"] = 250
     config["id_word"] = vocab_dict
     config["word_dim"] = 128
