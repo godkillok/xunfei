@@ -240,9 +240,9 @@ def main_class_hyper(hyper):
                 writer.write(predict_label + '\t' + true_label + "\n")
         test_y_name, test_preds_code=top_2_label_code(prob_list, true_label_code)
         acc2=accuracy_score( test_y_name, test_preds_code)
-
+        acc1 = accuracy_score(true_label_list, predict_label_list)
         logger.info(best_dir)
-        logger.info(classification_report(true_label_list, predict_label_list))
+        #logger.info(classification_report(true_label_list, predict_label_list))
     elapsed_time = (time.time() - start) / 60 / 60
     if acc2 > 0.7:
         cmd = "cd {} && mv {} model_{}".format(os.path.join(path, "textcnn_model"), "base", acc2)
@@ -252,6 +252,11 @@ def main_class_hyper(hyper):
     logger.info(cmd)
     os.system(cmd)
     logger.info("The total program takes {} hours =and top2 acc is {}".format(elapsed_time,acc2))
+    hyper["top1"]=acc1
+    hyper["cmd"]=cmd
+    hyper["top2"]=acc2
+    with open(os.path.join(path, "textcnn_model","all_history"),"a",encoding="utf8") as f:
+        f.writelines(json.dumps(hyper)+'\n')
     return acc2
 
 def main_class():
@@ -370,6 +375,9 @@ def main_class():
     logger.info(cmd)
     os.system(cmd)
     logger.info("The total program takes {} hours =and top2 acc is {}".format(elapsed_time,acc2))
+
+
+
     return acc2
 
 
