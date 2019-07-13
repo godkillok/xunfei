@@ -190,9 +190,9 @@ def main_class_hyper(hyper):
     no_increase_steps = int(config["train_size"] / FLAGS.batch_size * FLAGS.early_stop_epoches)
 
     # 用于early stop
-    early_stop_hook = tf.contrib.estimator.stop_if_no_increase_hook(estimator, metric_name='f1',
-                                                                    max_steps_without_increase=no_increase_steps,
-                                                                   min_steps=early_stop_steps, run_every_secs=120)
+    # early_stop_hook = tf.contrib.estimator.stop_if_no_increase_hook(estimator, metric_name='f1',
+    #                                                                 max_steps_without_increase=no_increase_steps,
+    #                                                                min_steps=early_stop_steps, run_every_secs=120)
     acc2=0
 
     # timeline_hook = tf.train.ProfilerHook(save_steps=FLAGS.steps_check, output_dir=model_dir + '/timeline/')
@@ -205,7 +205,7 @@ def main_class_hyper(hyper):
         #         score_metric='acc',  # metric to use to determine "best"
         #         compare_fn=lambda x, y: x.score > y.score,
         #         sort_reverse=True)
-        eval_spec = tf.estimator.EvalSpec(input_fn=input_fn_for_eval, throttle_secs=1200)  # exporters=best_copier
+        eval_spec = tf.estimator.EvalSpec(input_fn=input_fn_for_eval, throttle_secs=12000)  # exporters=best_copier
         tf.estimator.train_and_evaluate(estimator, train_spec, eval_spec)
         logger.info("Switch to the current directory and Run the command line:" \
                     "tensorboard --logdir=%s" \
