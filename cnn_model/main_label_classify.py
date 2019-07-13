@@ -241,9 +241,11 @@ def main_class_hyper(hyper):
         test_y_name, test_preds_code=top_2_label_code(prob_list, true_label_code)
         acc2=accuracy_score( test_y_name, test_preds_code)
         if acc2>0.7:
-            os.system("cd {} && mv {} model_{}".format( os.path.join(path,"textcnn_model"),"base",acc2))
+            cmd="cd {} && mv {} model_{}".format( os.path.join(path,"textcnn_model"),"base",acc2)
         else:
-            os.system("cd {} && rm -rf {}".format(os.path.join(path, "textcnn_model"),"base"))
+            cmd="cd {} && rm -rf {}".format(os.path.join(path, "textcnn_model"),"base")
+        logger.info(cmd)
+        os.system(cmd)
         logger.info(best_dir)
         logger.info(classification_report(true_label_list, predict_label_list))
     elapsed_time = (time.time() - start) / 60 / 60
