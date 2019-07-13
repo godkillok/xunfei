@@ -248,6 +248,7 @@ def main_class_hyper(hyper):
         cmd = "cd {} && mv {} model_{}".format(os.path.join(path, "textcnn_model"), "base", acc2)
     else:
         cmd = "cd {} && rm -rf {}".format(os.path.join(path, "textcnn_model"), "base")
+    logging.info("==========")
     logger.info(cmd)
     os.system(cmd)
     logger.info("The total program takes {} hours and top2 acc is {}".format(elapsed_time,acc2))
