@@ -158,12 +158,9 @@ flags.DEFINE_integer(
     "Only used if `use_tpu` is True. Total number of TPU cores to use.")
 
 # Custom Config
-flags.DEFINE_bool("use_gpu", False, "Whether to use GPU.")
+flags.DEFINE_bool("use_gpu", True, "Whether to use GPU.")
 
-flags.DEFINE_integer(
-    "num_gpu_cores", 0,
-    "Only used if `use_gpu` is True. Total number of GPU cores to use."
-)
+
 
 flags.DEFINE_bool("use_fp16", False, "Whether to use fp16.")
 
