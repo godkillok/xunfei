@@ -18,6 +18,7 @@ python3 run_classify.py \
   --max_seq_length=200 \
   --train_batch_size=16 \
   --num_lables=125 \
+  --num_first=26 \
   --learning_rate=1e-5 \
   --num_train_epochs=15.0 \
   --eval_steps=0\
