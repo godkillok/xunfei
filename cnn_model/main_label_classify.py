@@ -352,7 +352,7 @@ def main_class():
         logging.info(best_dir)
         logging.info("The total program takes =and top2 acc is {}".format( acc2))
 
-        if acc2>0.7:
+        if acc2>0.3:
             input_fn_for_test = lambda: input_fn(FLAGS.pred_file, config, 0)
             output_results = estimator.predict(input_fn_for_test, checkpoint_path=tf.train.latest_checkpoint(best_dir))
             path_label = FLAGS.label_path
