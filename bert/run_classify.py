@@ -185,7 +185,7 @@ class InputExample(object):
 
 
 def file_based_input_fn_builder(input_file, seq_length, is_training,
-                                drop_remainder, shuffle=False, multi_choice=1):
+                                drop_remainder,shuffle=False, multi_choice=1):
     """Creates an `input_fn` closure to be passed to TPUEstimator."""
 
     name_to_features_ = {
@@ -223,8 +223,8 @@ def file_based_input_fn_builder(input_file, seq_length, is_training,
 
     def input_fn(params):
         """The actual input function."""
-        batch_size = params["batch_size"]
-
+        #batch_size = params["batch_size"]
+        batch_size=32
         # For training, we want a lot of parallel reading and shuffling.
         # For eval, we want no shuffling and parallel reading doesn't matter.
         files = tf.data.Dataset.list_files(input_file, shuffle=shuffle)
