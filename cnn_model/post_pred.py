@@ -63,9 +63,7 @@ def post_pred(path_label,model_dir,history_dir,output_results,acc2):
 
     # predict
     predict_label_list = []
-    true_label_list = []
     prob_list = []
-    true_label_code = []
     guids = []
 
     for prediction in output_results:
