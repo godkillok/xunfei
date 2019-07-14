@@ -322,7 +322,7 @@ def model_fn_builder(bert_config, num_labels, init_checkpoint, learning_rate,
         (total_loss, per_example_loss, logits, probabilities) = create_model(
             bert_config, is_training, input_ids, input_mask, segment_ids, label_ids,
             num_labels, use_one_hot_embeddings)
-        squeeze_label_ids = tf.squeeze(label_ids, axis=1)
+        # squeeze_label_ids = tf.squeeze(label_ids, axis=1)
         tvars = tf.trainable_variables()
         initialized_variable_names = {}
         scaffold_fn = None
@@ -385,7 +385,7 @@ def model_fn_builder(bert_config, num_labels, init_checkpoint, learning_rate,
             predictions = {
                 'probabilities': probabilities,
                 "guid": guid,
-                'true_label_ids':squeeze_label_ids,
+                'true_label_ids':label_ids,
                 'predict_label_ids':predict_label_ids
             }
             output_spec = tf.contrib.tpu.TPUEstimatorSpec(
