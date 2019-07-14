@@ -40,6 +40,7 @@ from sklearn.metrics import classification_report,accuracy_score
 from cnn_model.post_pred import post_pred,post_eval
 from tensorflow.python.estimator.run_config import RunConfig
 from tensorflow.python.distribute.cross_device_ops import AllReduceCrossDeviceOps
+from tensorflow.python.estimator.estimator import Estimator
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
 flags = tf.flags
@@ -741,13 +742,17 @@ def main(_):
 
     # If TPU is not available, this will fall back to normal Estimator on CPU
     # or GPU.
-    estimator = tf.contrib.tpu.TPUEstimator(
-        use_tpu=FLAGS.use_tpu,
+    estimator = Estimator(
         model_fn=model_fn,
-        config=run_config,
-        train_batch_size=FLAGS.train_batch_size,
-        eval_batch_size=FLAGS.eval_batch_size,
-        predict_batch_size=FLAGS.predict_batch_size)
+        params={},
+        config=run_config)
+    # estimator = tf.contrib.tpu.TPUEstimator(
+    #     use_tpu=FLAGS.use_tpu,
+    #     model_fn=model_fn,
+    #     config=run_config,
+    #     train_batch_size=FLAGS.train_batch_size,
+    #     eval_batch_size=FLAGS.eval_batch_size,
+    #     predict_batch_size=FLAGS.predict_batch_size)
 
     if FLAGS.do_train:
         train_file = os.path.join(FLAGS.data_dir, "train*.tfrecord")
