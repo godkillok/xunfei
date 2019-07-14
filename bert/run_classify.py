@@ -37,7 +37,7 @@ import pandas as pd
 import pickle
 import json
 from sklearn.metrics import classification_report,accuracy_score
-
+from cnn_model.post_pred import post_pred,post_eval
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
 flags = tf.flags
@@ -69,6 +69,9 @@ flags.DEFINE_string(
     "output_dir", output,
     "The output directory where the model checkpoints will be written.")
 
+flags.DEFINE_string(
+    "history_dir", output,
+    "The output directory where the model checkpoints will be written.")
 ## Other parameters
 
 flags.DEFINE_string(
@@ -309,13 +312,13 @@ def model_fn_builder(bert_config, num_labels, init_checkpoint, learning_rate,
         input_mask = features["input_mask"]
         segment_ids = features["segment_ids"]
         label_ids = features["label_ids"]
-
+        guid=features["guid"]
         is_training = (mode == tf.estimator.ModeKeys.TRAIN)
 
         (total_loss, per_example_loss, logits, probabilities) = create_model(
             bert_config, is_training, input_ids, input_mask, segment_ids, label_ids,
             num_labels, use_one_hot_embeddings)
-
+        squeeze_label_ids = tf.squeeze(label_ids, axis=1)
         tvars = tf.trainable_variables()
         initialized_variable_names = {}
         scaffold_fn = None
@@ -374,8 +377,15 @@ def model_fn_builder(bert_config, num_labels, init_checkpoint, learning_rate,
                 eval_metrics=eval_metrics,
                 scaffold_fn=scaffold_fn)
         else:
+            predict_label_ids = tf.argmax(logits, axis=1, name="predict_label_id")
+            predictions = {
+                'probabilities': probabilities,
+                "guid": guid,
+                'true_label_ids':squeeze_label_ids,
+                'predict_label_ids':predict_label_ids
+            }
             output_spec = tf.contrib.tpu.TPUEstimatorSpec(
-                mode=mode, predictions=probabilities, scaffold_fn=scaffold_fn)
+                mode=mode, predictions=predictions, scaffold_fn=scaffold_fn)
         return output_spec
 
     return model_fn
@@ -464,7 +474,7 @@ def model_fn_builder_gpu(bert_config, num_labels, init_checkpoint, learning_rate
 
     return model_fn
 
-def main_hyper():
+def main_hyper(para):
     tf.logging.set_verbosity(tf.logging.ERROR)
 
     if not FLAGS.do_train and not FLAGS.do_eval and not FLAGS.do_predict:
@@ -473,15 +483,9 @@ def main_hyper():
 
     bert_config = modeling.BertConfig.from_json_file(FLAGS.bert_config_file)
 
-    if FLAGS.max_seq_length > bert_config.max_position_embeddings:
-        raise ValueError(
-            "Cannot use sequence1 length %d because the BERT model "
-            "was only trained up to sequence length %d" %
-            (FLAGS.max_seq_length, bert_config.max_position_embeddings))
 
     tf.gfile.MakeDirs(FLAGS.output_dir)
 
-    task_name = FLAGS.task_name.lower()
 
     tpu_cluster_resolver = None
     if FLAGS.use_tpu and FLAGS.tpu_name:
@@ -577,7 +581,7 @@ def main_hyper():
             drop_remainder=eval_drop_remainder)
 
         result = estimator.evaluate(input_fn=eval_input_fn, steps=eval_steps)
-
+        logging.info('{}'.format(result))
         output_eval_file = os.path.join(FLAGS.output_dir, "eval_results.txt")
         with tf.gfile.GFile(output_eval_file, "w") as writer:
             tf.logging.info("***** Eval results *****")
@@ -587,75 +591,38 @@ def main_hyper():
 
     if FLAGS.do_eval_pred:
 
-        eval_meta = os.path.join(FLAGS.data_dir, "eval.json")
 
-        with open(eval_meta, 'r') as f:
-            d = json.load(f)
-            num_eval_examples = d['num_eval_examples']
+        predict_drop_remainder = True if FLAGS.use_tpu else False
+        predict_file=os.path.join(FLAGS.data_dir,"eval.*tfrecord")
+        predict_input_fn = file_based_input_fn_builder(
+                        input_file=predict_file,
+                        seq_length=FLAGS.max_seq_length,
+                        is_training=False,
+                        drop_remainder=predict_drop_remainder)
 
-        tf.logging.info("***** Runnin12g evaluation  and predtion *****")
-        tf.logging.info("  Num examples = %d", num_eval_examples)
-        tf.logging.info("  Batch size = %d", FLAGS.eval_batch_size)
-        import re
-        import numpy as np
-        #1
+        output_results = estimator.predict(input_fn=predict_input_fn)
+        model_dir=FLAGS.model_dir
+        path_label = FLAGS.label_path
+        history_dir = FLAGS.history_dir
+        acc2 = post_eval(path_label, model_dir, history_dir, output_results)
 
-        type_=["eval.*tfrecord","train.*tfrecord","pred.*tfrecord"]
-        import time
-        for ty in type_:
-            t1=time.time()
-            all_real_label = []
-            all_pred_labal = []
-            for (root,dr,files) in os.walk(FLAGS.data_dir):
-                for predict_file in files:
-                    if re.findall(ty,predict_file):
-                        predict_drop_remainder = True if FLAGS.use_tpu else False
-                        predict_file=os.path.join(root,predict_file)
-                        predict_input_fn = file_based_input_fn_builder(
-                            input_file=predict_file,
-                            seq_length=FLAGS.max_seq_length,
-                            is_training=False,
-                            drop_remainder=predict_drop_remainder)
+        logging.info("The total program takes =and top2 acc is {}".format(acc2))
 
-                        pre_result = estimator.predict(input_fn=predict_input_fn)
-                        real_label, guid_list=get_real_label(predict_file)
-                        pred_label=[]
-                        for rea,pred in zip(real_label,pre_result):
-                            #print(rea,pred)
-                            pr_1=pred.argsort()[-2:][::-1][0]
-                            for pr in list(pred.argsort()[-2:][::-1]):
-                                if pr==rea:
-                                    pr_1=rea
+        if acc2 > 0.7:
+            predict_file = os.path.join(FLAGS.data_dir, "pred.*tfrecord")
+            predict_input_fn = file_based_input_fn_builder(
+                input_file=predict_file,
+                seq_length=FLAGS.max_seq_length,
+                is_training=False,
+                drop_remainder=predict_drop_remainder)
+            output_results = estimator.predict(predict_input_fn)
+            path_label = FLAGS.label_path
+            history_dir = FLAGS.history_dir
+            post_pred(path_label, model_dir, history_dir, output_results, acc2)
 
-                            pred_label.append(pr_1)
-
-                        all_real_label+=real_label
-                        all_pred_labal+=pred_label
-            t2 = time.time()
-            #12
-            tf.logging.info('{} classy reprts follow '
-                            'spend {},{}sample/second  '.format(ty,t2-t1,len(all_real_label)/(t2-t1)))
-            tf.logging.info('\n {}'.format((all_real_label, all_pred_labal)))
-
-            output_eval_file = os.path.join(FLAGS.output_dir, "{}_results.txt".format(ty))
-            with tf.gfile.GFile(output_eval_file, "w") as writer:
-                writer.write('\n {}'.format(classification_report(all_real_label, all_pred_labal)))
 
     if FLAGS.do_predict:
-        pred_meta = os.path.join(FLAGS.data_dir, "predict.json")
         predict_file = os.path.join(FLAGS.data_dir, "predict*.tfrecord")
-        with open(pred_meta, 'r') as f:
-            d = json.load(f)
-            num_pred_examples = d['num_pred_examples']
-
-        tf.logging.info("***** Running prediction*****")
-        tf.logging.info("  Num examples = %d", num_pred_examples)
-        tf.logging.info("  Batch size = %d", FLAGS.predict_batch_size)
-
-        if FLAGS.use_tpu:
-            # Warning: According to tpu_estimator.py Prediction on TPU is an
-            # experimental feature and hence not supported here
-            raise ValueError("Prediction in TPU not supported")
 
         predict_drop_remainder = True if FLAGS.use_tpu else False
         predict_input_fn = file_based_input_fn_builder(
@@ -670,9 +637,9 @@ def main_hyper():
         with tf.gfile.GFile(output_predict_file, "w") as writer:
             tf.logging.info("***** Predict results *****")
             for prediction in result:
-                output_line = "\t".join(
-                    str(class_probability) for class_probability in prediction) + "\n"
-                writer.write(output_line)
+                output_line = ",".join(
+                    str(class_probability) for class_probability in prediction["probabilities"]) + "\n"
+                writer.write(prediction["guid"]+','+output_line)
 
 def main(_):
     tf.logging.set_verbosity(tf.logging.ERROR)
