@@ -72,6 +72,13 @@ flags.DEFINE_string(
     "output_dir", output,
     "The output directory where the model checkpoints will be written.")
 
+flags.DEFINE_string(
+    "label_path", output,
+    "The output directory where the model checkpoints will be written.")
+
+flags.DEFINE_string(
+    "history_dir", output,
+    "The output directory where the model checkpoints will be written.")
 ## Other parameters
 
 flags.DEFINE_string(
