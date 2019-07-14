@@ -72,6 +72,10 @@ flags.DEFINE_string(
 flags.DEFINE_string(
     "history_dir", output,
     "The output directory where the model checkpoints will be written.")
+
+flags.DEFINE_string(
+    "label_path", os.path.join("/data/tanggp/",'textcnn_label_sort'),
+    "The output directory where the model checkpoints will be written.")
 ## Other parameters
 
 flags.DEFINE_string(
@@ -98,7 +102,7 @@ flags.DEFINE_bool(
     "Whether to run the model in inference mode on the test set.")
 
 flags.DEFINE_integer("train_batch_size", 16, "Total batch size for training.")
-flags.DEFINE_integer("drop_rate", 0.9, "Total batch size for training.")
+flags.DEFINE_float("drop_rate", 0.9, "Total batch size for training.")
 flags.DEFINE_integer("eval_batch_size", 8, "Total batch size for eval.")
 
 flags.DEFINE_integer("predict_batch_size", 8, "Total batch size for predict.")
