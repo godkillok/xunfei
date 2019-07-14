@@ -87,10 +87,11 @@ def post_pred(path_label,model_dir,history_dir,output_results,acc2):
         pass
 
     logging.info(model_dir)
-    cmd = "cd {} && mv {} {}_{}".format(root, folder_name,folder_name, acc2)
-    logging.info("==========")
-    logging.info(cmd)
-    os.system(cmd)
+    if acc2>0.74:
+        cmd = "cd {} && mv {} {}_{}".format(root, folder_name,folder_name, acc2)
+        logging.info("==========")
+        logging.info(cmd)
+        os.system(cmd)
     logging.info("total pred len is {}".format(len(prob_list)))
     with tf.gfile.GFile(output_eval_file, "w") as writer:
         for guid, prob in zip(guids, prob_list):
