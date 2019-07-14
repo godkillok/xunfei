@@ -159,29 +159,13 @@ flags.DEFINE_integer(
     "num_lables", 14,
     "num of labels ")
 flags.DEFINE_integer(
+    "num_first", 26,
+    "num of labels ")
+flags.DEFINE_integer(
     "eval_steps", 100,
     "elavalue steps")
 
 
-class InputExample(object):
-    """A single training/test example for simple sequence classification."""
-
-    def __init__(self, guid, text_a, text_b=None, label=None):
-        """Constructs a InputExample.
-
-        Args:
-          guid: Unique id for the example.
-          text_a: string. The untokenized text of the first sequence. For single
-            sequence tasks, only this sequence must be specified.
-          text_b: (Optional) string. The untokenized text of the second sequence.
-            Only must be specified for sequence pair tasks.
-          label: (Optional) string. The label of the example. This should be
-            specified for train and dev examples, but not for test examples.
-        """
-        self.guid = guid
-        self.text_a = text_a
-        self.text_b = text_b
-        self.label = label
 
 
 def file_based_input_fn_builder(input_file, seq_length, is_training,
@@ -193,7 +177,8 @@ def file_based_input_fn_builder(input_file, seq_length, is_training,
         "input_ids": tf.FixedLenFeature([seq_length], tf.int64),
         "input_mask": tf.FixedLenFeature([seq_length], tf.int64),
         "segment_ids": tf.FixedLenFeature([seq_length], tf.int64),
-        "label_ids": tf.FixedLenFeature([], tf.int64)
+        "label_ids": tf.FixedLenFeature([], tf.int64),
+        "label_first":tf.FixedLenFeature([], tf.int64)
     }
     if multi_choice > 1:
         name_to_features = {"label_ids": tf.FixedLenFeature([], tf.int64)}
@@ -245,7 +230,7 @@ def file_based_input_fn_builder(input_file, seq_length, is_training,
 
 
 def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
-                 labels, num_labels, use_one_hot_embeddings):
+                 labels, num_labels, num_first,use_one_hot_embeddings,label_first):
     """Creates a classification model."""
     model = modeling.BertModel(
         config=bert_config,
@@ -291,10 +276,27 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
         per_example_loss = -tf.reduce_sum(one_hot_labels * log_probs, axis=-1)
         loss = tf.reduce_mean(per_example_loss)
 
-        return (loss, per_example_loss, logits, probabilities)
+    with tf.variable_scope("loss_first"):
+        output_weights = tf.get_variable(
+            "output_weights", [num_first, hidden_size],
+            initializer=tf.truncated_normal_initializer(stddev=0.02))
+
+        output_bias = tf.get_variable(
+            "output_bias", [num_first], initializer=tf.zeros_initializer())
+
+        logits_first = tf.matmul(output_layer, output_weights, transpose_b=True)
+        logits_first = tf.nn.bias_add(logits_first, output_bias)
+        log_probs_first = tf.nn.log_softmax(logits_first, axis=-1)
+
+        one_hot_first = tf.one_hot(label_first, depth=num_labels, dtype=tf.float32)
+
+        per_example_loss_1 = -tf.reduce_sum(one_hot_first * log_probs_first, axis=-1)
+        loss_1 = tf.reduce_mean(per_example_loss_1)
+
+        return (loss+loss_1, per_example_loss, logits, probabilities)
 
 
-def model_fn_builder(bert_config, num_labels, init_checkpoint, learning_rate,
+def model_fn_builder(bert_config, num_labels, num_first,init_checkpoint, learning_rate,
                      num_train_steps, num_warmup_steps, use_tpu,
                      use_one_hot_embeddings):
     """Returns `model_fn` closure for TPUEstimator."""
@@ -311,11 +313,12 @@ def model_fn_builder(bert_config, num_labels, init_checkpoint, learning_rate,
         segment_ids = features["segment_ids"]
         label_ids = features["label_ids"]
         guid = features["guid"]
+        label_first=features["label_first"]
         is_training = (mode == tf.estimator.ModeKeys.TRAIN)
 
         (total_loss, per_example_loss, logits, probabilities) = create_model(
             bert_config, is_training, input_ids, input_mask, segment_ids, label_ids,
-            num_labels, use_one_hot_embeddings)
+            num_labels, num_first,use_one_hot_embeddings,label_first)
         # squeeze_label_ids = tf.squeeze(label_ids, axis=1)
         tvars = tf.trainable_variables()
         initialized_variable_names = {}
@@ -443,6 +446,7 @@ def main(_):
     model_fn = model_fn_builder(
         bert_config=bert_config,
         num_labels=FLAGS.num_lables,
+        num_first=FLAGS.num_first,
         init_checkpoint=FLAGS.init_checkpoint,
         learning_rate=FLAGS.learning_rate,
         num_train_steps=num_train_steps,
