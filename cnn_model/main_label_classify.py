@@ -14,17 +14,13 @@ import logging
 #from best_checkpoint_copier import BestCheckpointCopier
 from sklearn.metrics import classification_report, confusion_matrix,accuracy_score
 from logger import get_logger
-from  cnn_model.post_pred import post_pred
+from  cnn_model.post_pred import post_pred,post_eval
 import time
 
 import logging
 import os
 import sys
 
-
-# Hyperparameters tuning
-
-from hyperopt import STATUS_OK, Trials, fmin, hp, tpe
 currentUrl = os.path.dirname(__file__)
 most_parenturl = os.path.abspath(os.path.join(currentUrl, os.pardir))
 m_p, m_c = os.path.split(most_parenturl)
@@ -355,13 +351,23 @@ def main_class():
         logger.info("after train and evaluate")
     if FLAGS.do_predict == True:
         best_dir = model_dir + '/best'
-        input_fn_for_test = lambda: input_fn(FLAGS.pred_file, config, 0)
+        input_fn_for_test = lambda: input_fn(FLAGS.valid_file, config, 0)
         output_results = estimator.predict(input_fn_for_test, checkpoint_path=tf.train.latest_checkpoint(best_dir))
         path_label = FLAGS.label_path
         history_dir=FLAGS.history_dir
-        acc2=post_pred(path_label, model_dir, history_dir, output_results)
+        acc2=post_eval(path_label, model_dir, history_dir, output_results)
         logger.info(best_dir)
-    logger.info("The total program takes {} hours =and top2 acc is {}".format(elapsed_time,acc2))
+        logger.info("The total program takes =and top2 acc is {}".format( acc2))
+
+        if acc2>0.7:
+            input_fn_for_test = lambda: input_fn(FLAGS.pred_file, config, 0)
+            output_results = estimator.predict(input_fn_for_test, checkpoint_path=tf.train.latest_checkpoint(best_dir))
+            path_label = FLAGS.label_path
+            history_dir=FLAGS.history_dir
+            post_pred(path_label, model_dir, history_dir, output_results,acc2)
+    return acc2
+
+
 
 
 
