@@ -2,6 +2,7 @@ export BERT_BASE_DIR=/data/tanggp/bert/multi_cased_L-12_H-768_A-12
 #/data/tanggp/bert/chinese_L-12_H-768_A-12
 export XNLI_DIR=/data/tanggp/xun_class/aichallenge
 export OUTPUT=/data/tanggp/xun_class/bert_model/
+export Tfrecord=/data/tanggp/xun_class/bert_multi_tfrecord/
 python3 data_prepare.py \
   --task_name=category \
   --do_train=true \
@@ -16,4 +17,5 @@ python3 data_prepare.py \
   --learning_rate=5e-5 \
   --num_train_epochs=3.0 \
   --output_dir=$OUTPUT\
-  --num_lables=2
+  --num_lables=2\
+  --tfrecord=$Tfrecord

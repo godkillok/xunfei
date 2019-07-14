@@ -42,6 +42,11 @@ flags.DEFINE_string(
     "for the task.")
 
 flags.DEFINE_string(
+    "tfrecord", '/data/tanggp/channel_corpus/',
+    "The input data dir. Should contain the .tsv files (or other data files) "
+    "for the task.")
+
+flags.DEFINE_string(
     "bert_config_file", '/data/tanggp',
     "The config json file corresponding to the pre-trained BERT model. "
     "This specifies the model architecture.")
@@ -350,12 +355,8 @@ def file_based_convert_examples_to_features(
         examples, label_list, max_seq_length, tokenizer,output_file):
     """Convert a set of `InputExampl1e`s to a TFRecord file.1"""
     path, file_name = os.path.split(output_file)
-    bert_path="bert_multi"
-    try:
-        os.makedirs(os.path.join(path, bert_path))
-    except:
-        pass
-    file_name0 = os.path.join(os.path.join(path,bert_path), file_name + '_multi_0.tfrecord')
+
+    file_name0 = os.path.join(path, file_name + '_multi_0.tfrecord')
     writer = tf.python_io.TFRecordWriter(file_name0)
 
     for (ex_index, example) in enumerate(examples):
@@ -490,8 +491,13 @@ def main(_):
     train_examples = None
     num_train_steps = None
     num_warmup_steps = None
+
+    try:
+        os.makedirs(FLAGS.tfrecord)
+    except:
+        pass
     if FLAGS.do_train:
-        train_meta = os.path.join(FLAGS.data_dir, "train.json")
+        train_meta = os.path.join(FLAGS.tfrecord,"train.json")
 
         train_examples = processor.get_train_examples(FLAGS.data_dir)
         num_train_example = len(train_examples)
@@ -508,7 +514,7 @@ def main(_):
             json.dump(d, f)
 
     if FLAGS.do_train:
-        train_file = os.path.join(FLAGS.data_dir, "train")
+        train_file = os.path.join(FLAGS.tfrecord, "train")
         file_based_convert_examples_to_features(
             train_examples, label_list, FLAGS.max_seq_length, tokenizer, train_file)
         tf.logging.info("***** Running training *****")
@@ -518,13 +524,13 @@ def main(_):
 
     if FLAGS.do_eval:
         eval_examples = processor.get_dev_examples(FLAGS.data_dir)
-        eval_file = os.path.join(FLAGS.data_dir, "eval")
+        eval_file = os.path.join(FLAGS.tfrecord, "eval")
         num_eval_examples = len(eval_examples)
         d = {
             'num_eval_examples': num_eval_examples
 
         }
-        eval_meta = os.path.join(FLAGS.data_dir, "eval.json")
+        eval_meta = os.path.join(FLAGS.tfrecord, "eval.json")
         with open(eval_meta, 'w') as f:
             json.dump(d, f)
 
@@ -534,12 +540,12 @@ def main(_):
 
     if FLAGS.do_predict:
         predict_examples = processor.get_test_examples(FLAGS.data_dir)
-        predict_file = os.path.join(FLAGS.data_dir, "predict")
+        predict_file = os.path.join(FLAGS.tfrecord, "predict")
         file_based_convert_examples_to_features(predict_examples, label_list,
                                                 FLAGS.max_seq_length, tokenizer,
                                                 predict_file)
         num_pred_examples = len(predict_examples)
-        pred_meta = os.path.join(FLAGS.data_dir, "predict.json")
+        pred_meta = os.path.join(FLAGS.tfrecord, "predict.json")
         d = {
             'num_pred_examples': num_pred_examples
 
