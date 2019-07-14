@@ -92,7 +92,7 @@ def post_pred(path_label,model_dir,history_dir,output_results,acc2):
         logging.info("==========")
         logging.info(cmd)
         os.system(cmd)
-    logging.info("total pred len is {}".format(len(prob_list)))
+    logging.info("total pred len is {} and top2{}".format(len(prob_list),acc2))
     with tf.gfile.GFile(output_eval_file, "w") as writer:
         for guid, prob in zip(guids, prob_list):
             writer.write('{},{} \n'.format(guid, ','.join([str(pr) for pr in prob])))
