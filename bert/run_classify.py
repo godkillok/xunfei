@@ -572,7 +572,7 @@ def model_fn_builder(bert_config, num_labels, init_checkpoint, learning_rate,
 #                 writer.write(prediction["guid"]+','+output_line)
 
 def main(_):
-    tf.logging.set_verbosity(tf.logging.ERROR)
+    tf.logging.set_verbosity(tf.logging.INFO)
 
     if not FLAGS.do_train and not FLAGS.do_eval and not FLAGS.do_predict:
         raise ValueError(
