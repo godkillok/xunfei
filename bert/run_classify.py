@@ -518,9 +518,12 @@ def main_hyper(para):
         with open(train_meta, 'r') as f:
             d = json.load(f)
         num_train_example = d['num_train_example']
-        num_train_steps = d['num_train_steps']
-        #para['num_warmup_steps']
-        num_warmup_steps =None
+        # num_train_steps = d['num_train_steps']
+        # #para['num_warmup_steps']
+        # num_warmup_steps =None
+        num_train_steps = int(
+            num_train_example / FLAGS.train_batch_size * FLAGS.num_train_epochs)
+        num_warmup_steps = int(num_train_steps * FLAGS.warmup_proportion)
 
     model_fn = model_fn_builder(
         bert_config=bert_config,
