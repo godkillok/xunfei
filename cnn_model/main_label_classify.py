@@ -29,7 +29,7 @@ while 'xunfei' not in m_c:
 
 sys.path.append(os.path.join(m_p, m_c))
 
-log_file_name = os.path.basename(__file__).split('.', 1)[0] + '.log'
+log_file_name = os.path.base_2name(__file__).split('.', 1)[0] + '.log'
 # Save params
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "7"
@@ -63,8 +63,8 @@ flags.DEFINE_string("emb_file", "/data/tanggp/xun_class/cc.zh.300.bin", "Path fo
 flags.DEFINE_string("params_file", os.path.join(path,"textcnn_dataset_params.json"), "parameters file")
 flags.DEFINE_string("word_path", os.path.join(path,"textcnn_words.txt"), "word vocabulary file")
 flags.DEFINE_string("label_path", os.path.join(path,'textcnn_label_sort'), "word vocabulary file")
-flags.DEFINE_string("model_dir", os.path.join(path,"textcnn_model","base"), "Path to save model")
-flags.DEFINE_string("result_file", os.path.join(path,"textcnn_model","base","base_result.txt"), "Path to save predict result")
+flags.DEFINE_string("model_dir", os.path.join(path,"textcnn_model","base_2"), "Path to save model")
+flags.DEFINE_string("result_file", os.path.join(path,"textcnn_model","base_2","base_2_result.txt"), "Path to save predict result")
 flags.DEFINE_float("warmup_proportion", 0.1, "Proportion of training to perform linear learning rate warmup for.")
 # configurations for the model
 flags.DEFINE_float("dropout_prob", 0.2, "Dropout rate")  # 以0.2的概率drop out
@@ -248,7 +248,7 @@ def main_class_hyper(hyper):
         #logger.info(classification_report(true_label_list, predict_label_list))
     elapsed_time = (time.time() - start) / 60 / 60
     if acc2 > 0.7:
-        cmd = "cd {} && mv {} model_{}".format(os.path.join(path, "textcnn_model"), "base", acc2)
+        cmd = "cd {} && mv {} model_{}".format(os.path.join(path, "textcnn_model"), "base_2_2", acc2)
         output_eval_file = os.path.join(FLAGS.history_dir, "cnn_{}_results.txt".format(acc2))
         # try:
         #     os.makedirs(FLAGS.history_dir)
@@ -259,7 +259,7 @@ def main_class_hyper(hyper):
         #         writer.write('{},{} \n'.format(guid, ','.join([str(pr) for pr in prob])))
 
     else:
-        cmd = "cd {} && rm -rf {}".format(os.path.join(path, "textcnn_model"), "base")
+        cmd = "cd {} && rm -rf {}".format(os.path.join(path, "textcnn_model"), "base_2_2")
     logging.info("==========")
     logger.info(cmd)
     try:
