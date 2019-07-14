@@ -81,12 +81,13 @@ def post_pred(path_label,model_dir,history_dir,output_results,acc2):
         os.makedirs(history_dir)
     except:
         pass
-    if acc2 > 0.7:
-        logging.info(model_dir)
-        cmd = "cd {} && mv {} model_{}".format(root, folder_name, acc2)
-        logging.info("==========")
-        logging.info(cmd)
-        os.system(cmd)
+
+    logging.info(model_dir)
+    cmd = "cd {} && mv {} model_{}".format(root, folder_name, acc2)
+    logging.info("==========")
+    logging.info(cmd)
+    os.system(cmd)
+    logging.info("total pred len is {}".format(len(prob_list)))
     with tf.gfile.GFile(output_eval_file, "w") as writer:
         for guid, prob in zip(guids, prob_list):
             writer.write('{},{} \n'.format(guid, ','.join([str(pr) for pr in prob])))
