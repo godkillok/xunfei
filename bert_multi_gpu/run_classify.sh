@@ -4,7 +4,7 @@ export OUTPUT=/data/tanggp/xun_class/bert_model_mul/
 export HISTORY=/data/tanggp/xun_class/aichallenge/bert_multi_history
 export LABEL=/data/tanggp/xun_class/aichallenge/textcnn_label_sort
 #123
-python3 run_classify.py \
+python3 run_custom_classifier3.py\
   --task_name=category \
   --do_train=true \
   --do_eval=true \
