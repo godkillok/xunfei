@@ -53,7 +53,7 @@ def post_eval(path_label,model_dir,history_dir,output_results):
         cmd = "cd {} && rm -rf {}".format(root,folder_name)
         logging.info("==========")
         logging.info(cmd)
-        os.system(cmd)
+        #os.system(cmd)
     return acc2
 
 def post_pred(path_label,model_dir,history_dir,output_results,acc2):
