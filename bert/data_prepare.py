@@ -458,8 +458,9 @@ def main(_):
 
         train_examples = processor.get_train_examples(FLAGS.data_dir)
         num_train_example = len(train_examples)
-        num_train_steps = None
-        num_warmup_steps =None
+        num_train_steps = int(
+            num_train_example / FLAGS.train_batch_size * FLAGS.num_train_epochs)
+        num_warmup_steps = int(num_train_steps * FLAGS.warmup_proportion)
         d = {
             'num_train_example': num_train_example,
             'num_train_steps': num_train_steps,
