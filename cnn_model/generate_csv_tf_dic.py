@@ -162,6 +162,8 @@ def write_tfrecords(tf_lines, path_text, count):
             if i == 0:
                 print("NOT OK {}".format(i))
             example = tf.train.Example(features=tf.train.Features(feature={
+                'label': feature_auto(0),
+                'author': feature_auto(0),
                 'text': feature_auto(list(text)),
                 "app": feature_auto(app)
             }))
