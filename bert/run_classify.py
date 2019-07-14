@@ -94,7 +94,11 @@ flags.DEFINE_integer(
     "The maximum total input sequence length after WordPiece tokenization. "
     "Sequences longer than this will be truncated, and sequences shorter "
     "than this will be padded.")
-
+flags.DEFINE_integer(
+    "num_gpu_cores", 4,
+    "The maximum total input sequence length after WordPiece tokenization. "
+    "Sequences longer than this will be truncated, and sequences shorter "
+    "than this will be padded.")
 flags.DEFINE_bool("do_train", True, "Whether to run training.")
 
 flags.DEFINE_bool("do_eval", True, "Whether to run eval on the dev set.")
