@@ -359,6 +359,7 @@ def main_class():
             path_label = FLAGS.label_path
             history_dir=FLAGS.history_dir
             post_pred(path_label, model_dir, history_dir, output_results,acc2)
+            logging.info("done  pred top2 {}".format(acc2))
     return acc2
 
 
