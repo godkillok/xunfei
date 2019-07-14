@@ -40,7 +40,10 @@ flags.DEFINE_string(
     "data_dir", '/data/tanggp/channel_corpus/',
     "The input data dir. Should contain the .tsv files (or other data files) "
     "for the task.")
-
+flags.DEFINE_string(
+    "label_path", '/data/tanggp/channel_corpus/',
+    "The input data dir. Should contain the .tsv files (or other data files) "
+    "for the task.")
 flags.DEFINE_string(
     "tfrecord", '/data/tanggp/channel_corpus/',
     "The input data dir. Should contain the .tsv files (or other data files) "
@@ -226,10 +229,10 @@ class CategoryProcessor(DataProcessor):
         return self._create_examples(
             self._read_fasttxext_format(os.path.join(data_dir, "app_desc.jieba_json")), "test")
 
-    def get_labels(self,data_dir):
+    def get_labels(self,label_path):
         """See base class."""
         labels=[]
-        with open(os.path.join(data_dir, "textcnn_label_sort"),"r",encoding="utf8") as f:
+        with open(label_path,"r",encoding="utf8") as f:
             lines=f.readlines()
             for li in lines:
                 li=li.strip()
@@ -437,7 +440,7 @@ def main(_):
 
     processor = processors[task_name]()
 
-    label_list = processor.get_labels(FLAGS.data_dir)
+    label_list = processor.get_labels(FLAGS.label_path)
     # label_list.remove("no")
     print(len(label_list))
     import time
