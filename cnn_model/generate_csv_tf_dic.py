@@ -65,7 +65,7 @@ def parse_line_dict(record,vocab_dict,author_dict,label_dict):
         au=author_dict[author]
         return [text, label_dict.get(label),au,app]
     else:
-        return [text, None, None,app]
+        return [text, 0,0,app]
 
 
 def per_thouds_lines_dict(result_lines, path_text, count,flag_name=''):
