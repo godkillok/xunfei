@@ -572,7 +572,7 @@ def main(_):
                 output_line = "\t".join(
                     str(class_probability) for class_probability in prediction) + "\n"
                 writer.write(output_line)
-e
+
 
 if __name__ == "__main__":
     flags.mark_flag_as_required("data_dir")
