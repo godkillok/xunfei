@@ -147,7 +147,7 @@ def main_class_hyper(hyper):
     filter_sizes=','.join(filter_sizes)
     model_dir = os.path.join(FLAGS.model_dir)
     train_steps = int(config["train_size"] / batch_size * num_epoches)
-    logger.info('The number of training steps is {}'.format(train_steps))
+    logging.info('The number of training steps is {}'.format(train_steps))
     session_config = tf.ConfigProto(log_device_placement=True)
     session_config.gpu_options.per_process_gpu_memory_fraction = 0.7
     session_config.gpu_options.allow_growth = True
@@ -203,10 +203,10 @@ def main_class_hyper(hyper):
         #         sort_reverse=True)
         eval_spec = tf.estimator.EvalSpec(input_fn=input_fn_for_eval, throttle_secs=12000)  # exporters=best_copier
         tf.estimator.train_and_evaluate(estimator, train_spec, eval_spec)
-        logger.info("Switch to the current directory and Run the command line:" \
+        logging.info("Switch to the current directory and Run the command line:" \
                     "tensorboard --logdir=%s" \
                     "\nThen open http://localhost:6006/ into your web browser" % timestamp)
-        logger.info("after train and evaluate")
+        logging.info("after train and evaluate")
     if FLAGS.do_predict == True:
         best_dir = model_dir + '/best'
 
@@ -237,8 +237,8 @@ def main_class_hyper(hyper):
         test_y_name, test_preds_code=top_2_label_code(prob_list, true_label_code)
         acc2=accuracy_score( test_y_name, test_preds_code)
         acc1 = accuracy_score(true_label_list, predict_label_list)
-        logger.info(best_dir)
-        #logger.info(classification_report(true_label_list, predict_label_list))
+        logging.info(best_dir)
+        #logging.info(classification_report(true_label_list, predict_label_list))
     elapsed_time = (time.time() - start) / 60 / 60
     if acc2 > 0.7:
         cmd = "cd {} && mv {} model_{}".format(os.path.join(path, "textcnn_model"), "base_2_2", acc2)
@@ -254,18 +254,18 @@ def main_class_hyper(hyper):
     else:
         cmd = "cd {} && rm -rf {}".format(os.path.join(path, "textcnn_model"), "base_2_2")
     logging.info("==========")
-    logger.info(cmd)
+    logging.info(cmd)
     try:
         os.system(cmd)
     except:
         pass
-    logger.info("The total program takes {} hours =and top2 acc is {}".format(elapsed_time,acc2))
+    logging.info("The total program takes {} hours =and top2 acc is {}".format(elapsed_time,acc2))
     hyper["top1"]=acc1
     hyper["cmd"]=cmd
     hyper["top2"]=acc2
     with open(os.path.join(path, "textcnn_model","all_history"),"a",encoding="utf8") as f:
         f.writelines(json.dumps(hyper)+'\n')
-    logger.info("write to {}".format(json.dumps(hyper)))
+    logging.info("write to {}".format(json.dumps(hyper)))
     return acc2
 
 def main_class():
@@ -282,7 +282,7 @@ def main_class():
         FLAGS.shuffle_buffer_size = config["train_size"]
 
     train_steps = int(config["train_size"] / FLAGS.batch_size * FLAGS.num_epoches)
-    logger.info('The number of training steps is {}'.format(train_steps))
+    logging.info('The number of training steps is {}'.format(train_steps))
     session_config = tf.ConfigProto(log_device_placement=True)
     session_config.gpu_options.per_process_gpu_memory_fraction = 0.7
     session_config.gpu_options.allow_growth = True
@@ -338,10 +338,10 @@ def main_class():
         #         sort_reverse=True)
         eval_spec = tf.estimator.EvalSpec(input_fn=input_fn_for_eval, throttle_secs=1200)  # exporters=best_copier
         tf.estimator.train_and_evaluate(estimator, train_spec, eval_spec)
-        logger.info("Switch to the current directory and Run the command line:" \
+        logging.info("Switch to the current directory and Run the command line:" \
                     "tensorboard --logdir=%s" \
                     "\nThen open http://localhost:6006/ into your web browser" % timestamp)
-        logger.info("after train and evaluate")
+        logging.info("after train and evaluate")
     if FLAGS.do_predict == True:
         best_dir = model_dir + '/best'
         input_fn_for_test = lambda: input_fn(FLAGS.valid_file, config, 0)
@@ -349,8 +349,8 @@ def main_class():
         path_label = FLAGS.label_path
         history_dir=FLAGS.history_dir
         acc2=post_eval(path_label, model_dir, history_dir, output_results)
-        logger.info(best_dir)
-        logger.info("The total program takes =and top2 acc is {}".format( acc2))
+        logging.info(best_dir)
+        logging.info("The total program takes =and top2 acc is {}".format( acc2))
 
         if acc2>0.7:
             input_fn_for_test = lambda: input_fn(FLAGS.pred_file, config, 0)
