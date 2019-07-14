@@ -18,30 +18,34 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 import os
+
 currentUrl = os.path.dirname(__file__)
 most_parenturl = os.path.abspath(os.path.join(currentUrl, os.pardir))
 m_p, m_c = os.path.split(most_parenturl)
 while 'xunfei' not in m_c:
     m_p, m_c = os.path.split(m_p)
 import sys
+
 sys.path.append(os.path.join(m_p, m_c))
 import collections
 import csv
 import os
-from  bert import modeling
-from  bert import optimization
-from  bert import  tokenization
+from bert import modeling
+from bert import optimization
+from bert import tokenization
 import tensorflow as tf
 import logging
 import pandas as pd
 import pickle
 import json
-from sklearn.metrics import classification_report,accuracy_score
-from cnn_model.post_pred import post_pred,post_eval
+from sklearn.metrics import classification_report, accuracy_score
+from cnn_model.post_pred import post_pred, post_eval
+
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
 flags = tf.flags
 import os
+
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 FLAGS = flags.FLAGS
 
@@ -64,6 +68,11 @@ flags.DEFINE_string("task_name", 'SWAG', "The name of the task to train.")
 flags.DEFINE_string("vocab_file", os.path.join(bert_model, 'vocab.txt'),
                     "The vocabulary file that the BERT model was trained on.")
 
+flags.DEFINE_string(
+    "output_dir", output,
+    "The output directory where the model checkpoints will be written.")
+
+## Other parameters
 
 flags.DEFINE_string(
     "init_checkpoint", os.path.join(bert_model, 'bert_model.ckpt'),
@@ -145,10 +154,7 @@ flags.DEFINE_integer(
 flags.DEFINE_integer(
     "eval_steps", 100,
     "elavalue steps")
-flags.DEFINE_string(
-    "output_dir", data_path,
-    "The input data dir. Should contain the .tsv files (or other data files) "
-    "for the task.")
+
 
 class InputExample(object):
     """A single training/test example for simple sequence classification."""
@@ -176,7 +182,7 @@ def file_based_input_fn_builder(input_file, seq_length, is_training,
     """Creates an `input_fn` closure to be passed to TPUEstimator."""
 
     name_to_features_ = {
-        "guid":tf.FixedLenFeature([], tf.string),
+        "guid": tf.FixedLenFeature([], tf.string),
         "input_ids": tf.FixedLenFeature([seq_length], tf.int64),
         "input_mask": tf.FixedLenFeature([seq_length], tf.int64),
         "segment_ids": tf.FixedLenFeature([seq_length], tf.int64),
@@ -230,22 +236,9 @@ def file_based_input_fn_builder(input_file, seq_length, is_training,
 
     return input_fn
 
-def get_real_label(input_filename):
-
-    label_list = []
-    guid_list=[]
-    for serialized_example in tf.python_io.tf_record_iterator(input_filename):
-        # Get serialized example from file
-        example = tf.train.Example()
-        example.ParseFromString(serialized_example)
-        label = example.features.feature["label_ids"]
-        guid = example.features.feature["guid"]
-        label_list.append(label.int64_list.value[0])
-        guid_list.append(guid.string.value[0])
-    return label_list,guid_list
 
 def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
-                 labels, num_labels,use_one_hot_embeddings):
+                 labels, num_labels, use_one_hot_embeddings):
     """Creates a classification model."""
     model = modeling.BertModel(
         config=bert_config,
@@ -266,7 +259,7 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
     # If you want to use the token-level output, use model.get_sequence_output()
     # instead.
     output_layer = model.get_pooled_output()
-    #output_layer=tf.layers.dense(output_layer1, 100, activation=modeling.gelu,name='dense_layer')
+    # output_layer=tf.layers.dense(output_layer1, 100, activation=modeling.gelu,name='dense_layer')
 
     hidden_size = output_layer.shape[-1].value
     output_weights = tf.get_variable(
@@ -310,7 +303,7 @@ def model_fn_builder(bert_config, num_labels, init_checkpoint, learning_rate,
         input_mask = features["input_mask"]
         segment_ids = features["segment_ids"]
         label_ids = features["label_ids"]
-        guid=features["guid"]
+        guid = features["guid"]
         is_training = (mode == tf.estimator.ModeKeys.TRAIN)
 
         (total_loss, per_example_loss, logits, probabilities) = create_model(
@@ -379,15 +372,14 @@ def model_fn_builder(bert_config, num_labels, init_checkpoint, learning_rate,
             predictions = {
                 'probabilities': probabilities,
                 "guid": guid,
-                'true_label_ids':label_ids,
-                'predict_label_ids':predict_label_ids
+                'true_label_ids': label_ids,
+                'predict_label_ids': predict_label_ids
             }
             output_spec = tf.contrib.tpu.TPUEstimatorSpec(
                 mode=mode, predictions=predictions, scaffold_fn=scaffold_fn)
         return output_spec
 
     return model_fn
-
 
 
 # def main_hyper(para):
@@ -655,7 +647,7 @@ def main(_):
 
         # This tells the estimator to run through the entire set.
         eval_steps = FLAGS.eval_steps
-        if eval_steps==0:
+        if eval_steps == 0:
             eval_steps = None
         eval_steps = None
         # However, if running eval on the TPU, you will need to specify the
@@ -664,8 +656,6 @@ def main(_):
             # Eval will be slightly WRONG on the TPU because it will truncate
             # the last batch.1
             eval_steps = int(num_eval_examples / FLAGS.eval_batch_size)
-
-
 
         eval_drop_remainder = True if FLAGS.use_tpu else False
         eval_input_fn = file_based_input_fn_builder(
@@ -685,59 +675,33 @@ def main(_):
 
     if FLAGS.do_eval_pred:
 
-        eval_meta = os.path.join(FLAGS.data_dir, "eval.json")
+        predict_drop_remainder = True if FLAGS.use_tpu else False
+        predict_file = os.path.join(FLAGS.data_dir, "eval.*tfrecord")
+        predict_input_fn = file_based_input_fn_builder(
+            input_file=predict_file,
+            seq_length=FLAGS.max_seq_length,
+            is_training=False,
+            drop_remainder=predict_drop_remainder)
 
-        with open(eval_meta, 'r') as f:
-            d = json.load(f)
-            num_eval_examples = d['num_eval_examples']
+        output_results = estimator.predict(input_fn=predict_input_fn)
+        model_dir = FLAGS.model_dir
+        path_label = FLAGS.label_path
+        history_dir = FLAGS.history_dir
+        acc2 = post_eval(path_label, model_dir, history_dir, output_results)
 
-        tf.logging.info("***** Runnin12g evaluation  and predtion *****")
-        tf.logging.info("  Num examples = %d", num_eval_examples)
-        tf.logging.info("  Batch size = %d", FLAGS.eval_batch_size)
-        import re
-        import numpy as np
-        #1
+        logging.info("The total program takes =and top2 acc is {}".format(acc2))
 
-        type_=["eval.*tfrecord","train.*tfrecord","pred.*tfrecord"]
-        import time
-        for ty in type_:
-            t1=time.time()
-            all_real_label = []
-            all_pred_labal = []
-            for (root,dr,files) in os.walk(FLAGS.data_dir):
-                for predict_file in files:
-                    if re.findall(ty,predict_file):
-                        predict_drop_remainder = True if FLAGS.use_tpu else False
-                        predict_file=os.path.join(root,predict_file)
-                        predict_input_fn = file_based_input_fn_builder(
-                            input_file=predict_file,
-                            seq_length=FLAGS.max_seq_length,
-                            is_training=False,
-                            drop_remainder=predict_drop_remainder)
-
-                        pre_result = estimator.predict(input_fn=predict_input_fn)
-                        real_label=get_real_label(predict_file)
-                        pred_label=[]
-                        for rea,pred in zip(real_label,pre_result):
-                            #print(rea,pred)
-                            pr_1=pred.argsort()[-2:][::-1][0]
-                            for pr in list(pred.argsort()[-2:][::-1]):
-                                if pr==rea:
-                                    pr_1=rea
-
-                            pred_label.append(pr_1)
-
-                        all_real_label+=real_label
-                        all_pred_labal+=pred_label
-            t2 = time.time()
-            #12
-            tf.logging.info('{} classy reprts follow '
-                            'spend {},{}sample/second  '.format(ty,t2-t1,len(all_real_label)/(t2-t1)))
-            tf.logging.info('\n {}'.format(classification_report(all_real_label, all_pred_labal)))
-
-            output_eval_file = os.path.join(FLAGS.output_dir, "{}_results.txt".format(ty))
-            with tf.gfile.GFile(output_eval_file, "w") as writer:
-                writer.write('\n {}'.format(classification_report(all_real_label, all_pred_labal)))
+        if acc2 > 0.7:
+            predict_file = os.path.join(FLAGS.data_dir, "pred.*tfrecord")
+            predict_input_fn = file_based_input_fn_builder(
+                input_file=predict_file,
+                seq_length=FLAGS.max_seq_length,
+                is_training=False,
+                drop_remainder=predict_drop_remainder)
+            output_results = estimator.predict(predict_input_fn)
+            path_label = FLAGS.label_path
+            history_dir = FLAGS.history_dir
+            post_pred(path_label, model_dir, history_dir, output_results, acc2)
 
     if FLAGS.do_predict:
         pred_meta = os.path.join(FLAGS.data_dir, "predict.json")
