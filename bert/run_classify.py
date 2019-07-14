@@ -43,8 +43,6 @@ logging.basicConfig(level=logging.INFO,
 flags = tf.flags
 
 FLAGS = flags.FLAGS
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
-tf.logging.set_verbosity(logging.ERROR) # 只显示warning 和 error # 只显示warning 和 error
 
 bert_model = '/home/tom/chinese/'
 data_path = '/home/tom/swagaf/data'
@@ -65,18 +63,6 @@ flags.DEFINE_string("task_name", 'SWAG', "The name of the task to train.")
 flags.DEFINE_string("vocab_file", os.path.join(bert_model, 'vocab.txt'),
                     "The vocabulary file that the BERT model was trained on.")
 
-flags.DEFINE_string(
-    "output_dir", output,
-    "The output directory where the model checkpoints will be written.")
-
-flags.DEFINE_string(
-    "history_dir", output,
-    "The output directory where the model checkpoints will be written.")
-
-flags.DEFINE_string(
-    "label_path", os.path.join("/data/tanggp/",'textcnn_label_sort'),
-    "The output directory where the model checkpoints will be written.")
-## Other parameters
 
 flags.DEFINE_string(
     "init_checkpoint", os.path.join(bert_model, 'bert_model.ckpt'),
