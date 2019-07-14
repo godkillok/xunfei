@@ -20,6 +20,6 @@ python3 run_classify.py \
   --learning_rate=1e-5 \
   --num_train_epochs=4.0 \
   --eval_steps=0\
-  --output_dir=$OUTPUT
-  --history_dir=$HISTORY
+  --output_dir=$OUTPUT\
+  --history_dir=$HISTORY\
   --label_path=$LABEL
