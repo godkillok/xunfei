@@ -191,14 +191,14 @@ class InputExample(object):
 def file_based_input_fn_builder(input_file, seq_length, is_training,
                                 drop_remainder, batch_size,shuffle=False, multi_choice=1):
     """Creates an `input_fn` closure to be passed to TPUEstimator."""
-
-    name_to_features = {
-        "guid": tf.FixedLenFeature([], tf.string),
+    name_to_features_ = {
+        "guid":tf.FixedLenFeature([], tf.string),
         "input_ids": tf.FixedLenFeature([seq_length], tf.int64),
         "input_mask": tf.FixedLenFeature([seq_length], tf.int64),
         "segment_ids": tf.FixedLenFeature([seq_length], tf.int64),
         "label_ids": tf.FixedLenFeature([], tf.int64)
     }
+
     if multi_choice > 1:
         name_to_features = {"label_ids": tf.FixedLenFeature([], tf.int64)}
         for i in range(multi_choice):
