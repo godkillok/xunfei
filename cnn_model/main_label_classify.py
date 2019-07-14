@@ -210,59 +210,22 @@ def main_class_hyper(hyper):
         logging.info("after train and evaluate")
     if FLAGS.do_predict == True:
         best_dir = model_dir + '/best'
-
-        path_label = os.path.join(FLAGS.data_dir, )
-        with open(path_label, 'r', encoding='utf8') as f:
-            lines = f.readlines()
-            id2label = {i: l.strip().split("\x01\t")[0] for i, l in enumerate(lines)}
-
-        # predict
-        predict_label_list = []
-        true_label_list = []
-        prob_list=[]
-        true_label_code=[]
         input_fn_for_test = lambda: input_fn(FLAGS.valid_file, config, 0)
         output_results = estimator.predict(input_fn_for_test, checkpoint_path=tf.train.latest_checkpoint(best_dir))
-
-        with open(FLAGS.result_file, 'w') as writer:
-            for prediction in output_results:
-                predict_label_id = prediction["predict_label_ids"]
-                true_label_id = prediction["true_label_ids"]
-                prob_list.append(prediction["probabilities"])
-                predict_label = id2label[predict_label_id]
-                true_label = id2label[true_label_id]
-                predict_label_list.append(predict_label)
-                true_label_code.append(true_label_id)
-                true_label_list.append(true_label)
-                writer.write(predict_label + '\t' + true_label + "\n")
-        test_y_name, test_preds_code=top_2_label_code(prob_list, true_label_code)
-        acc2=accuracy_score( test_y_name, test_preds_code)
-        acc1 = accuracy_score(true_label_list, predict_label_list)
+        path_label = FLAGS.label_path
+        history_dir=FLAGS.history_dir
+        acc2, acc1=post_eval(path_label, model_dir, history_dir, output_results)
         logging.info(best_dir)
-        #logging.info(classification_report(true_label_list, predict_label_list))
-    elapsed_time = (time.time() - start) / 60 / 60
-    if acc2 > 0.7:
-        cmd = "cd {} && mv {} model_{}".format(os.path.join(path, "textcnn_model"), "base_2_2", acc2)
-        output_eval_file = os.path.join(FLAGS.history_dir, "cnn_{}_results.txt".format(acc2))
-        # try:
-        #     os.makedirs(FLAGS.history_dir)
-        # except:
-        #     pass
-        # with tf.gfile.GFile(output_eval_file, "a") as writer:
-        #     for guid, prob in zip(all_guid, all_prob):
-        #         writer.write('{},{} \n'.format(guid, ','.join([str(pr) for pr in prob])))
+        logging.info("The total program takes =and top2 acc is {}".format( acc2))
 
-    else:
-        cmd = "cd {} && rm -rf {}".format(os.path.join(path, "textcnn_model"), "base_2_2")
-    logging.info("==========")
-    logging.info(cmd)
-    try:
-        os.system(cmd)
-    except:
-        pass
-    logging.info("The total program takes {} hours =and top2 acc is {}".format(elapsed_time,acc2))
+        if acc2>0.3:
+            input_fn_for_test = lambda: input_fn(FLAGS.pred_file, config, 0)
+            output_results = estimator.predict(input_fn_for_test, checkpoint_path=tf.train.latest_checkpoint(best_dir))
+            path_label = FLAGS.label_path
+            history_dir=FLAGS.history_dir
+            post_pred(path_label, model_dir, history_dir, output_results,acc2)
+            logging.info("===********* done  pred top2 {}".format(acc2))
     hyper["top1"]=acc1
-    hyper["cmd"]=cmd
     hyper["top2"]=acc2
     with open(os.path.join(path, "textcnn_model","all_history"),"a",encoding="utf8") as f:
         f.writelines(json.dumps(hyper)+'\n')
@@ -349,7 +312,7 @@ def main_class():
         output_results = estimator.predict(input_fn_for_test, checkpoint_path=tf.train.latest_checkpoint(best_dir))
         path_label = FLAGS.label_path
         history_dir=FLAGS.history_dir
-        acc2=post_eval(path_label, model_dir, history_dir, output_results)
+        acc2, acc1=post_eval(path_label, model_dir, history_dir, output_results)
         logging.info(best_dir)
         logging.info("The total program takes =and top2 acc is {}".format( acc2))
 

@@ -54,7 +54,7 @@ def post_eval(path_label,model_dir,history_dir,output_results):
         logging.info("==========")
         logging.info(cmd)
         #os.system(cmd)
-    return acc2
+    return acc2,acc1
 
 def post_pred(path_label,model_dir,history_dir,output_results,acc2):
     with open(path_label, 'r', encoding='utf8') as f:
