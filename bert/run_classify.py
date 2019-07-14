@@ -38,6 +38,8 @@ import pickle
 import json
 from sklearn.metrics import classification_report,accuracy_score
 from cnn_model.post_pred import post_pred,post_eval
+from tensorflow.python.estimator.run_config import RunConfig
+from tensorflow.python.distribute.cross_device_ops import AllReduceCrossDeviceOps
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
 flags = tf.flags
@@ -684,15 +686,31 @@ def main(_):
     session_config = tf.ConfigProto(log_device_placement=True)
     session_config.gpu_options.per_process_gpu_memory_fraction = 0.7
     session_config.gpu_options.allow_growth = True
-    run_config = tf.contrib.tpu.RunConfig(
-        cluster=tpu_cluster_resolver,
-        master=FLAGS.master,
+
+    tf.logging.info("Use normal RunConfig")
+    # https://github.com/tensorflow/tensorflow/issues/21470#issuecomment-422506263
+    dist_strategy = tf.contrib.distribute.MirroredStrategy(
+        num_gpus=FLAGS.num_gpu_cores,
+        cross_device_ops=AllReduceCrossDeviceOps('nccl', num_packs=FLAGS.num_gpu_cores),
+        # cross_device_ops=AllReduceCrossDeviceOps('hierarchical_copy'),
+    )
+    log_every_n_steps = 8
+    run_config = RunConfig(
+        train_distribute=dist_strategy,
+        eval_distribute=dist_strategy,
+        log_step_count_steps=log_every_n_steps,
         model_dir=FLAGS.output_dir,
-        save_checkpoints_steps=FLAGS.save_checkpoints_steps,
-        tpu_config=tf.contrib.tpu.TPUConfig(
-            iterations_per_loop=FLAGS.iterations_per_loop,
-            num_shards=FLAGS.num_tpu_cores,
-            per_host_input_for_training=is_per_host))
+        save_checkpoints_steps=FLAGS.save_checkpoints_steps)
+
+    # run_config = tf.contrib.tpu.RunConfig(
+    #     cluster=tpu_cluster_resolver,
+    #     master=FLAGS.master,
+    #     model_dir=FLAGS.output_dir,
+    #     save_checkpoints_steps=FLAGS.save_checkpoints_steps,
+    #     tpu_config=tf.contrib.tpu.TPUConfig(
+    #         iterations_per_loop=FLAGS.iterations_per_loop,
+    #         num_shards=FLAGS.num_tpu_cores,
+    #         per_host_input_for_training=is_per_host))
 
     num_train_steps = None
     num_warmup_steps = None
