@@ -519,7 +519,8 @@ def main_hyper(para):
             d = json.load(f)
         num_train_example = d['num_train_example']
         num_train_steps = d['num_train_steps']
-        num_warmup_steps =para['num_warmup_steps']
+        #para['num_warmup_steps']
+        num_warmup_steps =None
 
     model_fn = model_fn_builder(
         bert_config=bert_config,
@@ -692,7 +693,8 @@ def main(_):
             d = json.load(f)
         num_train_example = d['num_train_example']
         num_train_steps = d['num_train_steps']
-        num_warmup_steps =para['num_warmup_steps']
+       # num_warmup_steps =para['num_warmup_steps']
+        num_train_example = None
 
     model_fn = model_fn_builder(
         bert_config=bert_config,
