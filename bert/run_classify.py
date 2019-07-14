@@ -693,9 +693,10 @@ def main(_):
 
     tf.logging.info("Use normal RunConfig")
     # https://github.com/tensorflow/tensorflow/issues/21470#issuecomment-422506263
+    num_gpu_cores=4
     dist_strategy = tf.contrib.distribute.MirroredStrategy(
-        num_gpus=FLAGS.num_gpu_cores,
-        cross_device_ops=AllReduceCrossDeviceOps('nccl', num_packs=FLAGS.num_gpu_cores),
+        num_gpus=num_gpu_cores,
+        cross_device_ops=AllReduceCrossDeviceOps('nccl', num_packs=num_gpu_cores),
         # cross_device_ops=AllReduceCrossDeviceOps('hierarchical_copy'),
     )
     log_every_n_steps = 8
