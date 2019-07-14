@@ -684,10 +684,10 @@ def main(_):
             drop_remainder=predict_drop_remainder)
 
         output_results = estimator.predict(input_fn=predict_input_fn)
-        model_dir = FLAGS.model_dir
+        model_dir = FLAGS.output_dir
         path_label = FLAGS.label_path
         history_dir = FLAGS.history_dir
-        acc2 = post_eval(path_label, model_dir, history_dir, output_results)
+        acc2, acc1 = post_eval(path_label, model_dir, history_dir, output_results)
 
         logging.info("The total program takes =and top2 acc is {}".format(acc2))
 
