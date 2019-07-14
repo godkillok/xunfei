@@ -38,6 +38,8 @@ from tensorflow.python.estimator.run_config import RunConfig
 from tensorflow.python.estimator.estimator import Estimator
 from sklearn.metrics import classification_report,accuracy_score
 from cnn_model.post_pred import post_pred,post_eval
+import json
+import logging
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
 flags = tf.flags
