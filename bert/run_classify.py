@@ -43,7 +43,7 @@ logging.basicConfig(level=logging.INFO,
 flags = tf.flags
 
 FLAGS = flags.FLAGS
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 tf.logging.set_verbosity(logging.ERROR) # 只显示warning 和 error # 只显示warning 和 error
 
 bert_model = '/home/tom/chinese/'
