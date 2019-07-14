@@ -251,7 +251,7 @@ def get_real_label(input_filename):
         label = example.features.feature["label_ids"]
         guid = example.features.feature["guid"]
         label_list.append(label.int64_list.value[0])
-        guid_list.append(guid.string_list.value[0])
+        guid_list.append(guid.string.value[0])
     return label_list,guid_list
 
 def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
