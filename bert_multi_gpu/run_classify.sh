@@ -1,6 +1,6 @@
 export BERT_BASE_DIR=/data/tanggp/bert/multi_cased_L-12_H-768_A-12
 export XNLI_DIR=/data/tanggp/xun_class/bert_multi_tfrecord/
-export OUTPUT=/data/tanggp/xun_class/bert_model_mul/
+export OUTPUT=/data/tanggp/xun_class/bert_model_mul2/
 export HISTORY=/data/tanggp/xun_class/aichallenge/bert_multi_history
 export LABEL=/data/tanggp/xun_class/aichallenge/textcnn_label_sort
 #123
