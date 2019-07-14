@@ -112,7 +112,7 @@ flags.DEFINE_integer("train_batch_size", 16, "Total batch size for training.")
 flags.DEFINE_float("drop_rate", 0.9, "Total batch size for training.")
 flags.DEFINE_integer("eval_batch_size", 8, "Total batch size for eval.")
 
-flags.DEFINE_integer("predict_batch_size", 8, "Total batch size for predict.")
+flags.DEFINE_integer("predict_batch_size", 16, "Total batch size for predict.")
 
 flags.DEFINE_float("learning_rate", 5e-5, "The initial learning rate for Adam.")
 
@@ -389,176 +389,6 @@ def model_fn_builder(bert_config, num_labels, init_checkpoint, learning_rate,
     return model_fn
 
 
-# def main_hyper(para):
-#     tf.logging.set_verbosity(tf.logging.ERROR)
-#
-#     if not FLAGS.do_train and not FLAGS.do_eval and not FLAGS.do_predict:
-#         raise ValueError(
-#             "At least one of `do_train`, `do_eval` or `do_predict' must be True.")
-#
-#     bert_config = modeling.BertConfig.from_json_file(FLAGS.bert_config_file)
-#
-#
-#     tf.gfile.MakeDirs(FLAGS.output_dir)
-#
-#
-#     tpu_cluster_resolver = None
-#     if FLAGS.use_tpu and FLAGS.tpu_name:
-#         tpu_cluster_resolver = tf.contrib.cluster_resolver.TPUClusterResolver(
-#             FLAGS.tpu_name, zone=FLAGS.tpu_zone, project=FLAGS.gcp_project)
-#
-#     is_per_host = tf.contrib.tpu.InputPipelineConfig.PER_HOST_V2
-#     session_config = tf.ConfigProto(log_device_placement=True)
-#     session_config.gpu_options.per_process_gpu_memory_fraction = 0.7
-#     session_config.gpu_options.allow_growth = True
-#     run_config = tf.contrib.tpu.RunConfig(
-#         cluster=tpu_cluster_resolver,
-#         master=FLAGS.master,
-#         model_dir=FLAGS.output_dir,
-#         save_checkpoints_steps=FLAGS.save_checkpoints_steps,
-#         tpu_config=tf.contrib.tpu.TPUConfig(
-#             iterations_per_loop=FLAGS.iterations_per_loop,
-#             num_shards=FLAGS.num_tpu_cores,
-#             per_host_input_for_training=is_per_host))
-#
-#     num_train_steps = None
-#     num_warmup_steps = None
-#     num_train_example = None
-#     if FLAGS.do_train:
-#         train_meta = os.path.join(FLAGS.data_dir, "train.json")
-#         with open(train_meta, 'r') as f:
-#             d = json.load(f)
-#         num_train_example = d['num_train_example']
-#         # num_train_steps = d['num_train_steps']
-#         # #para['num_warmup_steps']
-#         # num_warmup_steps =None
-#         num_train_steps = int(
-#             num_train_example / FLAGS.train_batch_size * FLAGS.num_train_epochs)
-#         num_warmup_steps = int(num_train_steps * FLAGS.warmup_proportion)
-#
-#     model_fn = model_fn_builder(
-#         bert_config=bert_config,
-#         num_labels=FLAGS.num_lables,
-#         init_checkpoint=FLAGS.init_checkpoint,
-#         learning_rate=FLAGS.learning_rate,
-#         num_train_steps=num_train_steps,
-#         num_warmup_steps=num_warmup_steps,
-#         use_tpu=FLAGS.use_tpu,
-#         use_one_hot_embeddings=FLAGS.use_tpu)
-#
-#     # If TPU is not available, this will fall back to normal Estimator on CPU
-#     # or GPU.
-#     estimator = tf.contrib.tpu.TPUEstimator(
-#         use_tpu=FLAGS.use_tpu,
-#         model_fn=model_fn,
-#         config=run_config,
-#         train_batch_size=FLAGS.train_batch_size,
-#         eval_batch_size=FLAGS.eval_batch_size,
-#         predict_batch_size=FLAGS.predict_batch_size)
-#
-#     if FLAGS.do_train:
-#         train_file = os.path.join(FLAGS.data_dir, "train*.tfrecord")
-#
-#         train_input_fn = file_based_input_fn_builder(
-#             input_file=train_file,
-#             seq_length=FLAGS.max_seq_length,
-#             is_training=True,
-#             drop_remainder=True, shuffle=True)
-#         estimator.train(input_fn=train_input_fn, max_steps=num_train_steps)
-#
-#     if FLAGS.do_eval:
-#         eval_file = os.path.join(FLAGS.data_dir, "eval*.tfrecord")
-#         eval_meta = os.path.join(FLAGS.data_dir, "eval.json")
-#
-#         with open(eval_meta, 'r') as f:
-#             d = json.load(f)
-#             num_eval_examples = d['num_eval_examples']
-#
-#         tf.logging.info("***** Running evaluation *****")
-#         tf.logging.info("  Num examples = %d", num_eval_examples)
-#         tf.logging.info("  Batch size = %d", FLAGS.eval_batch_size)
-#
-#         # This tells the estimator to run through the entire set.
-#         eval_steps = FLAGS.eval_steps
-#         if eval_steps==0:
-#             eval_steps = None
-#         eval_steps = None
-#         # However, if running eval on the TPU, you will need to specify the
-#         # number of steps.1
-#         if FLAGS.use_tpu:
-#             # Eval will be slightly WRONG on the TPU because it will truncate
-#             # the last batch.1
-#             eval_steps = int(num_eval_examples / FLAGS.eval_batch_size)
-#
-#
-#
-#         eval_drop_remainder = True if FLAGS.use_tpu else False
-#         eval_input_fn = file_based_input_fn_builder(
-#             input_file=eval_file,
-#             seq_length=FLAGS.max_seq_length,
-#             is_training=False,
-#             drop_remainder=eval_drop_remainder)
-#
-#         result = estimator.evaluate(input_fn=eval_input_fn, steps=eval_steps)
-#         logging.info('{}'.format(result))
-#         output_eval_file = os.path.join(FLAGS.output_dir, "eval_results.txt")
-#         with tf.gfile.GFile(output_eval_file, "w") as writer:
-#             tf.logging.info("***** Eval results *****")
-#             for key in sorted(result.keys()):
-#                 tf.logging.info("  %s = %s", key, str(result[key]))
-#                 writer.write("%s = %s\n" % (key, str(result[key])))
-#
-#     if FLAGS.do_eval_pred:
-#
-#
-#         predict_drop_remainder = True if FLAGS.use_tpu else False
-#         predict_file=os.path.join(FLAGS.data_dir,"eval.*tfrecord")
-#         predict_input_fn = file_based_input_fn_builder(
-#                         input_file=predict_file,
-#                         seq_length=FLAGS.max_seq_length,
-#                         is_training=False,
-#                         drop_remainder=predict_drop_remainder)
-#
-#         output_results = estimator.predict(input_fn=predict_input_fn)
-#         model_dir=FLAGS.model_dir
-#         path_label = FLAGS.label_path
-#         history_dir = FLAGS.history_dir
-#         acc2 = post_eval(path_label, model_dir, history_dir, output_results)
-#
-#         logging.info("The total program takes =and top2 acc is {}".format(acc2))
-#
-#         if acc2 > 0.7:
-#             predict_file = os.path.join(FLAGS.data_dir, "pred.*tfrecord")
-#             predict_input_fn = file_based_input_fn_builder(
-#                 input_file=predict_file,
-#                 seq_length=FLAGS.max_seq_length,
-#                 is_training=False,
-#                 drop_remainder=predict_drop_remainder)
-#             output_results = estimator.predict(predict_input_fn)
-#             path_label = FLAGS.label_path
-#             history_dir = FLAGS.history_dir
-#             post_pred(path_label, model_dir, history_dir, output_results, acc2)
-#
-#
-#     if FLAGS.do_predict:
-#         predict_file = os.path.join(FLAGS.data_dir, "predict*.tfrecord")
-#
-#         predict_drop_remainder = True if FLAGS.use_tpu else False
-#         predict_input_fn = file_based_input_fn_builder(
-#             input_file=predict_file,
-#             seq_length=FLAGS.max_seq_length,
-#             is_training=False,
-#             drop_remainder=predict_drop_remainder)
-#
-#         result = estimator.predict(input_fn=predict_input_fn)
-#
-#         output_predict_file = os.path.join(FLAGS.output_dir, "test_results.tsv")
-#         with tf.gfile.GFile(output_predict_file, "w") as writer:
-#             tf.logging.info("***** Predict results *****")
-#             for prediction in result:
-#                 output_line = ",".join(
-#                     str(class_probability) for class_probability in prediction["probabilities"]) + "\n"
-#                 writer.write(prediction["guid"]+','+output_line)
 
 def main(_):
     tf.logging.set_verbosity(tf.logging.INFO)
@@ -742,7 +572,7 @@ def main(_):
                 output_line = "\t".join(
                     str(class_probability) for class_probability in prediction) + "\n"
                 writer.write(output_line)
-
+e
 
 if __name__ == "__main__":
     flags.mark_flag_as_required("data_dir")
