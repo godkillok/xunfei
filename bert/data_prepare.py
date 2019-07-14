@@ -355,7 +355,10 @@ def file_based_convert_examples_to_features(
         examples, label_list, max_seq_length, tokenizer,output_file):
     """Convert a set of `InputExampl1e`s to a TFRecord file.1"""
     path, file_name = os.path.split(output_file)
-
+    try:
+        os.makedirs(path)
+    except:
+        pass
     file_name0 = os.path.join(path, file_name + '_multi_0.tfrecord')
     writer = tf.python_io.TFRecordWriter(file_name0)
 
