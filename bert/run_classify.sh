@@ -18,7 +18,7 @@ python3 run_classify.py \
   --train_batch_size=16 \
   --num_lables=125 \
   --learning_rate=1e-5 \
-  --num_train_epochs=10.0 \
+  --num_train_epochs=20.0 \
   --eval_steps=0\
   --output_dir=$OUTPUT\
   --history_dir=$HISTORY\
