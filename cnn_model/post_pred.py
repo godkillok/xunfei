@@ -87,7 +87,7 @@ def post_pred(path_label,model_dir,history_dir,output_results,acc2):
         pass
 
     logging.info(model_dir)
-    cmd = "cd {} && mv {} model_{}".format(root, folder_name, acc2)
+    cmd = "cd {} && mv {} {}_{}".format(root, folder_name,folder_name, acc2)
     logging.info("==========")
     logging.info(cmd)
     os.system(cmd)
