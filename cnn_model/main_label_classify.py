@@ -49,7 +49,7 @@ flags.DEFINE_integer("steps_check", 500, "steps per checkpoint")
 flags.DEFINE_string("history_dir", os.path.join(path,"cnn_result"), "train file pattern")
 flags.DEFINE_string("train_file", os.path.join(path,"author_text_cnn_apptype_train_26320.tfrecords"), "train file pattern")
 flags.DEFINE_string("valid_file", os.path.join(path,"author_text_cnn_apptype_train_6152.tfrecords"), "train file pattern")
-flags.DEFINE_string("pred_file", os.path.join(path,"author_text_cnn_apptype_train_6152.tfrecords"), "evalue file pattern")
+flags.DEFINE_string("pred_file", os.path.join(path,"author_text_cnn_app_desc_*.tfrecords"), "evalue file pattern")
 # flags.DEFINE_string("emb_file", "/data/tanggp/xun_class/merge_sgns_bigram_char300.txt-1", "Path for pre_trained embedding")
 flags.DEFINE_string("emb_file", "/data/tanggp/xun_class/cc.zh.300.bin", "Path for pre_trained embedding")
 
