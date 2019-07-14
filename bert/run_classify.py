@@ -41,7 +41,8 @@ from cnn_model.post_pred import post_pred,post_eval
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
 flags = tf.flags
-
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 FLAGS = flags.FLAGS
 
 bert_model = '/home/tom/chinese/'
