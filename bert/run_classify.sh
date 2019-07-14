@@ -15,7 +15,7 @@ python3 run_classify.py \
   --bert_config_file=$BERT_BASE_DIR/bert_config.json \
   --init_checkpoint=$BERT_BASE_DIR/bert_model.ckpt \
   --max_seq_length=300 \
-  --train_batch_size=32 \
+  --train_batch_size=16 \
   --num_lables=125 \
   --learning_rate=1e-5 \
   --num_train_epochs=4.0 \
