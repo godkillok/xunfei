@@ -21,6 +21,8 @@ def top_2_label_code(test_preds_prob,test_y):
 
 
 def post_eval(path_label,model_dir,history_dir,output_results):
+    if model_dir[-1]=='/':
+        model_dir=model_dir[:-1]
     with open(path_label, 'r', encoding='utf8') as f:
         lines = f.readlines()
         id2label = {i: l.strip().split("\x01\t")[0] for i, l in enumerate(lines)}
@@ -57,6 +59,8 @@ def post_eval(path_label,model_dir,history_dir,output_results):
     return acc2,acc1
 
 def post_pred(path_label,model_dir,history_dir,output_results,acc2):
+    if model_dir[-1]=='/':
+        model_dir=model_dir[:-1]
     with open(path_label, 'r', encoding='utf8') as f:
         lines = f.readlines()
         id2label = {i: l.strip().split("\x01\t")[0] for i, l in enumerate(lines)}
