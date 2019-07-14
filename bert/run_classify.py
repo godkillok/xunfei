@@ -683,7 +683,7 @@ def main(_):
     if FLAGS.do_eval_pred:
 
         predict_drop_remainder = True if FLAGS.use_tpu else False
-        predict_file = os.path.join(FLAGS.data_dir, "eval.*tfrecord")
+        predict_file = os.path.join(FLAGS.data_dir, "eval*.tfrecord")
         predict_input_fn = file_based_input_fn_builder(
             input_file=predict_file,
             seq_length=FLAGS.max_seq_length,
@@ -699,7 +699,7 @@ def main(_):
         logging.info("The total program takes =and top2 acc is {}".format(acc2))
 
         if acc2 > 0.7:
-            predict_file = os.path.join(FLAGS.data_dir, "pred.*tfrecord")
+            predict_file = os.path.join(FLAGS.data_dir, "pred*.tfrecord")
             predict_input_fn = file_based_input_fn_builder(
                 input_file=predict_file,
                 seq_length=FLAGS.max_seq_length,
