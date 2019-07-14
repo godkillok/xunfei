@@ -20,7 +20,8 @@ import time
 import logging
 import os
 import sys
-
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
 currentUrl = os.path.dirname(__file__)
 most_parenturl = os.path.abspath(os.path.join(currentUrl, os.pardir))
 m_p, m_c = os.path.split(most_parenturl)
