@@ -144,7 +144,10 @@ flags.DEFINE_integer(
 flags.DEFINE_integer(
     "eval_steps", 100,
     "elavalue steps")
-
+flags.DEFINE_string(
+    "output_dir", data_path,
+    "The input data dir. Should contain the .tsv files (or other data files) "
+    "for the task.")
 
 class InputExample(object):
     """A single training/test example for simple sequence classification."""
