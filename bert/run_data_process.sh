@@ -22,5 +22,4 @@ python3 data_prepare.py \
   --output_dir=$OUTPUT\
   --num_lables=2\
   --tfrecord=$Tfrecord\
-    --label_path=$LABEL\
-    --labels_first_path=$LABEL_F
+    --label_path=$LABEL
