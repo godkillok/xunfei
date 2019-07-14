@@ -81,7 +81,7 @@ assert 0 <= FLAGS.dropout_prob < 1, "dropout_prob rate between 0 and 1"
 assert FLAGS.learning_rate > 0, "learning rate must larger than zero"
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # 只显示warning 和 error
-tf.logging.set_verbosity(logging.ERROR)
+tf.logging.set_verbosity(logging.INFO)
 
 
 timestamp = time.strftime("%m_%d_%H", time.localtime())
@@ -371,7 +371,7 @@ def main_class():
 
 
 
-    return acc2
+
 
 
 if __name__ == '__main__':
