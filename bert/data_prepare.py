@@ -53,7 +53,10 @@ flags.DEFINE_string(
     "bert_config_file", '/data/tanggp',
     "The config json file corresponding to the pre-trained BERT model. "
     "This specifies the model architecture.")
-
+flags.DEFINE_string(
+    "labels_first_path", '/data/tanggp',
+    "The config json file corresponding to the pre-trained BERT model. "
+    "This specifies the model architecture.")
 flags.DEFINE_string("task_name", None, "The name of the task to train.")
 
 flags.DEFINE_string("vocab_file", None,
@@ -144,7 +147,7 @@ flags.DEFINE_integer(
 class InputExample(object):
     """A single training/test example for simple sequence classification."""
 
-    def __init__(self, guid, text_a, text_b=None, label=None):
+    def __init__(self, guid, text_a, text_b=None, label=None,label_first=None):
         """Constructs a InputExample.
 
         Args:
@@ -160,16 +163,18 @@ class InputExample(object):
         self.text_a = text_a
         self.text_b = text_b
         self.label = label
+        self.label_first = label_first
 
 class InputFeatures(object):
     """A single set of features of data."""
 
-    def __init__(self, input_ids, input_mask, segment_ids, label_id,guid=''):
+    def __init__(self, input_ids, input_mask, segment_ids, label_id,label_first,guid=''):
         self.guid=guid
         self.input_ids = input_ids
         self.input_mask = input_mask
         self.segment_ids = segment_ids
         self.label_id = label_id
+        self.label_first = label_first
 
 
 class DataProcessor(object):
@@ -240,6 +245,17 @@ class CategoryProcessor(DataProcessor):
                 labels.append(lid)
         return labels
 
+    def get_labels_first(self, label_path):
+        """See base class."""
+        labels = []
+        with open(label_path, "r", encoding="utf8") as f:
+            lines = f.readlines()
+            for li in lines:
+                li = li.strip()
+                lid, cou = li.split("\x01\t")
+                labels.append(lid)
+        return labels
+
     def _create_examples(self, lines, set_type):
         """Creates examples for the training and dev sets."""
         examples = []
@@ -251,22 +267,29 @@ class CategoryProcessor(DataProcessor):
             if set_type == "test":
                 text_a = tokenization.convert_to_unicode(text)
                 label ="142701"
+                label_first ="1427"
             else:
                 label = li["label"]
+                label_first = li[:4]
                 text_a = tokenization.convert_to_unicode(text)
                 label = tokenization.convert_to_unicode(label)
+                label_first= tokenization.convert_to_unicode(label_first)
             examples.append(
-                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label,label_first=label_first))
         return examples
 
 
 
-def convert_single_example(ex_index, example, label_list, max_seq_length,
+def convert_single_example(ex_index, example, label_list, label_first_list,max_seq_length,
                            tokenizer):
     """Converts a single `InputExample` into a single `InputFeatures`."""
     label_map = {}
     for (i, label) in enumerate(label_list):
         label_map[label] = i
+
+    label_first_list_map = {}
+    for (i, label) in enumerate(label_first_list):
+        label_first_list_map[label] = i
 
     tokens_a = tokenizer.tokenize(example.text_a)
     tokens_b = None
@@ -334,6 +357,7 @@ def convert_single_example(ex_index, example, label_list, max_seq_length,
     assert len(segment_ids) == max_seq_length
 
     label_id = label_map[example.label]
+    label_first=label_first_list_map[example.label_first]
     guid=example.guid
     if ex_index < 5:
         tf.logging.info("*** Example ***")
@@ -350,6 +374,7 @@ def convert_single_example(ex_index, example, label_list, max_seq_length,
         input_ids=input_ids,
         input_mask=input_mask,
         segment_ids=segment_ids,
+        label_first=label_first,
         label_id=label_id)
     return feature
 
@@ -388,6 +413,7 @@ def file_based_convert_examples_to_features(
         features["input_mask"] = create_int_feature(feature.input_mask)
         features["segment_ids"] = create_int_feature(feature.segment_ids)
         features["label_ids"] = create_int_feature([feature.label_id])
+        features["label_first"] = create_int_feature([feature.label_first])
         tf_example = tf.train.Example(features=tf.train.Features(feature=features))
         writer.write(tf_example.SerializeToString())
 
@@ -441,6 +467,7 @@ def main(_):
     processor = processors[task_name]()
 
     label_list = processor.get_labels(FLAGS.label_path)
+    label_first_list=processor.get_labels_first(FLAGS.labels_first_path)
     # label_list.remove("no")
     print(len(label_list))
     import time
@@ -468,7 +495,8 @@ def main(_):
             'num_train_example': num_train_example,
             'num_train_steps': num_train_steps,
             'num_warmup_steps': num_warmup_steps,
-            "label_list":{i:la for i,la in enumerate(label_list)}
+            "label_list":{i:la for i,la in enumerate(label_list)},
+            "label_first":{i:la for i,la in enumerate(label_first_list)},
         }
         with open(train_meta, 'w') as f:
             json.dump(d, f)

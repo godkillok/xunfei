@@ -3,6 +3,7 @@ export XNLI_DIR=/data/tanggp/xun_class/bert_multi_tfrecord/
 export OUTPUT=/data/tanggp/xun_class/bert_model_mul/
 export HISTORY=/data/tanggp/xun_class/aichallenge/bert_multi_history
 export LABEL=/data/tanggp/xun_class/aichallenge/textcnn_label_sort
+export LABEL_F=/data/tanggp/xun_class/aichallenge/textcnn_author_sort
 #123
 python3 run_classify.py \
   --task_name=category \
@@ -22,4 +23,5 @@ python3 run_classify.py \
   --eval_steps=0\
   --output_dir=$OUTPUT\
   --history_dir=$HISTORY\
-  --label_path=$LABEL
+     --label_path=$LABEL\
+    --labels_first_path=$LABEL_F
