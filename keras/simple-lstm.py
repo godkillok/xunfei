@@ -28,7 +28,7 @@ LSTM_UNITS = 128
 DENSE_HIDDEN_UNITS = 4 * LSTM_UNITS
 EPOCHS = 4
 MAX_LEN = 220
-
+#1
 TEXT_COLUMN = 'jieba'
 TARGET_COLUMN = 'label'
 CHARS_TO_REMOVE = ''''!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~\t\n“”’\'∞θ÷α•à−β∅³π‘₹´°£€\×™√²—'''
