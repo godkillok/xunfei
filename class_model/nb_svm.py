@@ -87,8 +87,9 @@ for i, j in enumerate(TARGET_COLS):
     train_loss_class=log_loss(y_train,preds_train[:,i])
     try:
         valid_loss_class=log_loss(y_valid,preds_valid[:,i])
-    except:
-        valid_loss_class=0.01
+    except  Exception as e:
+        print(e)
+        valid_loss_class= np.mean(train_loss)
     print('Trainloss=log loss:', train_loss_class)
     print('Validloss=log loss:', valid_loss_class)
     train_loss.append(train_loss_class)
