@@ -288,7 +288,7 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
         logits_first = tf.nn.bias_add(logits_first, output_bias)
         log_probs_first = tf.nn.log_softmax(logits_first, axis=-1)
 
-        one_hot_first = tf.one_hot(label_first, depth=num_labels, dtype=tf.float32)
+        one_hot_first = tf.one_hot(label_first, depth=num_first, dtype=tf.float32)
 
         per_example_loss_1 = -tf.reduce_sum(one_hot_first * log_probs_first, axis=-1)
         loss_1 = tf.reduce_mean(per_example_loss_1)
