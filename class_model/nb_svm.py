@@ -49,7 +49,7 @@ class NbSvmClassifier(BaseEstimator, ClassifierMixin):
 
         self._r = sparse.csr_matrix(np.log(pr(x, 1, y) / pr(x, 0, y)))
         x_nb = x.multiply(self._r)
-        self._clf = LogisticRegression(C=self.C, dual=self.dual, solver='sag',n_jobs=self.n_jobs).fit(x_nb, y)
+        self._clf = LogisticRegression(C=self.C, dual=self.dual,n_jobs=self.n_jobs).fit(x_nb, y)
         return self
 
 # model = NbSvmClassifier(C=4, dual=True, n_jobs=-1)
