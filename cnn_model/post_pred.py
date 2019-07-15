@@ -21,7 +21,7 @@ def top_2_label_code(test_preds_prob,test_y):
 
 
 def post_eval(path_label,output_results,model_dir='',history_dir=''):
-    if model_dir[-1]=='/':
+    if model_dir!='' and model_dir[-1]=='/':
         model_dir=model_dir[:-1]
     with open(path_label, 'r', encoding='utf8') as f:
         lines = f.readlines()
