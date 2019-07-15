@@ -54,7 +54,7 @@ class NbSvmClassifier(BaseEstimator, ClassifierMixin):
 
 # model = NbSvmClassifier(C=4, dual=True, n_jobs=-1)
 
-model = NbSvmClassifier(C=4, dual=False, n_jobs=-1)
+model = NbSvmClassifier(C=4, dual=True, n_jobs=-1)
 train_x, train_y, test_x, test_y, pred_x, apps, label_dic = load_data()
 data_set=train_x+test_x+pred_x
 # vec = TfidfVectorizer(ngram_range=(1, 3), min_df=10, max_df=0.95,
