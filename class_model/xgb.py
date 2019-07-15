@@ -34,6 +34,7 @@ project_path = "/data/tanggp/xun_class/aichallenge"
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
 from class_model.load_data import load_data
+from cnn_model.post_pred import post_eval
 from sklearn.calibration import CalibratedClassifierCV
 
 train_x, train_y, test_x, test_y, pred_x, apps, label_dic = load_data()
@@ -177,6 +178,5 @@ n_jobs=-1
 logging.info("xgb begin....")
 model.fit(trainDf, train_y)
 test_preds = model.predict(testDf)
-
-logging.info('train {} accuracy_score {},  \n {}'.format('test', accuracy_score(test_y, test_preds),
-                                                         classification_report(test_y, test_preds)))
+acc2=post_eval(test_y, test_preds)
+logging.info('train {} accuracy_score {}, and top2 {}'.format('test', accuracy_score(test_y, test_preds)),acc2)
