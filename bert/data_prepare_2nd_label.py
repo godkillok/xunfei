@@ -270,7 +270,7 @@ class CategoryProcessor(DataProcessor):
                 label_first ="1427"
             else:
                 label = li["label"]
-                label_first = li[:4]
+                label_first = label[:4]
                 text_a = tokenization.convert_to_unicode(text)
                 label = tokenization.convert_to_unicode(label)
                 label_first= tokenization.convert_to_unicode(label_first)
