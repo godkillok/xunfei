@@ -6,7 +6,7 @@ export Tfrecord=/data/tanggp/xun_class/bert_multi_tfrecord/
 export LABEL=/data/tanggp/xun_class/aichallenge/textcnn_label_sort
 export LABEL_F=/data/tanggp/xun_class/aichallenge/textcnn_author_sort
 
-python3 data_prepare.py \
+python3 data_prepare_2nd_label.py \
   --task_name=category \
   --do_train=true \
   --do_eval=true \
