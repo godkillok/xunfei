@@ -40,7 +40,7 @@ class NbSvmClassifier(BaseEstimator, ClassifierMixin):
 
     def fit(self, x, y):
         # Check that X and y have correct shape
-        y = y.values
+        # y = y.values
         x, y = check_X_y(x, y, accept_sparse=True)
 
         def pr(x, y_i, y):
