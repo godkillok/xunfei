@@ -1,4 +1,12 @@
 from sklearn.base import BaseEstimator, ClassifierMixin
+import os
+import sys
+currentUrl = os.path.dirname(__file__)
+most_parenturl = os.path.abspath(os.path.join(currentUrl, os.pardir))
+m_p, m_c = os.path.split(most_parenturl)
+while 'xunfei' not in m_c:
+    m_p, m_c = os.path.split(m_p)
+sys.path.append(os.path.join(m_p, m_c))
 from sklearn.utils.validation import check_X_y, check_is_fitted
 from sklearn.linear_model import LogisticRegression
 import numpy as np
@@ -11,12 +19,7 @@ import sys
 import pickle
 import logging
 
-currentUrl = os.path.dirname(__file__)
-most_parenturl = os.path.abspath(os.path.join(currentUrl, os.pardir))
-m_p, m_c = os.path.split(most_parenturl)
-while 'xunfei' not in m_c:
-    m_p, m_c = os.path.split(m_p)
-sys.path.append(os.path.join(m_p, m_c))
+
 
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer,HashingVectorizer
 class NbSvmClassifier(BaseEstimator, ClassifierMixin):
