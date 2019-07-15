@@ -6,6 +6,18 @@ from scipy import sparse
 from class_model.load_data import load_data
 from cnn_model.post_pred import post_eval
 from sklearn.metrics import log_loss
+import os
+import sys
+import pickle
+import logging
+
+currentUrl = os.path.dirname(__file__)
+most_parenturl = os.path.abspath(os.path.join(currentUrl, os.pardir))
+m_p, m_c = os.path.split(most_parenturl)
+while 'xunfei' not in m_c:
+    m_p, m_c = os.path.split(m_p)
+sys.path.append(os.path.join(m_p, m_c))
+
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer,HashingVectorizer
 class NbSvmClassifier(BaseEstimator, ClassifierMixin):
     def __init__(self, C=1.0, dual=False, n_jobs=1):
@@ -47,8 +59,9 @@ vec = TfidfVectorizer(ngram_range=(1, 3), min_df=10, max_df=0.95,
 
 vec.fit_transform(data_set)
 #
-# with open(project_path + 'tfidf.pkl', 'wb') as f:
-#     pickle.dump(vec, f)
+project_path="/data/tanggp/xun_class/aichallenge/"
+with open(project_path + 'tfidf.pkl', 'wb') as f:
+    vec = pickle.load(f)
 # # with open(CHANNEL_MODEL + 'tfidf.pkl', 'rb') as f:
 # #     vec = pickle.load(f)
 
