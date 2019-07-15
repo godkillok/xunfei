@@ -380,7 +380,7 @@ def convert_single_example(ex_index, example, label_list, label_first_list,max_s
 
 
 def file_based_convert_examples_to_features(
-        examples, label_list, max_seq_length, tokenizer,output_file):
+        examples, label_list,label_first_list, max_seq_length, tokenizer,output_file):
     """Convert a set of `InputExampl1e`s to a TFRecord file.1"""
     path, file_name = os.path.split(output_file)
     try:
@@ -396,7 +396,7 @@ def file_based_convert_examples_to_features(
             writer = tf.python_io.TFRecordWriter(file_name0)
             tf.logging.info("Writing example %d of %d" % (ex_index, len(examples)))
 
-        feature = convert_single_example(ex_index, example, label_list,
+        feature = convert_single_example(ex_index, example, label_list,label_first_list,
                                          max_seq_length, tokenizer)
 
         def create_int_feature(values):
@@ -504,7 +504,7 @@ def main(_):
     if FLAGS.do_train:
         train_file = os.path.join(FLAGS.tfrecord, "train")
         file_based_convert_examples_to_features(
-            train_examples, label_list, FLAGS.max_seq_length, tokenizer, train_file)
+            train_examples, label_list, label_first_list,FLAGS.max_seq_length, tokenizer, train_file)
         tf.logging.info("***** Running training *****")
         tf.logging.info("  Num examples = %d", len(train_examples))
         tf.logging.info("  Batch size = %d", FLAGS.train_batch_size)
@@ -523,13 +523,13 @@ def main(_):
             json.dump(d, f)
 
         file_based_convert_examples_to_features(
-            eval_examples, label_list, FLAGS.max_seq_length, tokenizer, eval_file)
+            eval_examples, label_list, label_first_list,FLAGS.max_seq_length, tokenizer, eval_file)
 
 
     if FLAGS.do_predict:
         predict_examples = processor.get_test_examples(FLAGS.data_dir)
         predict_file = os.path.join(FLAGS.tfrecord, "predict")
-        file_based_convert_examples_to_features(predict_examples, label_list,
+        file_based_convert_examples_to_features(predict_examples, label_list,label_first_list,
                                                 FLAGS.max_seq_length, tokenizer,
                                                 predict_file)
         num_pred_examples = len(predict_examples)
