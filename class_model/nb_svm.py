@@ -63,7 +63,7 @@ vec = TfidfVectorizer(ngram_range=(1, 3), min_df=10, max_df=0.95,
 vec.fit_transform(data_set)
 #
 project_path="/data/tanggp/xun_class/aichallenge/"
-with open(project_path + 'tfidf.pkl', 'wb') as f:
+with open(project_path + 'tfidf.pkl', 'rb') as f:
     vec = pickle.load(f)
 # # with open(CHANNEL_MODEL + 'tfidf.pkl', 'rb') as f:
 # #     vec = pickle.load(f)
