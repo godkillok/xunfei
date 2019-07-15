@@ -57,16 +57,16 @@ class NbSvmClassifier(BaseEstimator, ClassifierMixin):
 model = NbSvmClassifier(C=4, dual=True, n_jobs=-1)
 train_x, train_y, test_x, test_y, pred_x, apps, label_dic = load_data()
 data_set=train_x+test_x+pred_x
-vec = TfidfVectorizer(ngram_range=(1, 3), min_df=10, max_df=0.95,
-                      use_idf=1, smooth_idf=1, sublinear_tf=1)
+# vec = TfidfVectorizer(ngram_range=(1, 3), min_df=10, max_df=0.95,
+#                       use_idf=1, smooth_idf=1, sublinear_tf=1)
 
-vec.fit_transform(data_set)
-#
+
+#vec.fit_transform(data_set)
 project_path="/data/tanggp/xun_class/aichallenge/"
-with open(project_path + 'tfidf.pkl', 'wb') as f:
-    pickle.dump(vec, f)
-# with open(project_path + 'tfidf.pkl', 'rb') as f:
-#     vec = pickle.load(f)
+# with open(project_path + 'tfidf.pkl', 'wb') as f:
+#     pickle.dump(vec, f)
+with open(project_path + 'tfidf.pkl', 'rb') as f:
+    vec = pickle.load(f)
 
 
 trn_term_doc = vec.transform(train_x)
@@ -78,7 +78,7 @@ preds_valid = np.zeros((len(test_x), len(test_y)))
 
 TARGET_COLS=label_dic.values()
 for i, j in enumerate(TARGET_COLS):
-    print('Class:= '+j)
+    print('Class:= '+str(j))
     y_train = np.where(train_y ==j, 1, 0)
     y_valid= np.where(test_y ==j, 1, 0)
     model.fit(trn_term_doc,y_train)
