@@ -30,7 +30,7 @@ m_p, m_c = os.path.split(most_parenturl)
 while 'xunfei' not in m_c:
     m_p, m_c = os.path.split(m_p)
 sys.path.append(os.path.join(m_p, m_c))
-project_path = "/data/tanggp/xun_class//aichallenge"
+project_path = "/data/tanggp/xun_class/aichallenge"
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
 from class_model.load_data import load_data
@@ -139,14 +139,14 @@ parms = {'task': 'train',
     'bagging_fraction': 0.8,
     'bagging_freq': 5}
 
-rnds = 260
-print('Format a Train and Validation Set for LGB')
-lgbm = LGBMClassifier(objective='multiclass', random_state=5)
-lgbm.fit(trainDf, train_y)
-test_preds = lgbm.predict(testDf)
-
-logging.info('train {} accuracy_score {},  \n {}'.format('test', accuracy_score(test_y, test_preds),
-                                                         classification_report(test_y, test_preds)))
+# rnds = 260
+# print('Format a Train and Validation Set for LGB')
+# lgbm = LGBMClassifier(objective='multiclass', random_state=5)
+# lgbm.fit(trainDf, train_y)
+# test_preds = lgbm.predict(testDf)
+#
+# logging.info('train {} accuracy_score {},  \n {}'.format('test', accuracy_score(test_y, test_preds),
+#                                                          classification_report(test_y, test_preds)))
 
 # # print(trainDf.describe())
 # d_train = lgb.Dataset(trainDf, label=train_y)
@@ -171,8 +171,10 @@ model = XGBClassifier(learning_rate=0.01,
                       colsample_btree=1,         # 所有特征建立决策树
                       scale_pos_weight=1,        # 解决样本个数不平衡的问题
                       random_state=27,           # 随机数
-                      slient = 0
+                      slient = 0,
+n_jobs=-1
                       )
+logging.info("xgb begin....")
 model.fit(trainDf, train_y)
 test_preds = model.predict(testDf)
 
