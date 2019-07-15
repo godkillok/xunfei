@@ -5,7 +5,7 @@ export HISTORY=/data/tanggp/xun_class/aichallenge/bert_multi_history
 export LABEL=/data/tanggp/xun_class/aichallenge/textcnn_label_sort
 export LABEL_F=/data/tanggp/xun_class/aichallenge/textcnn_author_sort
 #123
-python3 run_classify.py \
+python3 run_classify_multitask.py \
   --task_name=category \
   --do_train=true \
   --do_eval=true \
