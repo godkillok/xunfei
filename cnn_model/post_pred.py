@@ -20,7 +20,7 @@ def top_2_label_code(test_preds_prob,test_y):
     return test_y_name,test_preds_code
 
 
-def post_eval(path_label,model_dir,history_dir,output_results):
+def post_eval(path_label,output_results,model_dir='',history_dir=''):
     if model_dir[-1]=='/':
         model_dir=model_dir[:-1]
     with open(path_label, 'r', encoding='utf8') as f:
@@ -50,11 +50,12 @@ def post_eval(path_label,model_dir,history_dir,output_results):
     acc1=accuracy_score(true_label_list, predict_label_list)
     logging.info(
     "The total program acc1 {} and top2 acc is {}".format(acc1, acc2))
-    root, folder_name = os.path.split(model_dir)
-    if acc2 <= 0.7:
-        cmd = "cd {} && rm -rf {}".format(root,folder_name)
-        logging.info("==========")
-        logging.info(cmd)
+    if model_dir!='':
+        root, folder_name = os.path.split(model_dir)
+        if acc2 <= 0.7:
+            cmd = "cd {} && rm -rf {}".format(root,folder_name)
+            logging.info("==========")
+            logging.info(cmd)
         #os.system(cmd)
     return acc2,acc1
 
