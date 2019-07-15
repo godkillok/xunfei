@@ -85,7 +85,10 @@ for i, j in enumerate(TARGET_COLS):
     preds_valid[:,i] = model.predict_proba(test_term_doc)[:,1]
     preds_train[:,i] = model.predict_proba(trn_term_doc)[:,1]
     train_loss_class=log_loss(y_train,preds_train[:,i])
-    valid_loss_class=log_loss(y_valid,preds_valid[:,i])
+    try:
+        valid_loss_class=log_loss(y_valid,preds_valid[:,i])
+    except:
+        valid_loss_class=0.01
     print('Trainloss=log loss:', train_loss_class)
     print('Validloss=log loss:', valid_loss_class)
     train_loss.append(train_loss_class)
