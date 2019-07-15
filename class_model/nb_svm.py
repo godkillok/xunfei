@@ -18,7 +18,7 @@ import os
 import sys
 import pickle
 import logging
-
+from sklearn.metrics import classification_report, confusion_matrix,accuracy_score
 
 
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer,HashingVectorizer
@@ -87,13 +87,17 @@ for i, j in enumerate(TARGET_COLS):
     preds_valid[:,i] = model.predict_proba(test_term_doc)[:,1]
     preds_train[:,i] = model.predict_proba(trn_term_doc)[:,1]
     train_loss_class=log_loss(y_train,preds_train[:,i])
+
     try:
         valid_loss_class=log_loss(y_valid,preds_valid[:,i])
+        acc = accuracy_score(y_valid,preds_valid[:,i])
     except  Exception as e:
         print(e)
         valid_loss_class= np.mean(train_loss)
+        acc=0
     print('Trainloss=log loss:', train_loss_class)
     print('Validloss=log loss:', valid_loss_class)
+    print('Validacc=acc     :', acc)
     train_loss.append(train_loss_class)
     valid_loss.append(valid_loss_class)
 print('mean column-wise log loss:Train dataset', np.mean(train_loss))
