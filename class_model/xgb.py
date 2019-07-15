@@ -122,7 +122,7 @@ logging.info('train {} accuracy_score {},  \n {}'.format('train', accuracy_score
 
 test_preds = lr_clf.predict(testDf)
 acc2=post_eval(test_y, test_preds)
-logging.info('train {} accuracy_score {},  and top2 {}'.format('test', accuracy_score(test_y, test_preds),acc2))
+logging.info('train {} accuracy_score {},  and top2 {}'.format('LR', accuracy_score(test_y, test_preds),acc2))
 
 parms = {'task': 'train',
     'boosting_type': 'gbdt',
@@ -178,4 +178,4 @@ logging.info("xgb begin....")
 model.fit(trainDf, train_y)
 test_preds = model.predict(testDf)
 acc2=post_eval(test_y, test_preds)
-logging.info('train {} accuracy_score {}, and top2 {}'.format('test', accuracy_score(test_y, test_preds),acc2))
+logging.info('train {} accuracy_score {}, and top2 {}'.format('XGB', accuracy_score(test_y, test_preds),acc2))
