@@ -60,7 +60,7 @@ valid_loss = []
 preds_train = np.zeros((len(train_x), len(train_y)))
 preds_valid = np.zeros((len(test_x), len(test_y)))
 
-TARGET_COLS=label_dic.keys()
+TARGET_COLS=label_dic.values()
 for i, j in enumerate(TARGET_COLS):
     print('Class:= '+j)
     y_train = np.where(train_y ==j, 1, 0)
