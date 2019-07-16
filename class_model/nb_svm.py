@@ -75,11 +75,13 @@ trn_term_doc = vec.transform(train_x)
 test_term_doc = vec.transform(test_x)
 train_loss = []
 valid_loss = []
-preds_train = np.zeros((len(train_x), len(train_y)))
-preds_valid = np.zeros((len(test_x), len(test_y)))
-
+preds_train = np.zeros((len(train_x), len(label_dic.values())))
+preds_valid = np.zeros((len(test_x), len(label_dic.values())))
+print(preds_train.shape)
 TARGET_COLS=label_dic.values()
 for i, j in enumerate(TARGET_COLS):
+    # j=TARGET_COLS[0]
+    # i=0
     print('Class:= '+str(j))
     y_train = np.where(train_y ==j, 1, 0)
     y_valid= np.where(test_y ==j, 1, 0)
@@ -90,7 +92,7 @@ for i, j in enumerate(TARGET_COLS):
 
     try:
         valid_loss_class=log_loss(y_valid,preds_valid[:,i])
-        acc = accuracy_score(y_valid,model.predict(trn_term_doc))
+        acc = accuracy_score(y_valid,model.predict(test_term_doc))
     except  Exception as e:
         print(e)
         valid_loss_class= np.mean(train_loss)
