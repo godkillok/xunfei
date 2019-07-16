@@ -38,6 +38,7 @@ def post_eval(path_label,output_results,model_dir='',history_dir=''):
     guids = []
 
     for prediction in output_results:
+        print(prediction)
         predict_label_id = prediction["predict_label_ids"]
         true_label_id = prediction["true_label_ids"]
         prob_list.append(prediction["probabilities"])
