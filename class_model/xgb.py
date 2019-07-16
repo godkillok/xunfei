@@ -34,7 +34,7 @@ project_path = "/data/tanggp/xun_class/aichallenge"
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
 from class_model.load_data import load_data
-from cnn_model.post_pred import post_eval
+from cnn_model.post_pred import post_eval,top_2_label_code
 from sklearn.calibration import CalibratedClassifierCV
 
 train_x, train_y, test_x, test_y, pred_x, apps, label_dic = load_data()
@@ -121,7 +121,8 @@ logging.info('train {} accuracy_score {},  \n {}'.format('train', accuracy_score
 
 
 test_preds = lr_clf.predict(testDf)
-acc2=post_eval(test_y, test_preds)
+test_preds_prob = lr_clf.predict_proba(testDf)
+acc2=top_2_label_code(test_y,test_preds_prob)
 logging.info('train {} accuracy_score {},  and top2 {}'.format('LR', accuracy_score(test_y, test_preds),acc2))
 
 parms = {'task': 'train',
@@ -177,5 +178,6 @@ n_jobs=-1
 logging.info("xgb begin....")
 model.fit(trainDf, train_y)
 test_preds = model.predict(testDf)
-acc2=post_eval(test_y, test_preds)
+test_preds_prob = model.predict_proba(testDf)
+acc2=top_2_label_code(test_y,test_preds_prob)
 logging.info('train {} accuracy_score {}, and top2 {}'.format('XGB', accuracy_score(test_y, test_preds),acc2))
