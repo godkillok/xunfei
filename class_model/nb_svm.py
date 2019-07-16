@@ -90,7 +90,7 @@ for i, j in enumerate(TARGET_COLS):
 
     try:
         valid_loss_class=log_loss(y_valid,preds_valid[:,i])
-        acc = top_2_acc(model.predict_proba(trn_term_doc),y_valid)
+        acc = accuracy_score(y_valid,model.predict(trn_term_doc))
     except  Exception as e:
         print(e)
         valid_loss_class= np.mean(train_loss)
