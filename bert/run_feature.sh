@@ -5,7 +5,7 @@ export OUTPUT=/data/tanggp/xun_class/bert_embedding/
 #123
 cp /data/tanggp/bert/chinese_L-12_H-768_A-12/bert_config.json /data/tanggp/xun_class/bert_model_mul/
 cp /data/tanggp/bert/chinese_L-12_H-768_A-12/vocab.txt /data/tanggp/xun_class/bert_model_mul/
-python3 run_classify.py \
+python3 extract_features2.py.py \
   --task_name=category \
   --input_file=$OINPUT/apptype_train.train_embedding\
   --output_file=$OUTPUT/apptype_train.train_jieba_json1\
