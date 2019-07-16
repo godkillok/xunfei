@@ -122,7 +122,7 @@ logging.info('train {} accuracy_score {},  \n {}'.format('train', accuracy_score
 
 test_preds = lr_clf.predict(testDf)
 test_preds_prob = lr_clf.predict_proba(testDf)
-acc2=top_2_label_code(test_y,test_preds_prob)
+acc2=top_2_label_code(test_preds_prob,test_y)
 logging.info('train {} accuracy_score {},  and top2 {}'.format('LR', accuracy_score(test_y, test_preds),acc2))
 
 parms = {'task': 'train',
@@ -179,5 +179,5 @@ logging.info("xgb begin....")
 model.fit(trainDf, train_y)
 test_preds = model.predict(testDf)
 test_preds_prob = model.predict_proba(testDf)
-acc2=top_2_label_code(test_y,test_preds_prob)
+acc2=top_2_label_code(test_preds_prob,test_y)
 logging.info('train {} accuracy_score {}, and top2 {}'.format('XGB', accuracy_score(test_y, test_preds),acc2))
