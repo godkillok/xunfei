@@ -17,9 +17,12 @@ def top_2_label_code(test_preds_prob,test_y):
                 prd = real
         test_y_name.append(real)
         test_preds_code.append(prd)
+
     return test_y_name,test_preds_code
 
-
+def top_2_acc(test_preds_prob,test_y):
+    test_y_name, test_preds_code=top_2_label_code(test_preds_prob, test_y)
+    return accuracy_score(test_y_name, test_preds_code)
 def post_eval(path_label,output_results,model_dir='',history_dir=''):
     if model_dir!='' and model_dir[-1]=='/':
         model_dir=model_dir[:-1]
