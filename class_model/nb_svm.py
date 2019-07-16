@@ -12,7 +12,7 @@ from sklearn.linear_model import LogisticRegression
 import numpy as np
 from scipy import sparse
 from class_model.load_data import load_data
-from cnn_model.post_pred import top_2_label_code
+from cnn_model.post_pred import top_2_acc
 from sklearn.metrics import log_loss
 import os
 import sys
@@ -90,7 +90,7 @@ for i, j in enumerate(TARGET_COLS):
 
     try:
         valid_loss_class=log_loss(y_valid,preds_valid[:,i])
-        acc = top_2_label_code(model.predict_proba(trn_term_doc),y_valid)
+        acc = top_2_acc(model.predict_proba(trn_term_doc),y_valid)
     except  Exception as e:
         print(e)
         valid_loss_class= np.mean(train_loss)
@@ -103,5 +103,5 @@ for i, j in enumerate(TARGET_COLS):
 print('mean column-wise log loss:Train dataset', np.mean(train_loss))
 print('mean column-wise log loss:Validation dataset', np.mean(valid_loss))
 print("shape preds_valid {}".format(preds_valid.shape))
-acc2=top_2_label_code(preds_valid,test_y)
+acc2=top_2_acc(preds_valid,test_y)
 print("shape preds_valid top 2 {}".format(acc2))
