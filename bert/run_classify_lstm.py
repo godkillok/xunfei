@@ -40,7 +40,8 @@ import pickle
 import json
 from sklearn.metrics import classification_report, accuracy_score
 from cnn_model.post_pred import post_pred, post_eval
-
+from tensorflow.python.ops.rnn import bidirectional_dynamic_rnn as bi_rnn
+from tensorflow.contrib.rnn import BasicLSTMCell
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
 flags = tf.flags
@@ -265,8 +266,34 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
     # }
     # If you want to use the token-level output, use model.get_sequence_output()
     # instead.
-    output_layer = model.get_pooled_output()
-    output_layer=tf.layers.dense(output_layer, 100, activation=modeling.gelu,name='dense_layer')
+    embedding = model.get_sequence_output() #[batch_size, seq_length, embedding_size]
+    max_seq_length = embedding.shape[1].value
+
+    from tensorflow.python.ops.rnn import bidirectional_dynamic_rnn as bi_rnn
+    from tensorflow.contrib.rnn import BasicLSTMCell
+    from keras.layers import  concatenate
+    rnn_outputs, _ = bi_rnn(BasicLSTMCell(128),
+                            BasicLSTMCell(128),
+                            inputs=embedding, max_seq_length=max_seq_length,dtype=tf.float32)
+    output_rnn = tf.concat(rnn_outputs, axis=2)  # [batch_size,sequence_length,hidden_size*2]
+    rnn_outputs, _ = bi_rnn(BasicLSTMCell(128),
+                            BasicLSTMCell(128),
+                            inputs=output_rnn, max_seq_length=max_seq_length, dtype=tf.float32)
+
+    output_rnn = tf.concat(rnn_outputs, axis=2)  # [batch_size,sequence_length,hidden_size*2]
+
+    GlobalMaxPooling1D=tf.nn.max_pool(inputs=output_rnn, ksize=[1, max_seq_length, 1, 1],
+                   strides=[1, 1, 1, 1], padding="VALID", name="pool")# [batch_size,hidden_size*2]
+
+    GlobalAveragePooling1D = tf.nn.avg_pool(inputs=output_rnn, ksize=[1, max_seq_length, 1, 1],
+                                        strides=[1, 1, 1, 1], padding="VALID", name="pool")
+    hidden = tf.concat([GlobalMaxPooling1D,GlobalAveragePooling1D],1)
+    hidden_size=hidden.shape[-1].value
+
+    output_layer=tf.layers.dense(hidden, hidden_size, activation=modeling.gelu,name='dense_layer')
+    z = tf.add(output_layer, hidden)
+
+    output_layer = tf.nn.dropout(z , keep_prob=FLAGS.drop_rate)
 
     hidden_size = output_layer.shape[-1].value
     output_weights = tf.get_variable(
