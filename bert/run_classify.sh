@@ -24,5 +24,5 @@ python3 run_classify.py \
   --eval_steps=0\
   --output_dir=$OUTPUT\
   --history_dir=$HISTORY\
-     --label_path=$LABEL\
-    --labels_first_path=$LABEL_F
+  --label_path=$LABEL\
+  --labels_first_path=$LABEL_F
