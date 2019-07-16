@@ -266,7 +266,7 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
     # If you want to use the token-level output, use model.get_sequence_output()
     # instead.
     output_layer = model.get_pooled_output()
-    output_layer=tf.layers.dense(output_layer, 100, activation=modeling.gelu,name='dense_layer')
+    # output_layer=tf.layers.dense(output_layer, 100, activation=modeling.gelu,name='dense_layer')
 
     hidden_size = output_layer.shape[-1].value
     output_weights = tf.get_variable(
