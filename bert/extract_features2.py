@@ -382,7 +382,10 @@ def main(_):
   with codecs.getwriter("utf-8")(tf.gfile.Open(FLAGS.output_file,
                                                "w")) as writer:
     for result in estimator.predict(input_fn, yield_single_examples=True):
-      writer.write(json.dumps(result) + "\n")
+        li={}
+        li["unique_id"]=result["unique_id"]
+        li["layer_output"]=[round(float(x), 6) for x in result["layer_output"].tolist()]
+        writer.write(json.dumps(li) + "\n")
 
 
 if __name__ == "__main__":
