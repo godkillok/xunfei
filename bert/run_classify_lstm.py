@@ -270,7 +270,7 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
     max_seq_length = embedding.shape[1].value
 
 
-    from keras.layers import  concatenate
+    #from keras.layers import  concatenate
     rnn_outputs, _ = bi_rnn(tf.nn.rnn_cell.LSTMCell(128),
                             tf.nn.rnn_cell.LSTMCell(128),
                             inputs=embedding, dtype=tf.float32)
