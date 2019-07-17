@@ -269,7 +269,7 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
     embedding = model.get_sequence_output() #[batch_size, seq_length, embedding_size]
     max_seq_length = embedding.shape[1].value
 
-
+    print('======********======shape{}'.format(embedding.shape))
     #from keras.layers import  concatenate
     rnn_outputs, _ = bi_rnn(tf.nn.rnn_cell.LSTMCell(128),
                             tf.nn.rnn_cell.LSTMCell(128),
