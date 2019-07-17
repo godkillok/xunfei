@@ -286,6 +286,7 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
 
     GlobalAveragePooling1D = tf.layers.average_pooling1d(output_rnn, pool_size=[FLAGS.max_seq_length],
                                         strides=[  1], padding="VALID", name="GlobalAveragePooling1D")
+    print('======********======shape{}'.format(GlobalMaxPooling1D.shape))
     hidden = tf.concat([GlobalMaxPooling1D,GlobalAveragePooling1D],2)
     hidden=tf.squeeze(hidden)
     hidden_size=hidden.shape[-1].value
