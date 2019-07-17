@@ -275,11 +275,11 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
                             BasicLSTMCell(128),
                             inputs=embedding, dtype=tf.float32)
     output_rnn = tf.concat(rnn_outputs, axis=2)  # [batch_size,sequence_length,hidden_size*2]
-    rnn_outputs, _ = bi_rnn(BasicLSTMCell(128),
-                            BasicLSTMCell(128),
-                            inputs=output_rnn, dtype=tf.float32)
-
-    output_rnn = tf.concat(rnn_outputs, axis=2)  # [batch_size,sequence_length,hidden_size*2]
+    # rnn_outputs, _ = bi_rnn(BasicLSTMCell(128),
+    #                         BasicLSTMCell(128),
+    #                         inputs=output_rnn, dtype=tf.float32)
+    #
+    # output_rnn = tf.concat(rnn_outputs, axis=2)  # [batch_size,sequence_length,hidden_size*2]
 
     GlobalMaxPooling1D=tf.nn.max_pool(inputs=output_rnn, ksize=[1, FLAGS.max_seq_length, 1, 1],
                    strides=[1, 1, 1, 1], padding="VALID", name="pool")# [batch_size,hidden_size*2]
