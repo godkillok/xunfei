@@ -23,8 +23,8 @@ import collections
 import json
 import re
 
-import modeling
-import tokenization
+from bert import modeling
+from bert import tokenization
 import tensorflow as tf
 
 flags = tf.flags
@@ -191,14 +191,15 @@ def model_fn_builder(bert_config, init_checkpoint, layer_indexes, use_tpu,
       tf.logging.info("  name = %s, shape = %s%s", var.name, var.shape,
                       init_string)
 
-    all_layers = model.get_all_encoder_layers()
-
+    #all_layers = model.get_all_encoder_layers()
+    dg=model.get_pooled_output()
     predictions = {
         "unique_id": unique_ids,
+        "layer_output":dg
     }
 
-    for (i, layer_index) in enumerate(layer_indexes):
-      predictions["layer_output_%d" % i] = all_layers[layer_index]
+    # for (i, layer_index) in enumerate(layer_indexes):
+    #   predictions["layer_output_%d" % i] = all_layers[layer_index]
 
     output_spec = tf.contrib.tpu.TPUEstimatorSpec(
         mode=mode, predictions=predictions, scaffold_fn=scaffold_fn)
@@ -381,27 +382,7 @@ def main(_):
   with codecs.getwriter("utf-8")(tf.gfile.Open(FLAGS.output_file,
                                                "w")) as writer:
     for result in estimator.predict(input_fn, yield_single_examples=True):
-      unique_id = int(result["unique_id"])
-      feature = unique_id_to_feature[unique_id]
-      output_json = collections.OrderedDict()
-      output_json["linex_index"] = unique_id
-      all_features = []
-      for (i, token) in enumerate(feature.tokens):
-        all_layers = []
-        for (j, layer_index) in enumerate(layer_indexes):
-          layer_output = result["layer_output_%d" % j]
-          layers = collections.OrderedDict()
-          layers["index"] = layer_index
-          layers["values"] = [
-              round(float(x), 6) for x in layer_output[i:(i + 1)].flat
-          ]
-          all_layers.append(layers)
-        features = collections.OrderedDict()
-        features["token"] = token
-        features["layers"] = all_layers
-        all_features.append(features)
-      output_json["features"] = all_features
-      writer.write(json.dumps(output_json) + "\n")
+      writer.write(json.dumps(result) + "\n")
 
 
 if __name__ == "__main__":
