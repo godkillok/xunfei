@@ -265,7 +265,7 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
     #     "label_ids": tf.FixedLenFeature([], tf.int64),
     # }
     # If you want to use the token-level output, use model.get_sequence_output()
-    # instead.1
+    # instead.12
     embedding = model.get_sequence_output() #[batch_size, seq_length, embedding_size]
     max_seq_length = embedding.shape[1].value
 
