@@ -281,11 +281,11 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
     #
     # output_rnn = tf.concat(rnn_outputs, axis=2)  # [batch_size,sequence_length,hidden_size*2]
 
-    GlobalMaxPooling1D=tf.layers.max_pooling2d (output_rnn, pool_size=[ FLAGS.max_seq_length, 1],
-                   strides=[1, 1], padding="VALID", name="GlobalMaxPooling1D")# [batch_size,hidden_size*2]
+    GlobalMaxPooling1D=tf.layers.max_pooling1d (output_rnn, pool_size=[ FLAGS.max_seq_length],
+                   strides=[1], padding="VALID", name="GlobalMaxPooling1D")# [batch_size,hidden_size*2]
 
-    GlobalAveragePooling1D = tf.layers.average_pooling2d(output_rnn, pool_size=[FLAGS.max_seq_length,  1],
-                                        strides=[1,  1], padding="VALID", name="GlobalAveragePooling1D")
+    GlobalAveragePooling1D = tf.layers.average_pooling2d(output_rnn, pool_size=[FLAGS.max_seq_length],
+                                        strides=[  1], padding="VALID", name="GlobalAveragePooling1D")
     hidden = tf.concat([GlobalMaxPooling1D,GlobalAveragePooling1D],1)
     hidden_size=hidden.shape[-1].value
 
