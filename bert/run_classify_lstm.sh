@@ -9,7 +9,7 @@ export LABEL_F=/data/tanggp/xun_class/aichallenge/textcnn_author_sort
 python3 run_classify_lstm.py \
   --task_name=category \
   --do_train=true \
-  --do_eval=true \
+  --do_eval=false \
   --do_predict=false\
   --do_eval_pred=true \
   --data_dir=$XNLI_DIR \
