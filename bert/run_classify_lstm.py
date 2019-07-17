@@ -269,23 +269,22 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
     embedding = model.get_sequence_output() #[batch_size, seq_length, embedding_size]
     max_seq_length = embedding.shape[1].value
 
-    from tensorflow.python.ops.rnn import bidirectional_dynamic_rnn as bi_rnn
-    from tensorflow.contrib.rnn import BasicLSTMCell
+
     from keras.layers import  concatenate
     rnn_outputs, _ = bi_rnn(BasicLSTMCell(128),
                             BasicLSTMCell(128),
-                            inputs=embedding, max_seq_length=max_seq_length,dtype=tf.float32)
+                            inputs=embedding, dtype=tf.float32)
     output_rnn = tf.concat(rnn_outputs, axis=2)  # [batch_size,sequence_length,hidden_size*2]
     rnn_outputs, _ = bi_rnn(BasicLSTMCell(128),
                             BasicLSTMCell(128),
-                            inputs=output_rnn, max_seq_length=max_seq_length, dtype=tf.float32)
+                            inputs=output_rnn, dtype=tf.float32)
 
     output_rnn = tf.concat(rnn_outputs, axis=2)  # [batch_size,sequence_length,hidden_size*2]
 
-    GlobalMaxPooling1D=tf.nn.max_pool(inputs=output_rnn, ksize=[1, max_seq_length, 1, 1],
+    GlobalMaxPooling1D=tf.nn.max_pool(inputs=output_rnn, ksize=[1, FLAGS.max_seq_length, 1, 1],
                    strides=[1, 1, 1, 1], padding="VALID", name="pool")# [batch_size,hidden_size*2]
 
-    GlobalAveragePooling1D = tf.nn.avg_pool(inputs=output_rnn, ksize=[1, max_seq_length, 1, 1],
+    GlobalAveragePooling1D = tf.nn.avg_pool(inputs=output_rnn, ksize=[1, FLAGS.max_seq_length, 1, 1],
                                         strides=[1, 1, 1, 1], padding="VALID", name="pool")
     hidden = tf.concat([GlobalMaxPooling1D,GlobalAveragePooling1D],1)
     hidden_size=hidden.shape[-1].value
