@@ -271,8 +271,8 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
 
 
     from keras.layers import  concatenate
-    rnn_outputs, _ = bi_rnn(BasicLSTMCell(128),
-                            BasicLSTMCell(128),
+    rnn_outputs, _ = bi_rnn(tf.nn.rnn_cell.LSTMCell(128),
+                            tf.nn.rnn_cell.LSTMCell(128),
                             inputs=embedding, dtype=tf.float32)
     output_rnn = tf.concat(rnn_outputs, axis=2)  # [batch_size,sequence_length,hidden_size*2]
     # rnn_outputs, _ = bi_rnn(BasicLSTMCell(128),
@@ -284,7 +284,7 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
     GlobalMaxPooling1D=tf.layers.max_pooling1d (output_rnn, pool_size=[ FLAGS.max_seq_length],
                    strides=[1], padding="VALID", name="GlobalMaxPooling1D")# [batch_size,hidden_size*2]
 
-    GlobalAveragePooling1D = tf.layers.average_pooling2d(output_rnn, pool_size=[FLAGS.max_seq_length],
+    GlobalAveragePooling1D = tf.layers.average_pooling1d(output_rnn, pool_size=[FLAGS.max_seq_length],
                                         strides=[  1], padding="VALID", name="GlobalAveragePooling1D")
     hidden = tf.concat([GlobalMaxPooling1D,GlobalAveragePooling1D],1)
     hidden_size=hidden.shape[-1].value
