@@ -288,7 +288,7 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
                                         strides=[  1], padding="VALID", name="GlobalAveragePooling1D")
     hidden = tf.concat([GlobalMaxPooling1D,GlobalAveragePooling1D],1)
     hidden_size=hidden.shape[-1].value
-
+    logging.info("hidden {}".format(hidden.shape))
     output_layer=tf.layers.dense(hidden, hidden_size, activation=modeling.gelu,name='dense_layer')
     z = tf.add(output_layer, hidden)
 
