@@ -280,7 +280,7 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
     #                         inputs=output_rnn, dtype=tf.float32)
     #
     # output_rnn = tf.concat(rnn_outputs, axis=2)  # [batch_size,sequence_length,hidden_size*2]
-
+    print('======********======shape{}'.format(output_rnn.shape))
     GlobalMaxPooling1D=tf.layers.max_pooling1d (output_rnn, pool_size=[ FLAGS.max_seq_length],
                    strides=[1], padding="VALID", name="GlobalMaxPooling1D")# [batch_size,hidden_size*2]
 
