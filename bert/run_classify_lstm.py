@@ -520,7 +520,7 @@ def main(_):
             # Eval will be slightly WRONG on the TPU because it will truncate
             # the last batch.1
             eval_steps = int(num_eval_examples / FLAGS.eval_batch_size)
-
+        eval_steps = int(num_eval_examples / FLAGS.eval_batch_size)
         eval_drop_remainder = True if FLAGS.use_tpu else False
         eval_input_fn = file_based_input_fn_builder(
             input_file=eval_file,
