@@ -88,7 +88,7 @@ for path in [train_path,test_path]:
             text2 = re.sub(r'[{}]+'.format(punctuation), ' ', str(text))
             seg_list=jieba.cut(text2.lower(), cut_all=False)
             res["jieba"]=' '.join(seg_list)
-            res["baidu"]=segment(text)
+            #res["baidu"]=segment(text)
             if "train" in path:
                 llid=li[1]
                 if len(llid.split("|"))>2:
