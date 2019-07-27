@@ -45,17 +45,18 @@ class Didumean:
 
 def  ge():
     #获取各个分类的url
-    data = requests.get('https://www.wandoujia.com/category/app')
+    data = requests.get('https://www.wandoujia.com/category/game')
     s = BeautifulSoup(data.text, "html.parser")
     divs = [li.div.find_all('a') for li in s.find_all('div')[4].find_all('ul')[0].find_all('li')]
 
     urls_dict = {}
     for i in range(len(divs)):
-        #print(divs[i])
+        print(divs[i])
         for j in range(len(divs[i])):
             title = divs[i][j].attrs['title']
             url = divs[i][j].attrs['href']
             urls_dict[title] = url
+            print(title)
 
     base_url = 'https://www.wandoujia.com/wdjweb/api/category/more?catId='
     apps = {}
@@ -114,15 +115,15 @@ def  ge():
         apps_df = apps_df.append(apps_df_tmp)
 
     # 导出
-    apps_df.to_json('wandoujia_app_cat.csv', orient='records',lines=True)
+    apps_df.to_json('wandoujia_app_game.csv', orient='records',lines=True)
 import json
 def  geg():
     from tqdm import tqdm
-    with open('wandoujia_app_cat.csv',encoding="utf8") as f:
+    with open('wandoujia_app_game.csv',encoding="utf8") as f:
         lines=f.readlines()
     d=Didumean()
     result=[]
-    with open('wandoujia_app_cat_desc',"a",encoding="utf8") as f:
+    with open('wandoujia_app_game_desc',"a",encoding="utf8") as f:
         print(len(lines))
         for li in tqdm(lines):
             li=json.loads(li)
