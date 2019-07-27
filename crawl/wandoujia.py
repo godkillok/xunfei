@@ -31,7 +31,7 @@ class Didumean:
             #这个结果根据不同的情况做不同处理
             if response!=[]:
                 data2=' '.join(list(response))
-                data2=data2.replace("")
+
                 if len(data2.replace("小编点评",'').strip())<15:
                     response = html_obj.xpath("/html/body/div[2]/div[2]/div[2]/div[*]/div[*]/div/div[*]/text()")
                     data2 = ' '.join(list(response))
